@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         textView.text = "Hello dirk"
 
         val board = Board(1f, 1f)
+
         val fps = 30L
         val msInSecond = 1000L
         val timeBetweenFrames = msInSecond / fps

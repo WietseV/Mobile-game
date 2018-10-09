@@ -13,7 +13,7 @@ interface Entity {
     /**
      * Update the position, health, ...
      * Get's called a fixed amount of time
-     * */
+     */
     fun update()
 
     /**

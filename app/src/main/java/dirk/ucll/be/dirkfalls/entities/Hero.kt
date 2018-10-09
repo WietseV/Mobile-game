@@ -15,9 +15,4 @@ class Hero(override var position: Vector2, var size: Vector2, var velocity: Vect
         position.x += velocity.x
         position.y += velocity.y
     }
-
-    override fun draw() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 }

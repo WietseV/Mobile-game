@@ -7,6 +7,5 @@ class Board(val width: Float, val height: Float) {
 
     fun updateEntities() {
         entities.forEach { it.update() }
-        entities.forEach { it.draw() }
     }
 }

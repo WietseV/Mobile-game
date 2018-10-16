@@ -4,6 +4,7 @@ import dirk.ucll.be.dirkfalls.Vector2
 
 interface Entity {
     val position: Vector2
+    val velocity: Vector2
 
     /**
      * Happens once: when the object is inited

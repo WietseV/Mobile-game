@@ -17,4 +17,12 @@ class Board(val width: Float, val height: Float) {
     fun addEntities(vararg ent: Entity) {
         entities.addAll(ent)
     }
+
+    fun removeEntity(ent: Entity) {
+        entities.remove(ent)
+    }
+
+    fun removeEntities(vararg ent: Entity) {
+        entities.removeAll(ent)
+    }
 }

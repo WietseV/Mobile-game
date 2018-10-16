@@ -9,4 +9,12 @@ class Board(val width: Float, val height: Float) {
     fun updateEntities() {
         entities.forEach { it.update() }
     }
+
+    fun addEntity(ent: Entity) {
+        entities.add(ent)
+    }
+
+    fun addEntities(vararg ent: Entity) {
+        entities.addAll(ent)
+    }
 }

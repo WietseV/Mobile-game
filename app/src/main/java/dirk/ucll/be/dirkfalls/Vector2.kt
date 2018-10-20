@@ -32,4 +32,8 @@ data class Vector2(val x: Float, val y: Float) {
     operator fun div(scalar: Float): Vector2 {
         return div(Vector2(scalar, scalar))
     }
+
+    companion object {
+       val Origin = Vector2(0.0f, 0.0f)
+    }
 }

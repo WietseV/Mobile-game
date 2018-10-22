@@ -3,7 +3,11 @@ package dirk.ucll.be.dirkfalls.entities
 import dirk.ucll.be.dirkfalls.Vector2
 
 class Hero(override var position: Vector2, var size: Vector2, override var velocity: Vector2): Entity {
-    var alive: Boolean = false
+    val alive
+        get()= health > 0
+
+    private var health: Int = 100
+
 
     override fun init() {
         println("Created hero")
@@ -18,11 +22,18 @@ class Hero(override var position: Vector2, var size: Vector2, override var veloc
     }
 
     fun hit(){
-        alive = false
-        //When our hero gets hit,
+        health -= 20
     }
 
-    fun alive(){
-        alive = true
+    fun respawn(){
+        if (!isAlive()){
+            health = 100;
+        }
     }
+
+    fun isAlive() = alive
+
+    fun getHealth() = health
+
+
 }

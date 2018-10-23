@@ -8,6 +8,10 @@ class Comet(override var position: Vector2, override var velocity: Vector2) : En
     }
 
     override fun update(dt: Float) {
+        fall(dt)
+    }
+
+    private fun fall(dt: Float) {
         position = velocity * dt
     }
 

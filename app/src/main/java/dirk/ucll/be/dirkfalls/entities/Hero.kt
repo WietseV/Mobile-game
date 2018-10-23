@@ -17,6 +17,11 @@ class Hero(override var position: Vector2, var size: Vector2, override var veloc
         position += velocity * dt
     }
 
+    fun moveRight(dt: Float) {
+        velocity =
+        position +=
+    }
+
     override fun delete() {
         println("Deleted hero")
     }

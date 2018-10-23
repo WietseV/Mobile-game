@@ -1,5 +1,7 @@
 package be.ucll.dirkfalls
 
+import be.ucll.dirkfalls.entities.Entity
+import be.ucll.dirkfalls.entities.Hero
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
@@ -7,19 +9,29 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 class DirkFallsGame : ApplicationAdapter() {
-    lateinit var batch: SpriteBatch
-    lateinit var img: Texture
+    private lateinit var batch: SpriteBatch
+    private lateinit var img: Texture
+    private val entities = mutableListOf<Entity>()
 
     override fun create() {
         batch = SpriteBatch()
         img = Texture("badlogic.jpg")
+        val hero = Hero(
+                position = Vector2(50f, 50f),
+                size = Vector2(10f, 10f),
+                velocity = Vector2.Origin
+        )
+
+        entities.add(hero)
     }
 
     override fun render() {
         Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         batch.begin()
-        batch.draw(img, 0f, 0f)
+        entities.forEach {
+            batch.draw(img, it.position.x, it.position.y)
+        }
         batch.end()
     }
 

@@ -7,13 +7,23 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import be.ucll.dirkfalls.utils.logger
+import com.badlogic.gdx.Application
 
 class DirkFallsGame : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
     private lateinit var img: Texture
     private val entities = mutableListOf<Entity>()
 
+    companion object {
+        @JvmStatic
+        private val log = logger<ApplicationAdapter>()
+    }
     override fun create() {
+
+        Gdx.app.logLevel = Application.LOG_DEBUG
+
+        log.debug("yo") // dit komt in console, you're welcome
         batch = SpriteBatch()
         img = Texture("badlogic.jpg")
         val hero = Hero(

@@ -11,7 +11,7 @@ data class Vector2(val x: Float, val y: Float){
     }
 
     operator fun minus(other: Vector2): Vector2 {
-        return Vector2(x - other.y, y + other.y)
+        return Vector2(x - other.x, y - other.y)
     }
 
     operator fun minus(scalar: Float): Vector2 {

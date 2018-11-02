@@ -1,6 +1,7 @@
 package be.ucll.dirkfalls.entities
 
 import be.ucll.dirkfalls.Vector2
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 
 interface Entity {
@@ -22,4 +23,6 @@ interface Entity {
      * Delete the reference
      */
     fun delete()
+
+    fun drawDebug(renderer: ShapeRenderer)
 }

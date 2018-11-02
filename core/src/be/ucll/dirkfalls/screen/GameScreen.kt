@@ -3,6 +3,8 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig.GameConfig
 import be.ucll.dirkfalls.Vector2
 import be.ucll.dirkfalls.common.SampleBase
+import be.ucll.dirkfalls.entities.Comet
+import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.utils.drawGrid
 import be.ucll.dirkfalls.utils.use
@@ -11,6 +13,7 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 
@@ -20,6 +23,9 @@ class GameScreen : Screen {
     private lateinit var viewport: Viewport
     private lateinit var renderer: ShapeRenderer
     private lateinit var hero: Hero
+    private val entities = mutableListOf<Comet>()
+
+    private var cometTimer = 0f
 
     override fun hide() {
     }
@@ -36,9 +42,6 @@ class GameScreen : Screen {
         var startVector2: Vector2 = Vector2(positionXHero, 1f)
         hero = Hero(startVector2)
 
-
-
-
     }
 
     override fun render(delta: Float) {
@@ -46,9 +49,14 @@ class GameScreen : Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         hero.moveX()
+        updateComet()
+        createComet(delta)
 
         renderer.projectionMatrix = camera.combined
-        renderer.use { hero.drawDebug(renderer) }
+        renderer.use {
+            hero.drawDebug(renderer)
+            entities.forEach{ it.drawDebug(renderer)}
+        }
 
         viewport.drawGrid(renderer)
     }
@@ -67,5 +75,29 @@ class GameScreen : Screen {
         renderer.dispose()
     }
 
+    private fun updateComet() {
+        entities.forEach {
+            renderer.use { it.fallDown() }
+        }
+    }
+
+    private fun createComet(delta: Float) {
+        cometTimer += delta
+
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+            cometTimer = 0f // reset timer
+
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH)
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT )
+
+            val comet = Comet(vector2)
+            entities.add(comet)
+
+        }
+    }
+
+    private fun  blockPlayerFromLeaving(){
+        
+    }
 
 }

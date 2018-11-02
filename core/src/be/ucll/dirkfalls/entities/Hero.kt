@@ -54,18 +54,16 @@ class Hero(override var position: Vector2 = Vector2(0f,0f), override var velocit
         }
 
         //aangezin roobin wilt dat we met vectors werken, moet ik speed in een vector steken voordat het macheert
-        
+
         var updateVector2: Vector2 = Vector2(xSpeed, 0f)
 
         position += updateVector2
         updateBounds()
-
-
     }
     private fun updateBounds() = bounds.setPosition(position.x, position.y)
 
 
-    fun drawDebug(renderer: ShapeRenderer) = renderer.circle(bounds)
+    override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(bounds)
     override fun delete() {
         println("Deleted hero")
     }

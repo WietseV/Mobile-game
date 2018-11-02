@@ -77,7 +77,7 @@ class ShapeRenderSample : SampleBase() {
 
         renderer.end()
 
-        
+
 
     }
 

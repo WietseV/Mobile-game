@@ -1,6 +1,7 @@
 package be.ucll.dirkfalls
 
 data class Vector2(val x: Float, val y: Float){
+
     operator fun plus(other: Vector2): Vector2 {
         return Vector2(x + other.x, y + other.y)
     }

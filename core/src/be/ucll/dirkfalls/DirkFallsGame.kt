@@ -28,7 +28,7 @@ class DirkFallsGame : ApplicationAdapter() {
         img = Texture("badlogic.jpg")
         val hero = Hero(
                 position = Vector2(50f, 50f),
-                size = Vector2(10f, 10f),
+                //size = Vector2(10f, 10f),
                 velocity = Vector2.Origin
         )
 

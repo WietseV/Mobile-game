@@ -1,4 +1,4 @@
-package be.ucll.dirkfalls.GameConfig
+package be.ucll.dirkfalls
 
 object GameConfig {
 

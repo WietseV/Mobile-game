@@ -10,6 +10,6 @@ inline fun ShapeRenderer.use(action: () -> Unit) {
 }
 
 @JvmOverloads
-fun ShapeRenderer.circle(c: Circle, segments: Int = 30){
+fun ShapeRenderer.circle(c: Circle, segments: Int = 30) {
     circle(c.x, c.y, c.radius, segments)
 }

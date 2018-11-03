@@ -2,13 +2,14 @@ package be.ucll.dirkfalls
 
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
+import be.ucll.dirkfalls.utils.logger
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import be.ucll.dirkfalls.utils.logger
-import com.badlogic.gdx.Application
+import com.badlogic.gdx.math.Vector2
 
 class DirkFallsGame : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
@@ -16,20 +17,17 @@ class DirkFallsGame : ApplicationAdapter() {
     private val entities = mutableListOf<Entity>()
 
     companion object {
-        @JvmStatic
-        private val log = logger<ApplicationAdapter>()
+        private val logger = logger<ApplicationAdapter>()
     }
-    override fun create() {
 
+    override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
 
-        log.debug("yo") // dit komt in console, you're welcome
         batch = SpriteBatch()
         img = Texture("badlogic.jpg")
         val hero = Hero(
-                position = Vector2(50f, 50f),
-                //size = Vector2(10f, 10f),
-                velocity = Vector2.Origin
+            Vector2(50f, 50f),
+            Vector2.Zero
         )
 
         entities.add(hero)

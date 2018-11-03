@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.badlogic.gdx.utils.viewport.Viewport
 
 
 /*dit is een voorbeeld om hoe je dingen moet tekenen of representeren in uw gbx,
@@ -59,10 +58,10 @@ class ShapeRenderSample : SampleBase() {
             drawCirckle()
         }
 
-        if(drawRectangles){
+        if (drawRectangles) {
             drawRectangle()
         }
-        if(drawPoints){
+        if (drawPoints) {
             drawPoint()
         }
     }
@@ -76,7 +75,6 @@ class ShapeRenderSample : SampleBase() {
         renderer.point(-7f, -2f, 0f)
 
         renderer.end()
-
 
 
     }

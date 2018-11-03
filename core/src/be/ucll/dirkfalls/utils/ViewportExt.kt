@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 
 @JvmOverloads
-fun Viewport.drawGrid(renderer: ShapeRenderer, cellSize: Int = 1){
+fun Viewport.drawGrid(renderer: ShapeRenderer, cellSize: Int = 1) {
     val oldColor = renderer.color.cpy()
     val doubleWorldWidth = worldWidth * 2
     val doubleWorldHeight = worldHeight * 2
@@ -14,8 +14,8 @@ fun Viewport.drawGrid(renderer: ShapeRenderer, cellSize: Int = 1){
         renderer.color = Color.WHITE
 
         //teken verticale lijnen
-        var x =  -doubleWorldWidth
-        while (x < doubleWorldWidth){
+        var x = -doubleWorldWidth
+        while (x < doubleWorldWidth) {
             renderer.line(x, -doubleWorldHeight, x, doubleWorldHeight)
 
             x += cellSize
@@ -23,15 +23,15 @@ fun Viewport.drawGrid(renderer: ShapeRenderer, cellSize: Int = 1){
 
         //teken horizontale lijnen
         var y = -doubleWorldHeight
-        while (y < doubleWorldHeight){
-            renderer.line(-doubleWorldWidth, y,doubleWorldWidth, y)
+        while (y < doubleWorldHeight) {
+            renderer.line(-doubleWorldWidth, y, doubleWorldWidth, y)
             y += cellSize
         }
 
         //teken de assen
         renderer.color = Color.RED
         renderer.line(0f, -doubleWorldHeight, 0f, doubleWorldHeight)
-        renderer.line(-doubleWorldWidth, 0f,doubleWorldWidth, 0f)
+        renderer.line(-doubleWorldWidth, 0f, doubleWorldWidth, 0f)
 
         // randen van de wereld
         renderer.color = Color.GREEN

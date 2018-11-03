@@ -1,36 +1,35 @@
 package be.ucll.dirkfalls.entities
 
-import be.ucll.dirkfalls.Vector2
 import be.ucll.dirkfalls.utils.circle
 import be.ucll.dirkfalls.utils.isKeyPressed
+import be.ucll.dirkfalls.utils.vector2.plus
+import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Vector2
 
-class Hero(override var position: Vector2 = Vector2(0f,0f), override var velocity: Vector2 = Vector2(2f, 0f)): Entity {
-    //vorstellen met een circel, daarna spirit
-
+class Hero(
+    startPosition: Vector2 = Vector2(0f, 0f),
+    override var velocity: Vector2 = Vector2(2f, 0f)
+) : Entity {
     companion object {
-        // constanten
         private const val BOUNDS_RADIUS = 0.4f //world units
-        private const val SIZE = BOUNDS_RADIUS * 2f
-
         private const val MAX_X_SPEED = 0.05f // world units
-
-
     }
 
-    //properties
-    var bounds: Circle
-    var xSpeed = 0f
-    //init
+    private var _position = startPosition
+    override var position: Vector2
+        get() = _position
+        set(value) {
+            _position = value
+            bounds.setPosition(value)
+        }
 
-    init {
-        bounds = Circle(position.x,position.y, BOUNDS_RADIUS)
+    var bounds = Circle(position.x, position.y, BOUNDS_RADIUS)
 
-    }
     private val alive
-        get()= health > 0
+        get() = health > 0
 
     private var health = 100
 
@@ -41,39 +40,33 @@ class Hero(override var position: Vector2 = Vector2(0f,0f), override var velocit
 
     override fun update(dt: Float) {
         position += velocity * dt
-        updateBounds()
     }
 
-    //Om naar links en naar rechts te kunnen bewegen
-    fun moveX(){
-        xSpeed = 0f
-
-        when{
-            Input.Keys.RIGHT.isKeyPressed() -> xSpeed = MAX_X_SPEED
-            Input.Keys.LEFT.isKeyPressed() -> xSpeed = - MAX_X_SPEED
-        }
-
-        //aangezin roobin wilt dat we met vectors werken, moet ik speed in een vector steken voordat het macheert
-
-        var updateVector2: Vector2 = Vector2(xSpeed, 0f)
-
-        position += updateVector2
-        updateBounds()
+    /**
+     * Om naar links en naar rechts te kunnen bewegen
+     */
+    fun moveX() {
+        position += Vector2(
+            when {
+                Input.Keys.RIGHT.isKeyPressed() -> MAX_X_SPEED
+                Input.Keys.LEFT.isKeyPressed() -> -MAX_X_SPEED
+                else -> 0f
+            }, 0f
+        )
     }
-    private fun updateBounds() = bounds.setPosition(position.x, position.y)
-
 
     override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(bounds)
+
     override fun delete() {
         println("Deleted hero")
     }
 
-    fun hit(){
+    fun hit() {
         health -= 20
     }
 
-    fun respawn(){
-        if (!alive){
+    fun respawn() {
+        if (!alive) {
             health = 100
         }
     }

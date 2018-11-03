@@ -25,10 +25,7 @@ class DirkFallsGame : ApplicationAdapter() {
 
         batch = SpriteBatch()
         img = Texture("badlogic.jpg")
-        val hero = Hero(
-            Vector2(50f, 50f),
-            Vector2.Zero
-        )
+        val hero = Hero()
 
         entities.add(hero)
     }

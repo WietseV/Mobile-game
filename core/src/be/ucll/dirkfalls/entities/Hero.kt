@@ -1,15 +1,13 @@
 package be.ucll.dirkfalls.entities
 
 import be.ucll.dirkfalls.utils.circle
-import be.ucll.dirkfalls.utils.vector2.plus
-import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
 
 class Hero(
     startPosition: Vector2 = Vector2.Zero
-) : Entity {
+) : Entity() {
     companion object {
         private const val BOUNDS_RADIUS = 0.4f //world units
         private const val MAX_X_SPEED = 5f // world units
@@ -45,10 +43,6 @@ class Hero(
 
     override fun init() {
         println("Created hero")
-    }
-
-    override fun update(dt: Float) {
-        position += velocity * dt
     }
 
     override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(bounds)

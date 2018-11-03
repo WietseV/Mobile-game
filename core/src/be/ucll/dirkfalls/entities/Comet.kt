@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
 
 
-class Comet(startPosition: Vector2, override var velocity: Vector2 = Vector2(0f, -3f)) : Entity {
+class Comet(startPosition: Vector2, override var velocity: Vector2 = Vector2(0f, -3f)) : Entity() {
     companion object {
         private const val BOUNDS_RADIUS = 0.1f //world units
     }
@@ -34,11 +34,6 @@ class Comet(startPosition: Vector2, override var velocity: Vector2 = Vector2(0f,
     override fun init() {
         println("Created comet")
     }
-
-    override fun update(dt: Float) {
-        position += velocity * dt
-    }
-
 
     override fun delete() {
         println("Deleted comet")

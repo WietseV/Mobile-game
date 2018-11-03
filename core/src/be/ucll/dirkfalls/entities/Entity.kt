@@ -1,35 +1,43 @@
 package be.ucll.dirkfalls.entities
 
+import be.ucll.dirkfalls.utils.vector2.plus
+import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 
 
-interface Entity {
+abstract class Entity {
     /**
      * Current position of the entity
      */
-    var position: Vector2
+    abstract var position: Vector2
 
     /**
      * Current velocity of the entity
+     * This should be how many units the entity moves per second (it get's multiplied with delta time
+     * in the update method)
      */
-    var velocity: Vector2
+    abstract var velocity: Vector2
 
     /**
      * Happens once: when the object is inited
      */
-    fun init()
+    abstract fun init()
 
     /**
      * Update the position, health, ...
      */
-    fun update(dt: Float)
-
+    open fun update(dt: Float) {
+        position += velocity * dt
+    }
 
     /**
      * Delete the reference
      */
-    fun delete()
+    abstract fun delete()
 
-    fun drawDebug(renderer: ShapeRenderer)
+    /**
+     * Draw debug info
+     */
+    abstract fun drawDebug(renderer: ShapeRenderer)
 }

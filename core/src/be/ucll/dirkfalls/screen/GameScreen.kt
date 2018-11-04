@@ -88,6 +88,9 @@ class GameScreen : Screen {
 
     private fun updateComet(delta: Float) {
         entities.forEach {
+            if (it.overlaps(hero)) {
+                println("$it overlaps with hero")
+            }
             renderer.use { it.update(delta) }
         }
     }

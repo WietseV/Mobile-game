@@ -55,7 +55,7 @@ class ShapeRenderSample : SampleBase() {
         }
 
         if (drawCircles) {
-            drawCirckle()
+            drawCircle()
         }
 
         if (drawRectangles) {
@@ -89,7 +89,7 @@ class ShapeRenderSample : SampleBase() {
         renderer.end()
     }
 
-    private fun drawCirckle() {
+    private fun drawCircle() {
         renderer.begin(ShapeRenderer.ShapeType.Filled)
         renderer.color = Color.GREEN
 

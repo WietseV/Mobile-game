@@ -3,10 +3,13 @@ package be.ucll.dirkfalls.entities
 import be.ucll.dirkfalls.utils.vector2.plus
 import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.math.Vector2
 
 
 abstract class Entity {
+
+    abstract var shape: Shape2D
     /**
      * Current position of the entity
      */
@@ -40,4 +43,6 @@ abstract class Entity {
      * Draw debug info
      */
     abstract fun drawDebug(renderer: ShapeRenderer)
+
+    abstract fun overlaps(entity: Entity): Boolean
 }

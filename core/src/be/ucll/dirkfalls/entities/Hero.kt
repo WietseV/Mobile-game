@@ -1,8 +1,6 @@
 package be.ucll.dirkfalls.entities
 
-import be.ucll.dirkfalls.utils.circle
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.math.Vector2

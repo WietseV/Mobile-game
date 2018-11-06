@@ -87,12 +87,15 @@ class GameScreen : Screen {
     }
 
     private fun updateComet(delta: Float) {
+        val entRemove = mutableListOf<Comet>()
         entities.forEach {
             if (it.overlaps(hero)) {
-                println("$it overlaps with hero")
+                entRemove.add(it)
+                hero.hit()
             }
             renderer.use { it.update(delta) }
         }
+        entities.removeAll(entRemove)
     }
 
     private fun createComet(delta: Float) {

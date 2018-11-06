@@ -3,6 +3,7 @@ package be.ucll.dirkfalls.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import be.ucll.dirkfalls.DirkFallsGame;
 import be.ucll.dirkfalls.GameConfig;
 import be.ucll.dirkfalls.TestGame;
 

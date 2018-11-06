@@ -11,8 +11,10 @@ import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -43,8 +45,9 @@ class GameScreen : Screen {
         //camera.zoom = 2f //zet deze uit op het origineel bord te zien
         viewport = FitViewport(be.ucll.dirkfalls.GameConfig.WORLD_WIDTH, be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT, camera)
         renderer = ShapeRenderer()
-        batch = SpriteBatch()
+        batch = SpriteBatch(20)
         font = BitmapFont()
+        font.color = Color.WHITE
 
         //create player
         hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
@@ -77,14 +80,15 @@ class GameScreen : Screen {
             health.drawDebugRed(renderer)
             renderer.setColor(255f,255f,255f,100f)
         }
+
         //Score not yet shown TODO
         batch.begin()
-        batch.setColor(255f,255f,255f,100f)
-        font.draw(batch, score.toString(),1f, WORLD_HEIGHT-1f)
+        val char: CharSequence = score.toString()
+        font.draw(batch, char, WORLD_WIDTH/2, WORLD_HEIGHT/2)
         batch.end()
         println(score)
 
-        viewport.drawGrid(renderer)
+        //viewport.drawGrid(renderer)
     }
 
     private fun update(delta: Float) {
@@ -122,6 +126,8 @@ class GameScreen : Screen {
 
     override fun dispose() {
         renderer.dispose()
+        batch.dispose()
+        font.dispose()
     }
 
     private fun updateHero(delta: Float) {

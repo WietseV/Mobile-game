@@ -24,7 +24,7 @@ class DirkFallsGame : ApplicationAdapter() {
         Gdx.app.logLevel = Application.LOG_DEBUG
 
         batch = SpriteBatch()
-        img = Texture("badlogic.jpg")
+        img = Texture("data/badlogic.jpg")
         val hero = Hero()
 
         entities.add(hero)

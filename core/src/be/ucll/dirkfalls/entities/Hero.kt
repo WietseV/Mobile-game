@@ -14,6 +14,8 @@ class Hero(
         private const val MAX_X_SPEED = 5f // world units
     }
 
+    fun getWidth() = BOUNDS_RADIUS
+
     var direction: HeroDirection = HeroDirection.STILL
 
     private var _position = startPosition
@@ -50,7 +52,12 @@ class Hero(
     private val alive
         get() = health > 0
 
-    private var health = 100
+    private var _health = 100
+    var health: Int
+        get() = _health
+        set(value) {
+            _health = value
+        }
 
 
     override fun init() {
@@ -64,7 +71,9 @@ class Hero(
     }
 
     fun hit() {
-        health -= 20
+        if (health != 0) {
+            health -= 20
+        }
     }
 
     fun respawn() {

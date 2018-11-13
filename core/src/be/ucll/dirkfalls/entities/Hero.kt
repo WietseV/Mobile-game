@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.entities
 
+import be.ucll.dirkfalls.GameConfig
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Shape2D
@@ -81,5 +82,8 @@ class Hero(
             health = 100
         }
     }
+
+    override fun outOfBounds(delta: Float): Boolean =
+            (position.x + velocity.x * delta)+ getWidth() > GameConfig.WORLD_WIDTH *1f || (position.x + velocity.x * delta) < 0
 
 }

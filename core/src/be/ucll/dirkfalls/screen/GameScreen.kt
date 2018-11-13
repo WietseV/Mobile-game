@@ -131,7 +131,7 @@ class GameScreen : Screen {
     }
 
     private fun updateHero(delta: Float) {
-        if ((hero.position.x + hero.velocity.x * delta)+ hero.getWidth() > WORLD_WIDTH*1f || (hero.position.x + hero.velocity.x * delta) < 0) {
+        if (hero.outOfBounds(delta)) {
             hero.direction = HeroDirection.STILL
         }
         else {
@@ -160,10 +160,10 @@ class GameScreen : Screen {
 
         if (cometTimer >= be.ucll.dirkfalls.GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
-
-            val cometX = MathUtils.random(0f, be.ucll.dirkfalls.GameConfig.WORLD_WIDTH)
+            val cometRadius = MathUtils.random(0.1f, 0.4f)
+            val cometX = MathUtils.random(0f+cometRadius, be.ucll.dirkfalls.GameConfig.WORLD_WIDTH+cometRadius)
             val vector2 = Vector2(cometX, be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT)
-            val comet = Comet(vector2)
+            val comet = Comet(vector2,cometRadius)
             entities.add(comet)
         }
     }

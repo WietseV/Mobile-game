@@ -45,4 +45,6 @@ abstract class Entity {
     abstract fun drawDebug(renderer: ShapeRenderer)
 
     abstract fun overlaps(entity: Entity): Boolean
+
+    abstract fun outOfBounds(delta: Float): Boolean
 }

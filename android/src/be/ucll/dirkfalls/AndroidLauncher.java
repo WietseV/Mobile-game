@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -9,8 +10,11 @@ import be.ucll.dirkfalls.DirkFallsGame;
 public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new TestGame(), config);
+		System.out.println(this.graphics.getView());
+
 	}
 }

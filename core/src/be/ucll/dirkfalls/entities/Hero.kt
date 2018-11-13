@@ -84,6 +84,7 @@ class Hero(
     }
 
     override fun outOfBounds(delta: Float): Boolean =
-            (position.x + velocity.x * delta)+ getWidth() > GameConfig.WORLD_WIDTH *1f || (position.x + velocity.x * delta) < 0
+            (position.x + velocity.x * delta)+ getWidth() > GameConfig.WORLD_WIDTH *1f
+                    || (position.x + velocity.x * delta) < 0
 
 }

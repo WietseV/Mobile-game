@@ -162,9 +162,9 @@ class GameScreen : Screen {
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
-            val cometRadius = MathUtils.random(0.1f, 0.4f)
-            val cometX = MathUtils.random(0f+cometRadius, be.ucll.dirkfalls.GameConfig.WORLD_WIDTH+cometRadius)
-            val vector2 = Vector2(cometX, be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT)
+            val cometRadius = MathUtils.random(0.1f, 0.3f)
+            val cometX = MathUtils.random(0f+cometRadius, GameConfig.WORLD_WIDTH - cometRadius)
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
             val comet = Comet(vector2,cometRadius)
 
             entities.add(comet)

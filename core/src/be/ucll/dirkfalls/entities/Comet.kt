@@ -60,5 +60,6 @@ class Comet(startPosition: Vector2, radius: Float, override var velocity: Vector
     }
 
     override fun outOfBounds(delta: Float): Boolean =
-            (position.x + velocity.x * delta) - radius < 0 || (position.x + velocity.x * delta) + radius > WORLD_WIDTH
+            (position.x + velocity.x * delta) - radius < 0 ||
+                    (position.x + velocity.x * delta) + radius > WORLD_WIDTH
 }

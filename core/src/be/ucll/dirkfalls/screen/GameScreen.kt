@@ -3,19 +3,18 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
-import be.ucll.dirkfalls.entities.*
-import be.ucll.dirkfalls.utils.drawGrid
+import be.ucll.dirkfalls.entities.Comet
+import be.ucll.dirkfalls.entities.HealthBar
+import be.ucll.dirkfalls.entities.Hero
+import be.ucll.dirkfalls.entities.HeroDirection
 import be.ucll.dirkfalls.utils.isKeyPressed
 import be.ucll.dirkfalls.utils.use
-import be.ucll.dirkfalls.utils.vector2.plus
-import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -87,7 +86,6 @@ class GameScreen : Screen {
         val char: CharSequence = score.toString()
         font.draw(batch, char, WORLD_WIDTH/2, WORLD_HEIGHT/2)
         batch.end()
-        println(score)
 
         //viewport.drawGrid(renderer)
     }
@@ -150,6 +148,7 @@ class GameScreen : Screen {
             if (it.position.y+1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
                 entRemove.add(it)
                 score++
+                println(score)
             }
             renderer.use { it.update(delta) }
         }
@@ -166,9 +165,19 @@ class GameScreen : Screen {
             val cometX = MathUtils.random(0f+cometRadius, GameConfig.WORLD_WIDTH - cometRadius)
             val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
             val comet = Comet(vector2,cometRadius)
-
-            entities.add(comet)
+            if (checkCometSpawn(comet)) {
+                entities.add(comet)
+            }
         }
+    }
+
+    private fun checkCometSpawn(comet: Comet): Boolean {
+        entities.forEach {
+            if (it.overlaps(comet)) {
+                return false
+            }
+        }
+        return true
     }
 
     private fun blockPlayerFromLeaving(){

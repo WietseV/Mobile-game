@@ -14,7 +14,5 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new TestGame(), config);
-		System.out.println(this.graphics.getView());
-
 	}
 }

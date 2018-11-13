@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.entities.*
@@ -43,7 +44,7 @@ class GameScreen : Screen {
     override fun show() {
         camera = OrthographicCamera()
         //camera.zoom = 2f //zet deze uit op het origineel bord te zien
-        viewport = FitViewport(be.ucll.dirkfalls.GameConfig.WORLD_WIDTH, be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT, camera)
+        viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
         renderer = ShapeRenderer()
         batch = SpriteBatch(20)
         font = BitmapFont()
@@ -146,11 +147,11 @@ class GameScreen : Screen {
                 entRemove.add(it)
                 hero.hit()
             }
-            renderer.use { it.update(delta) }
             if (it.position.y+1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
                 entRemove.add(it)
                 score++
             }
+            renderer.use { it.update(delta) }
         }
         entities.removeAll(entRemove)
     }
@@ -158,17 +159,17 @@ class GameScreen : Screen {
     private fun createComet(delta: Float) {
         cometTimer += delta
 
-        if (cometTimer >= be.ucll.dirkfalls.GameConfig.COMET_SPAWN_TIME) {
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
-            val cometX = MathUtils.random(0f, be.ucll.dirkfalls.GameConfig.WORLD_WIDTH)
-            val vector2 = Vector2(cometX, be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT)
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH)
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT)
             val comet = Comet(vector2)
             entities.add(comet)
         }
     }
 
-    private fun blockPlayerFromLeaving() {
+    private fun blockPlayerFromLeaving(){
 
     }
 

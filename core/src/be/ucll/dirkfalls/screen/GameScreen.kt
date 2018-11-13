@@ -7,6 +7,7 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HealthBar
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.entities.HeroDirection
+import be.ucll.dirkfalls.utils.TouchHandler
 import be.ucll.dirkfalls.utils.isKeyPressed
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
@@ -94,6 +95,8 @@ class GameScreen : Screen {
         hero.direction = when {
             Input.Keys.RIGHT.isKeyPressed() -> HeroDirection.RIGHT
             Input.Keys.LEFT.isKeyPressed() -> HeroDirection.LEFT
+            TouchHandler.touch[0] < WORLD_WIDTH/2 -> HeroDirection.LEFT
+            TouchHandler.touch[0] > WORLD_WIDTH/2 -> HeroDirection.RIGHT
             else -> HeroDirection.STILL
         }
         updateHero(delta)

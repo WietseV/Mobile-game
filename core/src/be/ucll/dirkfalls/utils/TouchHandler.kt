@@ -1,18 +1,24 @@
 package be.ucll.dirkfalls.utils
 
-object TouchHandler {
-    var isChanged: Boolean = false
+import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
+import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
+
+object TouchHandler { //Static class
+    var isChanged: Boolean = false //Als dit op true staat is er een touch geweest, als dit op false staat is deze touch uitgelezen
     var x: Float = 0f
     var y: Float = 0f
 
-    var touch: FloatArray
+    var touch: FloatArray?
         get() {
-            isChanged = false
-            return floatArrayOf(x, y)
+            if (isChanged) {
+                isChanged = false
+                return floatArrayOf(x, y)
+            }
+            return null
         }
         set(value) {
-            x = value.get(0)
-            y = value.get(1)
+            x = value!![0]*WORLD_WIDTH //Werkelijk punt op scherm
+            y = value[1]*WORLD_HEIGHT
             isChanged = true
         }
 }

@@ -92,11 +92,16 @@ class GameScreen : Screen {
     }
 
     private fun update(delta: Float) {
+        var t = TouchHandler.touch
+        t = when (t) {
+            null -> floatArrayOf(-1f,-1f)
+            else -> t
+        }
         hero.direction = when {
             Input.Keys.RIGHT.isKeyPressed() -> HeroDirection.RIGHT
             Input.Keys.LEFT.isKeyPressed() -> HeroDirection.LEFT
-            TouchHandler.touch[0] < WORLD_WIDTH/2 -> HeroDirection.LEFT
-            TouchHandler.touch[0] > WORLD_WIDTH/2 -> HeroDirection.RIGHT
+            !t.contentEquals(floatArrayOf(-1f,-1f)) && t[0] < WORLD_WIDTH/2 -> HeroDirection.LEFT
+            !t.contentEquals(floatArrayOf(-1f,-1f)) && t[0] > WORLD_WIDTH/2 -> HeroDirection.RIGHT
             else -> HeroDirection.STILL
         }
         updateHero(delta)

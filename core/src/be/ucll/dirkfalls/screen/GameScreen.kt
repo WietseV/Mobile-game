@@ -7,11 +7,11 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HealthBar
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.entities.HeroDirection
-import be.ucll.dirkfalls.utils.TouchHandler
 import be.ucll.dirkfalls.utils.isKeyPressed
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -53,7 +53,7 @@ class GameScreen : Screen {
         //create player
         hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
         health = HealthBar(Vector2(WORLD_WIDTH-2f, WORLD_HEIGHT-0.4f))
-
+        Gdx.input.inputProcessor = GameTouchAdapter(hero)
     }
 
     override fun render(delta: Float) {
@@ -92,18 +92,11 @@ class GameScreen : Screen {
     }
 
     private fun update(delta: Float) {
-        var t = TouchHandler.touch
-        t = when (t) {
-            null -> floatArrayOf(-1f,-1f)
-            else -> t
-        }
-        hero.direction = when {
+        /*hero.direction = when {
             Input.Keys.RIGHT.isKeyPressed() -> HeroDirection.RIGHT
             Input.Keys.LEFT.isKeyPressed() -> HeroDirection.LEFT
-            !t.contentEquals(floatArrayOf(-1f,-1f)) && t[0] < WORLD_WIDTH/2 -> HeroDirection.LEFT
-            !t.contentEquals(floatArrayOf(-1f,-1f)) && t[0] > WORLD_WIDTH/2 -> HeroDirection.RIGHT
             else -> HeroDirection.STILL
-        }
+        }*/
         updateHero(delta)
         updateComet(delta)
         updateHealth()
@@ -156,7 +149,7 @@ class GameScreen : Screen {
             if (it.position.y+1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
                 entRemove.add(it)
                 score++
-                println(score)
+                //println(score)
             }
             renderer.use { it.update(delta) }
         }
@@ -190,6 +183,23 @@ class GameScreen : Screen {
 
     private fun blockPlayerFromLeaving(){
 
+    }
+
+    private class GameTouchAdapter(val hero: Hero): InputAdapter() {
+        override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            val x = screenX * 1f / Gdx.graphics.width
+            hero.direction = when {
+                x * WORLD_WIDTH < WORLD_WIDTH/2 -> HeroDirection.LEFT
+                x * WORLD_WIDTH > WORLD_WIDTH/2 -> HeroDirection.RIGHT
+                else -> HeroDirection.STILL
+            }
+            return super.touchDown(screenX, screenY, pointer, button)
+        }
+
+        override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            hero.direction = HeroDirection.STILL
+            return super.touchUp(screenX, screenY, pointer, button)
+        }
     }
 
 }

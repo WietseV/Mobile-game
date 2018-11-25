@@ -3,7 +3,6 @@ package be.ucll.dirkfalls.entities
 import be.ucll.dirkfalls.GameConfig
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.math.Vector2
 
 class Hero(
@@ -15,7 +14,7 @@ class Hero(
         private const val MAX_X_SPEED = 5f // world units
     }
 
-    fun getWidth() = BOUNDS_RADIUS
+    private fun getWidth() = BOUNDS_RADIUS
 
     var direction: HeroDirection = HeroDirection.STILL
 
@@ -24,21 +23,17 @@ class Hero(
         get() = _position
         set(value) {
             _position = value
-            _shape.setPosition(value)
+            shape.setPosition(value)
         }
 
-    private var _shape = Rectangle(startPosition.x, startPosition.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
-    override var shape: Shape2D
-        get() = _shape
-        set(value) {
-            throw NotImplementedError()
-        }
+    override val shape = Rectangle(startPosition.x, startPosition.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
+
 
     override fun overlaps(entity: Entity): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
-    override var velocity
+    override var velocity: Vector2
         get() = when (direction) {
             HeroDirection.LEFT -> Vector2(-MAX_X_SPEED, 0f)
             HeroDirection.RIGHT -> Vector2(MAX_X_SPEED, 0f)
@@ -47,7 +42,6 @@ class Hero(
         set(value) {
             throw NotImplementedError("You should not directly set the velocity of the hero, rather use the direction API")
         }
-
 
 
     private val alive
@@ -65,7 +59,8 @@ class Hero(
         println("Created hero")
     }
 
-    override fun drawDebug(renderer: ShapeRenderer) = renderer.rect(_shape.x,_shape.y,_shape.width,_shape.height)
+    override fun drawDebug(renderer: ShapeRenderer) =
+        renderer.rect(shape.x, shape.y, shape.width, shape.height)
 
     override fun delete() {
         println("Deleted hero")
@@ -77,14 +72,9 @@ class Hero(
         }
     }
 
-    fun respawn() {
-        if (!alive) {
-            health = 100
-        }
-    }
 
     override fun outOfBounds(delta: Float): Boolean =
-            (position.x + velocity.x * delta)+ getWidth() > GameConfig.WORLD_WIDTH *1f
-                    || (position.x + velocity.x * delta) < 0
+        (position.x + velocity.x * delta) + getWidth() > GameConfig.WORLD_WIDTH * 1f
+                || (position.x + velocity.x * delta) < 0
 
 }

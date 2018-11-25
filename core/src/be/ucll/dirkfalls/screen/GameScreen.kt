@@ -3,15 +3,9 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
-import be.ucll.dirkfalls.entities.Comet
-import be.ucll.dirkfalls.entities.HealthBar
-import be.ucll.dirkfalls.entities.Hero
-import be.ucll.dirkfalls.entities.HeroDirection
-import be.ucll.dirkfalls.utils.isKeyPressed
+import be.ucll.dirkfalls.entities.*
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
-import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -25,14 +19,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 
 class GameScreen : Screen {
-
     private lateinit var camera: OrthographicCamera
     private lateinit var viewport: Viewport
     private lateinit var renderer: ShapeRenderer
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
     private lateinit var hero: Hero
-    private lateinit var health: HealthBar
+    private lateinit var healthBar: HealthBar
     private var paused: Boolean = false
     private val entities = mutableListOf<Comet>()
     private var cometTimer = 0f
@@ -52,7 +45,7 @@ class GameScreen : Screen {
 
         //create player
         hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
-        health = HealthBar(Vector2(WORLD_WIDTH-2f, WORLD_HEIGHT-0.4f))
+        healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
         Gdx.input.inputProcessor = GameTouchAdapter(hero)
     }
 
@@ -60,7 +53,7 @@ class GameScreen : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        if(!paused) {
+        if (!paused) {
             update(delta)
         }
 
@@ -68,27 +61,22 @@ class GameScreen : Screen {
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.setColor(0f,0f,255f,100f)
-            renderer.rect(0f,1f, WORLD_WIDTH, WORLD_HEIGHT)
-            renderer.setColor(0f,255f,0f,100f)
-            renderer.rect(0f,0f, WORLD_WIDTH, 1f)
-            renderer.setColor(255f,255f,255f,100f)
+            renderer.setColor(0f, 0f, 255f, 100f)
+            renderer.rect(0f, 1f, WORLD_WIDTH, WORLD_HEIGHT)
+            renderer.setColor(0f, 255f, 0f, 100f)
+            renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
+            renderer.setColor(255f, 255f, 255f, 100f)
             hero.drawDebug(renderer)
             entities.forEach { it.drawDebug(renderer) }
-            renderer.setColor(0f,255f,0f,100f)
-            health.drawDebugGreen(renderer)
-            renderer.setColor(255f,0f,0f,100f)
-            health.drawDebugRed(renderer)
-            renderer.setColor(255f,255f,255f,100f)
+            healthBar.draw(renderer)
+            renderer.setColor(255f, 255f, 255f, 100f)
         }
 
         //Score not yet shown TODO
         batch.begin()
         val char: CharSequence = score.toString()
-        font.draw(batch, char, WORLD_WIDTH/2, WORLD_HEIGHT/2)
+        font.draw(batch, char, WORLD_WIDTH / 2, WORLD_HEIGHT / 2)
         batch.end()
-
-        //viewport.drawGrid(renderer)
     }
 
     private fun update(delta: Float) {
@@ -104,8 +92,7 @@ class GameScreen : Screen {
     }
 
     private fun updateHealth() {
-
-        renderer.use {health.setRed(hero.health)}
+        renderer.use { healthBar.update(hero.health) }
         if (hero.health == 0) {
             pause()
         }
@@ -133,8 +120,7 @@ class GameScreen : Screen {
     private fun updateHero(delta: Float) {
         if (hero.outOfBounds(delta)) {
             hero.direction = HeroDirection.STILL
-        }
-        else {
+        } else {
             hero.update(delta)
         }
     }
@@ -146,7 +132,7 @@ class GameScreen : Screen {
                 entRemove.add(it)
                 hero.hit()
             }
-            if (it.position.y+1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
+            if (it.position.y + 1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
                 entRemove.add(it)
                 score++
                 //println(score)
@@ -163,9 +149,9 @@ class GameScreen : Screen {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
-            val cometX = MathUtils.random(0f+cometRadius, GameConfig.WORLD_WIDTH - cometRadius)
+            val cometX = MathUtils.random(0f + cometRadius, GameConfig.WORLD_WIDTH - cometRadius)
             val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
-            val comet = Comet(vector2,cometRadius)
+            val comet = Comet(vector2, cometRadius)
             if (checkCometSpawn(comet)) {
                 entities.add(comet)
             }
@@ -180,26 +166,4 @@ class GameScreen : Screen {
         }
         return true
     }
-
-    private fun blockPlayerFromLeaving(){
-
-    }
-
-    private class GameTouchAdapter(val hero: Hero): InputAdapter() {
-        override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-            val x = screenX * 1f / Gdx.graphics.width
-            hero.direction = when {
-                x * WORLD_WIDTH < WORLD_WIDTH/2 -> HeroDirection.LEFT
-                x * WORLD_WIDTH > WORLD_WIDTH/2 -> HeroDirection.RIGHT
-                else -> HeroDirection.STILL
-            }
-            return super.touchDown(screenX, screenY, pointer, button)
-        }
-
-        override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-            hero.direction = HeroDirection.STILL
-            return super.touchUp(screenX, screenY, pointer, button)
-        }
-    }
-
 }

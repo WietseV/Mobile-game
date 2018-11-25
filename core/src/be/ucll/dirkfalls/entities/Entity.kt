@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector2
 
 
 abstract class Entity {
+    abstract val shape: Shape2D
 
-    abstract var shape: Shape2D
     /**
      * Current position of the entity
      */

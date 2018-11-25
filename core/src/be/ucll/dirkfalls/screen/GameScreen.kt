@@ -80,7 +80,6 @@ class GameScreen : Screen {
     }
 
 
-
     private fun update(delta: Float) {
         updateHero(delta)
         updateComet(delta)

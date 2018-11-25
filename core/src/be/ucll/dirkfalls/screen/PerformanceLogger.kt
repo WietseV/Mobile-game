@@ -30,7 +30,7 @@ class PerformanceLogger {
             log.info("LAGGING!!!")
         }
 
-        log.info("Frames per log: $fps - Longest time between 2 frames: $longestDeltaMs ms (+${longestDeltaMs - 1000f / 60f})")
+        log.info("Frames per second: $fps - Longest time between 2 frames: $longestDeltaMs ms (+${longestDeltaMs - 1000f / 60f})")
 
     }
 

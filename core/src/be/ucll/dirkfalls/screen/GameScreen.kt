@@ -4,7 +4,6 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.entities.*
-import be.ucll.dirkfalls.utils.logger
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -20,9 +19,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 
 class GameScreen : Screen {
-    companion object {
-        val log = logger<GameScreen>()
-    }
     private lateinit var camera: OrthographicCamera
     private lateinit var viewport: Viewport
     private lateinit var renderer: ShapeRenderer
@@ -30,15 +26,12 @@ class GameScreen : Screen {
     private lateinit var font: BitmapFont
     private lateinit var hero: Hero
     private lateinit var healthBar: HealthBar
+    private val performance = PerformanceLogger()
     private var paused: Boolean = false
     private val entities = mutableListOf<Entity>()
     private var cometTimer = 0f
     private var score = 0
 
-    // Used for performance calculations
-    private var fps = 0
-    private var time = 0f
-    private var longestDelta = 0f
 
     override fun hide() {
     }
@@ -60,7 +53,7 @@ class GameScreen : Screen {
     }
 
     override fun render(delta: Float) {
-        calculatePerformance(delta)
+        performance.update(delta)
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -86,27 +79,7 @@ class GameScreen : Screen {
         drawScore(score)
     }
 
-    private fun calculatePerformance(delta: Float) {
-        fps += 1
-        time += delta
 
-        if(delta > longestDelta) {
-            longestDelta = delta
-        }
-
-        if(time >= 1) {
-            val longestDeltaMs = longestDelta * 1000
-
-            if(longestDeltaMs > 50) {
-                log.info("LAGGING!!!")
-            }
-
-            log.info("Frames per second: $fps - Longest time between 2 frames: $longestDeltaMs ms (+${longestDeltaMs - 1000f / 60f})")
-            fps = 0
-            time = 0f
-            longestDelta = 0f
-        }
-    }
 
     private fun update(delta: Float) {
         updateHero(delta)

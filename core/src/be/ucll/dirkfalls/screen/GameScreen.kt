@@ -27,7 +27,7 @@ class GameScreen : Screen {
     private lateinit var hero: Hero
     private lateinit var healthBar: HealthBar
     private var paused: Boolean = false
-    private val entities = mutableListOf<Comet>()
+    private val entities = mutableListOf<Entity>()
     private var cometTimer = 0f
     private var score = 0
 
@@ -45,6 +45,7 @@ class GameScreen : Screen {
 
         //create player
         hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
+        entities.add(hero)
         healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
         Gdx.input.inputProcessor = GameTouchAdapter(hero)
     }
@@ -66,17 +67,12 @@ class GameScreen : Screen {
             renderer.setColor(0f, 255f, 0f, 100f)
             renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
-            hero.drawDebug(renderer)
             entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(255f, 255f, 255f, 100f)
         }
 
-        //Score not yet shown TODO
-        batch.begin()
-        val char: CharSequence = score.toString()
-        font.draw(batch, char, WORLD_WIDTH / 2, WORLD_HEIGHT / 2)
-        batch.end()
+        drawScore(score)
     }
 
     private fun update(delta: Float) {
@@ -127,16 +123,16 @@ class GameScreen : Screen {
 
     private fun updateComet(delta: Float) {
         val entRemove = mutableListOf<Comet>()
-        entities.forEach {
+        entities.filterIsInstance<Comet>().forEach {
             if (it.overlaps(hero)) {
                 entRemove.add(it)
                 hero.hit()
             }
-            if (it.position.y + 1f < 2f) { //Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
+            if (it.position.y + 1f < 2f) { // Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
                 entRemove.add(it)
                 score++
-                //println(score)
             }
+
             renderer.use { it.update(delta) }
         }
         entities.removeAll(entRemove)
@@ -165,5 +161,12 @@ class GameScreen : Screen {
             }
         }
         return true
+    }
+
+    private fun drawScore(score: Int) {
+        batch.use {
+            val char = score.toString()
+            font.draw(it, char, WORLD_WIDTH / 2, WORLD_HEIGHT / 2)
+        }
     }
 }

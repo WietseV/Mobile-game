@@ -30,7 +30,7 @@ class Hero(
 
 
     override fun overlaps(entity: Entity): Boolean {
-        TODO("not implemented")
+        return false
     }
 
     override var velocity: Vector2

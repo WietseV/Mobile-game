@@ -76,11 +76,6 @@ class GameScreen : Screen {
     }
 
     private fun update(delta: Float) {
-        /*hero.direction = when {
-            Input.Keys.RIGHT.isKeyPressed() -> HeroDirection.RIGHT
-            Input.Keys.LEFT.isKeyPressed() -> HeroDirection.LEFT
-            else -> HeroDirection.STILL
-        }*/
         updateHero(delta)
         updateComet(delta)
         updateHealth()

@@ -54,5 +54,5 @@ class EntityManagerImpl : EntityManager {
         }
     }
 
-    private fun checkCometSpawn(comet: Comet) = comets.any { it.overlaps(comet) }
+    private fun checkCometSpawn(comet: Comet) = comets.none { it.overlaps(comet) }
 }

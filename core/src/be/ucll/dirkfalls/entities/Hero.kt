@@ -15,15 +15,10 @@ class Hero(
 
     var direction: HeroDirection = HeroDirection.STILL
 
-    private var _position = startPosition
-    override var position: Vector2
-        get() = _position
-        set(value) {
-            _position = value
-            shape.setPosition(value)
-        }
+    override var position = startPosition
 
-    override val shape = Rectangle(startPosition.x, startPosition.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
+    override val shape
+        get() = Rectangle(position.x, position.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
 
     override var velocity: Vector2
         get() = when (direction) {
@@ -31,25 +26,23 @@ class Hero(
             HeroDirection.RIGHT -> Vector2(MAX_X_SPEED, 0f)
             HeroDirection.STILL -> Vector2.Zero
         }
-        set(value) {
+        set(_) {
             throw NotImplementedError("You should not directly set the velocity of the hero, rather use the direction API")
         }
 
     var health = 100
 
-    override fun drawDebug(renderer: ShapeRenderer) =
+    override fun drawDebug(renderer: ShapeRenderer) {
         renderer.rect(shape.x, shape.y, shape.width, shape.height)
+    }
 
+    override fun outOfBounds(delta: Float): Boolean =
+        (position.x + velocity.x * delta) + BOUNDS_RADIUS > GameConfig.WORLD_WIDTH * 1f
+                || (position.x + velocity.x * delta) < 0
 
     fun hit() {
         if (health != 0) {
             health -= 20
         }
     }
-
-
-    override fun outOfBounds(delta: Float): Boolean =
-        (position.x + velocity.x * delta) + BOUNDS_RADIUS > GameConfig.WORLD_WIDTH * 1f
-                || (position.x + velocity.x * delta) < 0
-
 }

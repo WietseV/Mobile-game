@@ -12,15 +12,9 @@ class Comet(
     private var radius: Float,
     override var velocity: Vector2 = Vector2(0f, -3f)
 ) : Entity() {
-    private var _position = startPosition
-    override var position: Vector2
-        get() = _position
-        set(value) {
-            _position = value
-            shape.setPosition(value)
-        }
-
-    override val shape = Circle(position, radius)
+    override var position = startPosition
+    override val shape
+        get() = Circle(position, radius)
 
     fun overlaps(entity: Entity) =
         entity.shape.contains(shape.x + shape.radius, shape.y) ||

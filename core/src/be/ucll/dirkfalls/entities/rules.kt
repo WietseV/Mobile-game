@@ -7,20 +7,17 @@ typealias Rule = (entityManager: EntityManager, delta: Float) -> Unit
 
 val updatePositionBasedOnVelocity: Rule = { entityManager, delta ->
     entityManager.entities
-        .forEach {entity ->
-            entity.position += entity.velocity * delta
-        }
+        .forEach { it.position += it.velocity * delta }
 }
 
 val heroTakesDamageWhenHit: Rule = { entityManager, _ ->
     val hero = entityManager.hero
     entityManager.comets
-        .filter { hero.overlaps(it) }
+        .filter { it.overlaps(hero) }
         .forEach {
             entityManager.deleteEntity(it)
             hero.hit()
         }
-
 }
 
 val removeCometWhenOutOfBound: Rule = { entityManager, _ ->
@@ -29,9 +26,9 @@ val removeCometWhenOutOfBound: Rule = { entityManager, _ ->
         .forEach { entityManager.deleteEntity(it) }
 }
 
-val heroCannotMoveOutOfBounds: Rule = {entityManager, delta ->
+val heroCannotMoveOutOfBounds: Rule = { entityManager, delta ->
     val hero = entityManager.hero
-    if(hero.outOfBounds(delta)) {
+    if (hero.outOfBounds(delta)) {
         hero.direction = HeroDirection.STILL
     }
 }

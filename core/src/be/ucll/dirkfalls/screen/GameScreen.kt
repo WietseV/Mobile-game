@@ -19,16 +19,18 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 
 class GameScreen : Screen {
-    private lateinit var camera: OrthographicCamera
-    private lateinit var viewport: Viewport
-    private lateinit var renderer: ShapeRenderer
-    private lateinit var batch: SpriteBatch
-    private lateinit var font: BitmapFont
-    private lateinit var hero: Hero
-    private lateinit var healthBar: HealthBar
+    private val camera = OrthographicCamera()
+    private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
+    private val renderer = ShapeRenderer()
+    private val batch = SpriteBatch(5)
+    private val font = BitmapFont().apply {
+        color = Color.WHITE
+    }
+    private val hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
+    private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
     private var paused: Boolean = false
-    private val entities = mutableListOf<Entity>()
+    private val entities = mutableListOf<Entity>(hero)
     private var cometTimer = 0f
     private var score = 0
 
@@ -37,18 +39,6 @@ class GameScreen : Screen {
     }
 
     override fun show() {
-        camera = OrthographicCamera()
-        //camera.zoom = 2f //zet deze uit op het origineel bord te zien
-        viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
-        renderer = ShapeRenderer()
-        batch = SpriteBatch(20)
-        font = BitmapFont()
-        font.color = Color.WHITE
-
-        //create player
-        hero = Hero(Vector2(WORLD_WIDTH / 2f, 1f))
-        entities.add(hero)
-        healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
         Gdx.input.inputProcessor = GameTouchAdapter(hero)
     }
 

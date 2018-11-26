@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Vector2
 
 
 abstract class Entity {
+    /**
+     * Shape of the object
+     */
     abstract val shape: Shape2D
 
     /**
@@ -44,7 +47,13 @@ abstract class Entity {
      */
     abstract fun drawDebug(renderer: ShapeRenderer)
 
+    /**
+     * Checks if two entities overlap
+     */
     abstract fun overlaps(entity: Entity): Boolean
 
+    /**
+     * Checks if an object is out of bounds
+     */
     abstract fun outOfBounds(delta: Float): Boolean
 }

@@ -2,7 +2,8 @@ package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
-import be.ucll.dirkfalls.entities.*
+import be.ucll.dirkfalls.entities.EntityManager
+import be.ucll.dirkfalls.entities.EntityManagerImpl
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen

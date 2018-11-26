@@ -5,15 +5,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 
-class EntityManagerImpl: EntityManager {
+class EntityManagerImpl : EntityManager {
     override val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f, 1f))
-
     override val entities = mutableListOf<Entity>(hero)
-
+    /**
+     * Time since last comet spawned
+     */
     private var cometTimer = 0f
 
+
     override fun draw(renderer: ShapeRenderer) {
-       entities.forEach { it.drawDebug(renderer) }
+        entities.forEach { it.drawDebug(renderer) }
     }
 
     override fun update(delta: Float) {

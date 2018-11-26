@@ -27,10 +27,10 @@ internal class GameTouchAdapter(private val hero: Hero) : InputAdapter() {
      * @param screenX Where the current press is
      */
     private fun switchHeroDirection(screenX: Int) {
-        val heroX = (hero.shape.x * (Gdx.graphics.width / WORLD_WIDTH)).roundToInt()
+        val heroX = convertWorldXToScreenX(hero.shape.x)
 
         hero.direction = when {
-            between(screenX, heroX - 50, heroX + 50) -> STILL
+            between(screenX, heroX, heroX + convertWorldXToScreenX(hero.shape.width)) -> STILL
             screenX < heroX -> LEFT
             screenX > heroX -> RIGHT
             else -> STILL
@@ -39,5 +39,9 @@ internal class GameTouchAdapter(private val hero: Hero) : InputAdapter() {
 
     private fun between(compare: Int, min: Int, max: Int): Boolean {
         return compare in (min + 1)..(max - 1)
+    }
+
+    private fun convertWorldXToScreenX(worldX: Float): Int {
+        return (worldX * (Gdx.graphics.width / WORLD_WIDTH)).roundToInt()
     }
 }

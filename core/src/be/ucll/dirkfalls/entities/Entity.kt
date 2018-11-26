@@ -31,13 +31,6 @@ abstract class Entity {
     abstract fun init()
 
     /**
-     * Update the position, health, ...
-     */
-    open fun update(dt: Float) {
-        position += velocity * dt
-    }
-
-    /**
      * Delete the reference
      */
     abstract fun delete()

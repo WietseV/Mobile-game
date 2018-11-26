@@ -17,9 +17,12 @@ class EntityManagerImpl : EntityManager {
     private var cometTimer = 0f
 
     /**
-     * List of all rules used
+     * List of all rules used.
+     * The order is very important here!
      */
     private val rules = mutableListOf(
+        heroCannotMoveOutOfBounds,
+        updatePositionBasedOnVelocity,
         heroTakesDamageWhenHit,
         removeCometWhenOutOfBound
     )
@@ -30,26 +33,10 @@ class EntityManagerImpl : EntityManager {
 
     override fun update(delta: Float) {
         rules.forEach { it(this, delta) }
-        updateHero(delta)
-        updateComet(delta)
         createComet(delta)
     }
 
     override fun deleteEntity(entity: Entity) = entities.remove(entity)
-
-    private fun updateHero(delta: Float) {
-        if (hero.outOfBounds(delta)) {
-            hero.direction = HeroDirection.STILL
-        } else {
-            hero.update(delta)
-        }
-    }
-
-    private fun updateComet(delta: Float) {
-        entities.filterIsInstance<Comet>().forEach {
-            it.update(delta)
-        }
-    }
 
     private fun createComet(delta: Float) {
         cometTimer += delta

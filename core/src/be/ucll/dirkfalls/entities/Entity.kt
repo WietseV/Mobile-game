@@ -1,12 +1,13 @@
 package be.ucll.dirkfalls.entities
 
-import be.ucll.dirkfalls.utils.vector2.plus
-import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.math.Vector2
 
-
+/**
+ * This should be stupid classe: contain no game logic
+ * Logic needs to be implented in rules
+ */
 abstract class Entity {
     /**
      * Shape of the object
@@ -26,24 +27,9 @@ abstract class Entity {
     abstract var velocity: Vector2
 
     /**
-     * Happens once: when the object is inited
-     */
-    abstract fun init()
-
-    /**
-     * Delete the reference
-     */
-    abstract fun delete()
-
-    /**
      * Draw debug info
      */
     abstract fun drawDebug(renderer: ShapeRenderer)
-
-    /**
-     * Checks if two entities overlap
-     */
-    abstract fun overlaps(entity: Entity): Boolean
 
     /**
      * Checks if an object is out of bounds

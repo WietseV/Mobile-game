@@ -9,17 +9,9 @@ import com.badlogic.gdx.math.Vector2
 
 class Comet(
     startPosition: Vector2,
-    radius: Float,
+    private var radius: Float,
     override var velocity: Vector2 = Vector2(0f, -3f)
 ) : Entity() {
-
-    private var _radius: Float = radius
-    var radius: Float
-        get() = _radius
-        set(value) {
-            _radius = value
-        }
-
     private var _position = startPosition
     override var position: Vector2
         get() = _position
@@ -30,7 +22,7 @@ class Comet(
 
     override val shape = Circle(position, radius)
 
-    override fun overlaps(entity: Entity) =
+    fun overlaps(entity: Entity) =
         entity.shape.contains(shape.x + shape.radius, shape.y) ||
                 entity.shape.contains(shape.x + shape.radius / 2, shape.y + shape.radius / 2) ||
                 entity.shape.contains(shape.x, shape.y + shape.radius) ||
@@ -41,14 +33,6 @@ class Comet(
                 entity.shape.contains(shape.x + shape.radius / 2, shape.y - shape.radius / 2)
 
     override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(shape)
-
-    override fun init() {
-        println("Created comet")
-    }
-
-    override fun delete() {
-        println("Deleted comet")
-    }
 
     override fun outOfBounds(delta: Float): Boolean =
         (position.x + velocity.x * delta) - radius < 0 ||

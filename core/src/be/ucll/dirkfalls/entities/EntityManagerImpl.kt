@@ -8,21 +8,34 @@ import com.badlogic.gdx.math.Vector2
 class EntityManagerImpl : EntityManager {
     override val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f, 1f))
     override val entities = mutableListOf<Entity>(hero)
+    override val comets
+        get() = entities.filterIsInstance<Comet>()
+
     /**
      * Time since last comet spawned
      */
     private var cometTimer = 0f
 
+    /**
+     * List of all rules used
+     */
+    private val rules = mutableListOf(
+        heroTakesDamageWhenHit,
+        removeCometWhenOutOfBound
+    )
 
     override fun draw(renderer: ShapeRenderer) {
         entities.forEach { it.drawDebug(renderer) }
     }
 
     override fun update(delta: Float) {
+        rules.forEach { it(this, delta) }
         updateHero(delta)
         updateComet(delta)
         createComet(delta)
     }
+
+    override fun deleteEntity(entity: Entity) = entities.remove(entity)
 
     private fun updateHero(delta: Float) {
         if (hero.outOfBounds(delta)) {
@@ -33,20 +46,9 @@ class EntityManagerImpl : EntityManager {
     }
 
     private fun updateComet(delta: Float) {
-        val entRemove = mutableListOf<Comet>()
         entities.filterIsInstance<Comet>().forEach {
-            if (it.overlaps(hero)) {
-                entRemove.add(it)
-                hero.hit()
-            }
-            if (it.position.y + 1f < 2f) { // Comet destroyed after hitting ground (set to 0f for destruction out of bounds)
-                entRemove.add(it)
-                //score++
-            }
-
             it.update(delta)
         }
-        entities.removeAll(entRemove)
     }
 
     private fun createComet(delta: Float) {

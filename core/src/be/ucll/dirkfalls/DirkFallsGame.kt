@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx
 class DirkFallsGame : Game() {
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
-        setScreen(GameScreen(this))
+        setScreen(HomeScreen(this))
     }
 
 

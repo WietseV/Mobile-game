@@ -12,17 +12,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen: Screen {
-
+class HomeScreen : Screen {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
-    private var paused: Boolean = false
-
     private val spriteBatch = SpriteBatch()
-    private val  font = BitmapFont()
-    private val str = "Hello World!";
-
+    private val font = BitmapFont()
+    private val str = "Hello World!"
 
 
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
@@ -53,16 +49,22 @@ class HomeScreen: Screen {
         }
 
         spriteBatch.begin()
-        font.draw(spriteBatch, str, Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
+        font.draw(
+            spriteBatch,
+            str,
+            Gdx.graphics.width / 2f - 20f,
+            Gdx.graphics.height / 2f,
+            20f,
+            1,
+            false
+        )
         spriteBatch.end()
     }
 
     override fun pause() {
-        paused = true
     }
 
     override fun resume() {
-        paused = false
     }
 
     override fun resize(width: Int, height: Int) {

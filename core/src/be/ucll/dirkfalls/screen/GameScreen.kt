@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -41,6 +42,8 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     override fun show() {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
         reset.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
+        font.data.setScale(3f, 3f)
+        font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
     }
 
     override fun render(delta: Float) {
@@ -107,7 +110,6 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private fun drawScore(score: Int) {
         batch.use {
             val char = score.toString()
-            font.data.setScale(3f, 3f)
             font.draw(it, "Score: $char", 20f+font.data.scaleX, Gdx.graphics.height-20f)
         }
     }
@@ -119,7 +121,9 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
             renderer.rect(reset.x,reset.y,reset.width,reset.height)
         }
         batch.use {
-            font.data.setScale(1f, 1f)
+            font.data.setScale(5f,5f)
+            font.draw(batch, "Game over!", Gdx.graphics.width/3f-1f, 3f*Gdx.graphics.height/5f)
+            font.data.setScale(3f, 3f)
             font.draw(batch, "Reset game?", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
         }
     }

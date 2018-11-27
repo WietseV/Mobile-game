@@ -2,6 +2,9 @@ package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
+import be.ucll.dirkfalls.screen.buttons.Button
+import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
+import be.ucll.dirkfalls.screen.buttons.PlayButton
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
@@ -18,9 +21,8 @@ class HomeScreen(dirkFallsGame: DirkFallsGame) : Screen {
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
     private val spriteBatch = SpriteBatch()
-    private val  font = BitmapFont()
-
-
+    private val font = BitmapFont()
+    private val buttons = mutableListOf<Button>()
 
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
 
@@ -28,7 +30,8 @@ class HomeScreen(dirkFallsGame: DirkFallsGame) : Screen {
     }
 
     override fun show() {
-        Gdx.input.inputProcessor = InputAdapter()
+        Gdx.input.inputProcessor = ButtonTouchAdapter()
+        buttons.add(PlayButton())
     }
 
     override fun render(delta: Float) {
@@ -50,7 +53,7 @@ class HomeScreen(dirkFallsGame: DirkFallsGame) : Screen {
         }
 
         spriteBatch.begin()
-        font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
+        font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
         spriteBatch.end()
     }
 

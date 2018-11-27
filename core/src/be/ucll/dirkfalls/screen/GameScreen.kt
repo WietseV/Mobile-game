@@ -4,7 +4,7 @@ import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.entities.EntityManager
+import be.ucll.dirkfalls.rules.RuleManager
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 
 class GameScreen(dirkFallsGame: DirkFallsGame) : Screen {
@@ -25,11 +26,10 @@ class GameScreen(dirkFallsGame: DirkFallsGame) : Screen {
     private val font = BitmapFont().apply {
         color = Color.WHITE
     }
-
     private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private val entityManager = EntityManager(gameState)
+    private val entityManager = RuleManager(gameState)
     private var paused: Boolean = false
 
 
@@ -62,7 +62,7 @@ class GameScreen(dirkFallsGame: DirkFallsGame) : Screen {
             renderer.setColor(0f, 255f, 0f, 100f)
             renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
-            entityManager.draw(renderer)
+            gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(255f, 255f, 255f, 100f)
         }
@@ -100,7 +100,8 @@ class GameScreen(dirkFallsGame: DirkFallsGame) : Screen {
     private fun drawScore(score: Int) {
         batch.use {
             val char = score.toString()
-            font.draw(it, "Score: $char", 8f, Gdx.graphics.height-10f)
+            font.data.setScale(3f, 3f)
+            font.draw(it, "Score: $char", 20f+font.data.scaleX, Gdx.graphics.height-20f)
         }
     }
 }

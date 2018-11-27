@@ -3,7 +3,7 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.entities.EntityManager
+import be.ucll.dirkfalls.rules.RuleManager
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -24,11 +24,10 @@ class GameScreen : Screen {
     private val font = BitmapFont().apply {
         color = Color.WHITE
     }
-
     private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private val entityManager = EntityManager(gameState)
+    private val entityManager = RuleManager(gameState)
     private var paused: Boolean = false
 
 
@@ -61,7 +60,7 @@ class GameScreen : Screen {
             renderer.setColor(0f, 255f, 0f, 100f)
             renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
-            entityManager.draw(renderer)
+            gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(255f, 255f, 255f, 100f)
         }

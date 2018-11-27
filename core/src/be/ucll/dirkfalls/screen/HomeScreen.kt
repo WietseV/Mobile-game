@@ -12,13 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen: Screen {
-
+class HomeScreen : Screen {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
-    private var paused: Boolean = false
-
     private val spriteBatch = SpriteBatch()
     private val  font = BitmapFont()
 
@@ -57,11 +54,9 @@ class HomeScreen: Screen {
     }
 
     override fun pause() {
-        paused = true
     }
 
     override fun resume() {
-        paused = false
     }
 
     override fun resize(width: Int, height: Int) {

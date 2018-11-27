@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
@@ -16,7 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen : Screen {
+class GameScreen(dirkFallsGame: DirkFallsGame) : Screen {
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()

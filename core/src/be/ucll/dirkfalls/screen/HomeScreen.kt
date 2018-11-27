@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
@@ -12,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen : Screen {
+class HomeScreen(dirkFallsGame: DirkFallsGame) : Screen {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()

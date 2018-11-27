@@ -10,4 +10,6 @@ class DirkFallsGame : Game() {
         Gdx.app.logLevel = Application.LOG_DEBUG
         setScreen(GameScreen())
     }
+
+
 }

@@ -17,6 +17,6 @@ class ButtonTouchAdapter(private val screen: DirkScreen): InputAdapter() {
         return scale(x.toFloat(), 0f, Gdx.graphics.width.toFloat(), 0f, WORLD_WIDTH)
     }
     private fun convertScreenYToWorldY(y: Int): Float {
-        return scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
+        return WORLD_HEIGHT-scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
     }
 }

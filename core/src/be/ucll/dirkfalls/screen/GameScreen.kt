@@ -5,9 +5,10 @@ import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.rules.RuleManager
+import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
+import be.ucll.dirkfalls.screen.buttons.ResetButton
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -17,7 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
+class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()
@@ -30,7 +31,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
     private val performance = PerformanceLogger()
     private val ruleManager = RuleManager(gameState)
     private var paused: Boolean = false
-
+    private val reset = ResetButton()
 
 
 
@@ -39,6 +40,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
 
     override fun show() {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
+        reset.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
     }
 
     override fun render(delta: Float) {
@@ -65,6 +67,10 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
             renderer.setColor(255f, 255f, 255f, 100f)
         }
 
+        if (gameState.gameOver) {
+            drawGameOver()
+        }
+
         drawScore(gameState.score)
     }
 
@@ -73,6 +79,8 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
 
         renderer.use { healthBar.update(hero.health) }
         if (hero.health == 0) {
+            Gdx.input.inputProcessor = ButtonTouchAdapter(this)
+            gameState.gameOver = true
             pause()
         }
     }
@@ -101,5 +109,29 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
             font.data.setScale(3f, 3f)
             font.draw(it, "Score: $char", 20f+font.data.scaleX, Gdx.graphics.height-20f)
         }
+    }
+
+    private fun drawGameOver() {
+        renderer.use {
+            renderer.color = Color.RED
+            renderer.set(ShapeRenderer.ShapeType.Filled)
+            renderer.rect(reset.x,reset.y,reset.width,reset.height)
+        }
+        batch.use {
+            font.data.setScale(1f, 1f)
+            font.draw(batch, "Reset game?", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
+        }
+    }
+
+    override fun screenPressed(x: Float, y: Float) {
+        if (reset.contains(x, y)) {
+            resetGame()
+        }
+    }
+
+    private fun resetGame() {
+        gameState.resetGame()
+        Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
+        resume()
     }
 }

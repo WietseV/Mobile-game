@@ -7,7 +7,6 @@ import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.screen.buttons.*
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -16,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen(val dirkFallsGame: DirkFallsGame) : Screen {
+class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
@@ -35,7 +34,7 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : Screen {
         buttons.add(play)
     }
 
-    fun screenPressed(x: Float, y: Float) {
+    override fun screenPressed(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
                 dirkFallsGame.screen = GameScreen(dirkFallsGame)
@@ -75,7 +74,6 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : Screen {
     private fun drawText() {
         spriteBatch.use {
             font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
-
         }
     }
 

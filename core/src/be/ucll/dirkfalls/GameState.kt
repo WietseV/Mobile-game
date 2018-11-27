@@ -11,9 +11,17 @@ class GameState {
     val comets
         get() = entities.filterIsInstance<Comet>()
     var score = 0
+    var gameOver = false
 
     fun deleteEntity(entity: Entity){
         entities.remove(entity)
     }
 
+    fun resetGame() {
+        hero.position = Vector2(GameConfig.WORLD_WIDTH / 2f, 1f)
+        hero.health = 100
+        entities.removeAll(comets)
+        score = 0
+        gameOver = false
+    }
 }

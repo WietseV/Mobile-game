@@ -81,6 +81,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         if (hero.health == 0) {
             Gdx.input.inputProcessor = ButtonTouchAdapter(this)
             gameState.gameOver = true
+            //dirkFallsGame.screen = KillScreen(dirkFallsGame)
             pause()
         }
     }

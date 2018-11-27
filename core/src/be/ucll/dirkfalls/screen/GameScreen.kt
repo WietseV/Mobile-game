@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 
 class GameScreen : Screen {
@@ -98,7 +99,8 @@ class GameScreen : Screen {
     private fun drawScore(score: Int) {
         batch.use {
             val char = score.toString()
-            font.draw(it, "Score: $char", 8f, Gdx.graphics.height-10f)
+            font.data.setScale(3f, 3f)
+            font.draw(it, "Score: $char", 20f+font.data.scaleX, Gdx.graphics.height-20f)
         }
     }
 }

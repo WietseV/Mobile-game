@@ -16,15 +16,18 @@ class Comet(
     override val shape
         get() = Circle(position, radius)
 
+    // Get 8 points of the circle and check if they are contained in the shape
     fun overlaps(entity: Entity) =
-        entity.shape.contains(shape.x + shape.radius, shape.y) ||
-                entity.shape.contains(shape.x + shape.radius / 2, shape.y + shape.radius / 2) ||
-                entity.shape.contains(shape.x, shape.y + shape.radius) ||
-                entity.shape.contains(shape.x - shape.radius / 2, shape.y + shape.radius / 2) ||
-                entity.shape.contains(shape.x - shape.radius, shape.y) ||
-                entity.shape.contains(shape.x - shape.radius / 2, shape.y - shape.radius / 2) ||
-                entity.shape.contains(shape.x, shape.y - shape.radius) ||
-                entity.shape.contains(shape.x + shape.radius / 2, shape.y - shape.radius / 2)
+        listOf(
+            Vector2(shape.x + shape.radius, shape.y),
+            Vector2(shape.x + shape.radius / 2, shape.y + shape.radius / 2),
+            Vector2(shape.x, shape.y + shape.radius),
+            Vector2(shape.x - shape.radius / 2, shape.y + shape.radius / 2),
+            Vector2(shape.x - shape.radius, shape.y),
+            Vector2(shape.x - shape.radius / 2, shape.y - shape.radius / 2),
+            Vector2(shape.x, shape.y - shape.radius),
+            Vector2(shape.x + shape.radius / 2, shape.y - shape.radius / 2)
+        ).any { entity.shape.contains(it) }
 
     override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(shape)
 

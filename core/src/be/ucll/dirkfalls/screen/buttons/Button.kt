@@ -1,4 +1,4 @@
-package be.ucll.dirkfalls.screen.Buttons
+package be.ucll.dirkfalls.screen.buttons
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Rectangle

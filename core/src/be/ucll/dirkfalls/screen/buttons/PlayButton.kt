@@ -1,4 +1,4 @@
-package be.ucll.dirkfalls.screen.Buttons
+package be.ucll.dirkfalls.screen.buttons
 
 class PlayButton: Button() {
     override fun pressButton() {

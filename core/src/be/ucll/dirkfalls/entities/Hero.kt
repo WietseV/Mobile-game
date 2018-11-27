@@ -33,6 +33,7 @@ class Hero(
     var health = 100
 
     override fun drawDebug(renderer: ShapeRenderer) {
+        renderer.setColor(255f, 255f, 255f, 100f)
         renderer.rect(shape.x, shape.y, shape.width, shape.height)
     }
 

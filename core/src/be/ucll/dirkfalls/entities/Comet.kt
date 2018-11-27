@@ -5,6 +5,7 @@ import be.ucll.dirkfalls.utils.circle
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 
 class Comet(
@@ -15,6 +16,8 @@ class Comet(
     override var position = startPosition
     override val shape
         get() = Circle(position, radius)
+
+    var color = Vector3(1f, 1f, 1f)
 
     // Get 8 points of the circle and check if they are contained in the shape
     fun overlaps(entity: Entity) =
@@ -29,7 +32,11 @@ class Comet(
             Vector2(shape.x + shape.radius / 2, shape.y - shape.radius / 2)
         ).any { entity.shape.contains(it) }
 
-    override fun drawDebug(renderer: ShapeRenderer) = renderer.circle(shape)
+    override fun drawDebug(renderer: ShapeRenderer) {
+        renderer.setColor(color.x, color.y, color.z, 100f)
+        renderer.circle(shape)
+
+    }
 
     override fun outOfBounds(delta: Float): Boolean =
         (position.x + velocity.x * delta) - radius < 0 ||

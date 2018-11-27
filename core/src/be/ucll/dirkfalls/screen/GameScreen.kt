@@ -27,7 +27,7 @@ class GameScreen : Screen {
     private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private val entityManager = RuleManager(gameState)
+    private val ruleManager = RuleManager(gameState)
     private var paused: Boolean = false
 
 
@@ -47,7 +47,7 @@ class GameScreen : Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         if (!paused) {
-            entityManager.update(delta)
+            ruleManager.update(delta)
             updateHealth()
         }
 
@@ -55,13 +55,12 @@ class GameScreen : Screen {
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.setColor(0f, 0f, 255f, 100f)
+            renderer.setColor(0f, 0f, 1f, 1f)
             renderer.rect(0f, 1f, WORLD_WIDTH, WORLD_HEIGHT)
-            renderer.setColor(0f, 255f, 0f, 100f)
-            renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
-            renderer.setColor(255f, 255f, 255f, 100f)
             gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
+            renderer.setColor(0f, 1f, 0f, 1f)
+            renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
         }
 

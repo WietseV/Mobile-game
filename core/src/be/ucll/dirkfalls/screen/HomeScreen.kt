@@ -21,7 +21,6 @@ class HomeScreen: Screen {
 
     private val spriteBatch = SpriteBatch()
     private val  font = BitmapFont()
-    private val str = "Hello World!";
 
 
 
@@ -53,7 +52,7 @@ class HomeScreen: Screen {
         }
 
         spriteBatch.begin()
-        font.draw(spriteBatch, str, Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
+        font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
         spriteBatch.end()
     }
 

@@ -99,7 +99,7 @@ class GameScreen : Screen {
     private fun drawScore(score: Int) {
         batch.use {
             val char = score.toString()
-            font.draw(it, "Score: $char", WORLD_WIDTH / 2, WORLD_HEIGHT / 2)
+            font.draw(it, "Score: $char", 5f, 5f)
         }
     }
 }

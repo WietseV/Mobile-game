@@ -52,9 +52,9 @@ class HomeScreen: Screen {
             renderer.setColor(255f, 255f, 255f, 100f)
         }
 
-        spriteBatch.begin();
-        font.draw(spriteBatch, str, 10f, 10f);
-        spriteBatch.end();
+        spriteBatch.begin()
+        font.draw(spriteBatch, str, Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
+        spriteBatch.end()
     }
 
     override fun pause() {

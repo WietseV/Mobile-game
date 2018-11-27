@@ -17,8 +17,8 @@ class HomeScreen : Screen {
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
     private val spriteBatch = SpriteBatch()
-    private val font = BitmapFont()
-    private val str = "Hello World!"
+    private val  font = BitmapFont()
+
 
 
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
@@ -49,15 +49,7 @@ class HomeScreen : Screen {
         }
 
         spriteBatch.begin()
-        font.draw(
-            spriteBatch,
-            str,
-            Gdx.graphics.width / 2f - 20f,
-            Gdx.graphics.height / 2f,
-            20f,
-            1,
-            false
-        )
+        font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-20f, Gdx.graphics.height/2f, 20f, 1, false)
         spriteBatch.end()
     }
 

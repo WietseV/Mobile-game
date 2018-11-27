@@ -98,7 +98,7 @@ class GameScreen : Screen {
     private fun drawScore(score: Int) {
         batch.use {
             val char = score.toString()
-            font.draw(it, "Score: $char", 5f, 5f)
+            font.draw(it, "Score: $char", 8f, Gdx.graphics.height-10f)
         }
     }
 }

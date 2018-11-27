@@ -2,12 +2,18 @@ package be.ucll.dirkfalls.screen.buttons
 
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.screen.HomeScreen
+import be.ucll.dirkfalls.screen.KillScreen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.Screen
 
-class ButtonTouchAdapter(private val screen: HomeScreen): InputAdapter() {
+class ButtonTouchAdapter(private val screen: Screen): InputAdapter() {
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        screen.screenPressed(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        if (screen is HomeScreen) {
+            screen.screenPressed(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        } else if (screen is KillScreen){
+            screen.screenPressed(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        }
         return super.touchUp(screenX, screenY, pointer, button)
     }
 

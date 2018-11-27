@@ -73,6 +73,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : Screen {
 
         renderer.use { healthBar.update(hero.health) }
         if (hero.health == 0) {
+            dirkFallsGame.screen = KillScreen(dirkFallsGame)
             pause()
         }
     }

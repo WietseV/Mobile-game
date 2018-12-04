@@ -5,11 +5,10 @@ import be.ucll.dirkfalls.GameState
 class LevelFactory(val gameState: GameState) {
 
     fun createLevel(number: Int) :Level {
-        var gyro: Rule
-        if (gameState.useGyro) {
-            gyro = gyroscope
+        val gyro: Rule = if (gameState.useGyro) {
+            gyroscope
         } else {
-            gyro = touchScreen
+            touchScreen
         }
         return when (number) {
             //1 -> LevelOne()

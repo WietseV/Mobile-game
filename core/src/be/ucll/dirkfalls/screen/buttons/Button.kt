@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Rectangle
 abstract class Button(val screen: DirkScreen, var color: Color): Rectangle() {
     protected val startColor = color
     abstract fun pressButton(game: DirkFallsGame, targetScreen: DirkScreen? = null)
-    fun touchButton(color: Color = Color.ORANGE) {
+    open fun touchButton(color: Color = Color.ORANGE) {
         this.color = color
     }
-    fun touchMovedOff() {
+    open fun touchMovedOff() {
         this.color = startColor
     }
 }

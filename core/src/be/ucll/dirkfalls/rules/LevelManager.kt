@@ -2,18 +2,16 @@ package be.ucll.dirkfalls.rules
 
 import be.ucll.dirkfalls.GameState
 
-class RuleManager(var gameState: GameState) {
-    /**
-     * List of all rules used.
-     * The order is very important here!
-     */
+class LevelManager(var gameState: GameState) {
+
     private val rules = mutableSetOf(
         heroCannotMoveOutOfBounds,
         updatePositionBasedOnVelocity,
         heroTakesDamageWhenHit,
         removeCometWhenOutOfBound,
         createCometSpawner(),
-        changeColor
+        changeColor,
+            newBackgroundAbove1000Points
     )
 
     fun update(delta: Float) {

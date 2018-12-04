@@ -4,9 +4,10 @@ import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.rules.RuleManager
+import be.ucll.dirkfalls.rules.LevelManager
 import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
 import be.ucll.dirkfalls.screen.buttons.ResetButton
+import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -30,10 +31,9 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private val ruleManager = RuleManager(gameState)
+    private val ruleManager = LevelManager(gameState)
     private var paused: Boolean = false
     private val reset = ResetButton()
-
 
 
     override fun hide() {
@@ -61,8 +61,8 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.setColor(0f, 0f, 1f, 1f)
-            renderer.rect(0f, 1f, WORLD_WIDTH, WORLD_HEIGHT)
+            renderer.setColor(gameState.background.color)
+            renderer.rect(gameState.background.background)
             gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(0f, 1f, 0f, 1f)
@@ -140,3 +140,5 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         resume()
     }
 }
+
+

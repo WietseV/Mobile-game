@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls
 
+import be.ucll.dirkfalls.entities.Background
 import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
@@ -12,6 +13,7 @@ class GameState {
         get() = entities.filterIsInstance<Comet>()
     var score = 0
     var gameOver = false
+    val background = Background()
 
     fun deleteEntity(entity: Entity){
         entities.remove(entity)
@@ -23,5 +25,9 @@ class GameState {
         entities.removeAll(comets)
         score = 0
         gameOver = false
+    }
+
+    fun changeBackground(red:Float, green: Float, blue: Float ){
+        background.changeColor(red, green, blue)
     }
 }

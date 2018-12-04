@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 fun main(arg: Array<String>) {
     val config = LwjglApplicationConfiguration().apply {
         width = 480
-        height = 800
+    height = 800
     }
     LwjglApplication(DirkFallsGame(), config)
 }

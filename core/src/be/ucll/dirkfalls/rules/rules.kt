@@ -69,3 +69,10 @@ val changeColor : Rule = {gameState, delta ->
         it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)
     }
 }
+
+val newBackgroundAbove1000Points : Rule = {gameState, _ ->
+
+    if (gameState.score > 4) {
+            gameState.changeBackground(110f, 61f, 29f)
+    }
+}

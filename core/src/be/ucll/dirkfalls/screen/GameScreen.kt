@@ -33,7 +33,6 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private val ruleManager = LevelManager(gameState)
     private var paused: Boolean = false
     private val reset = ResetButton(this)
 
@@ -55,7 +54,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         if (!paused) {
-            ruleManager.update(delta)
+            gameState.updateLevels(delta)
             updateHealth()
         }
 

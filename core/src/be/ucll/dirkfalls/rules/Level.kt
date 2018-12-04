@@ -1,8 +1,12 @@
 package be.ucll.dirkfalls.rules
 
-interface Level {
+import be.ucll.dirkfalls.GameState
 
-    var rules: Set<Rule>
+abstract class Level {
 
+    abstract var rules: Set<Rule>
 
+    fun executeRules( gameState: GameState, delta: Float){
+        rules.forEach{it(gameState, delta)}
+    }
 }

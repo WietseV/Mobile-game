@@ -4,26 +4,20 @@ import be.ucll.dirkfalls.GameState
 
 class LevelManager(var gameState: GameState) {
 
-    private val rules = mutableSetOf(
-        heroCannotMoveOutOfBounds,
-        updatePositionBasedOnVelocity,
-        heroTakesDamageWhenHit,
-        removeCometWhenOutOfBound,
-        createCometSpawner(),
-        changeColor,
-            newBackgroundAbove1000Points
-    )
+    private var level: Level = LevelOne()
+    private var levelCounter = 1
+    private val LevelFactory = LevelFactory()
+
 
     fun update(delta: Float) {
-        rules.forEach { it(gameState, delta) }
+        level.executeRules(gameState, delta)
     }
 
-    fun activateRule(rule: Rule) {
-        rules.add(rule)
+    fun nextLevel() {
+        if (gameState.score % 10 == 0){
+            level = LevelFactory.createLevel(++levelCounter)
+        }
     }
 
-    fun deactivate(rule: Rule) {
-        rules.remove(rule)
-    }
 
 }

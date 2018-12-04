@@ -15,26 +15,26 @@ typealias Rule = (gameState: GameState, delta: Float) -> Unit
 
 val updatePositionBasedOnVelocity: Rule = { gameState, delta ->
     gameState.entities
-        .forEach { it.position += it.velocity * delta }
+            .forEach { it.position += it.velocity * delta }
 }
 
 val heroTakesDamageWhenHit: Rule = { gameState, _ ->
     val hero = gameState.hero
     gameState.comets
-        .filter { it.overlaps(hero) }
-        .forEach {
-            gameState.deleteEntity(it)
-            hero.hit(it)
-        }
+            .filter { it.overlaps(hero) }
+            .forEach {
+                gameState.deleteEntity(it)
+                hero.hit(it)
+            }
 }
 
 val removeCometWhenOutOfBound: Rule = { gameState, _ ->
     gameState.comets
-        .filter { it.position.y < 0f }
-        .forEach {
-            gameState.deleteEntity(it)
-            gameState.score++
-        }
+            .filter { it.position.y < 0f }
+            .forEach {
+                gameState.deleteEntity(it)
+                gameState.score++
+            }
 }
 
 val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
@@ -47,7 +47,7 @@ val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
 fun createCometSpawner(): Rule {
     var cometTimer = 0f
 
-    return {gameState, delta ->
+    return { gameState, delta ->
         cometTimer += delta
 
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
@@ -64,15 +64,12 @@ fun createCometSpawner(): Rule {
     }
 }
 
-val changeColor : Rule = {gameState, delta ->
+val changeColor: Rule = { gameState, delta ->
     gameState.comets.forEach {
         it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)
     }
 }
 
-val newBackgroundAbove1000Points : Rule = {gameState, _ ->
-
-    if (gameState.score > 4) {
-            gameState.changeBackground(110f, 61f, 29f)
-    }
+fun newBackground(red: Float, green: Float, blue: Float): Rule = { gameState, delta ->
+    gameState.changeBackground(red, green, blue)
 }

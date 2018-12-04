@@ -45,7 +45,7 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
             color = Color.GRAY
             gameState.useGyro = false
         }
-        val gyro = UseGyroButton(this, )
+        val gyro = UseGyroButton(this, color)
         gyro.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
         buttons.add(play)
         buttons.add(gyro)

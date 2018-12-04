@@ -1,47 +1,39 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
+import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.entities.HeroDirection.*
+import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.math.Vector2
 import kotlin.math.roundToInt
 
-internal class GameTouchAdapter(private val hero: Hero) : InputAdapter() {
+internal class GameTouchAdapter(private val gameState: GameState) : InputAdapter() {
+    private val hero
+        get() = gameState
+
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        switchHeroDirection(screenX)
+        updatePosition(screenX, screenY)
         return true
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        switchHeroDirection(screenX)
+        updatePosition(screenX, screenY)
         return true
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        hero.direction = STILL
+        gameState.pressedPosition = null
         return true
     }
 
-    /**
-     * @param screenX Where the current press is
-     */
-    private fun switchHeroDirection(screenX: Int) {
-        val heroX = convertWorldXToScreenX(hero.shape.x)
-
-        hero.direction = when {
-            between(screenX, heroX, heroX + convertWorldXToScreenX(hero.shape.width)) -> STILL
-            screenX < heroX -> LEFT
-            screenX > heroX -> RIGHT
-            else -> STILL
-        }
-    }
-
-    private fun between(compare: Int, min: Int, max: Int): Boolean {
-        return compare in (min + 1)..(max - 1)
-    }
-
-    private fun convertWorldXToScreenX(worldX: Float): Int {
-        return (worldX * (Gdx.graphics.width / WORLD_WIDTH)).roundToInt()
+    private fun updatePosition(x: Int, y: Int) {
+        gameState.pressedPosition = Vector2(
+            scale(x.toFloat(), 0f, Gdx.graphics.width.toFloat(), 0f, WORLD_WIDTH),
+            scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
+        )
     }
 }

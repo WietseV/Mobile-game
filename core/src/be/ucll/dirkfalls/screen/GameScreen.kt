@@ -4,9 +4,11 @@ import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
+import be.ucll.dirkfalls.entities.HeroDirection
 import be.ucll.dirkfalls.rules.RuleManager
 import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
 import be.ucll.dirkfalls.screen.buttons.ResetButton
+import be.ucll.dirkfalls.utils.between
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -40,7 +42,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     }
 
     override fun show() {
-        Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
+        Gdx.input.inputProcessor = GameTouchAdapter(gameState)
         reset.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -56,6 +58,20 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
             ruleManager.update(delta)
             updateHealth()
         }
+
+        val hero = gameState.hero
+        val pressed = gameState.pressedPosition
+        if(pressed != null) {
+            hero.direction = when {
+                between(pressed.x, hero.position.x, hero.position.x + hero.shape.width) -> HeroDirection.STILL
+                pressed.x < hero.position.x -> HeroDirection.LEFT
+                pressed.x > hero.position.x -> HeroDirection.RIGHT
+                else -> HeroDirection.STILL
+            }
+        } else {
+            hero.direction = HeroDirection.STILL
+        }
+
 
         renderer.projectionMatrix = camera.combined
         renderer.use {
@@ -152,7 +168,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
 
     fun resetGame() {
         gameState.resetGame()
-        Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
+        Gdx.input.inputProcessor = GameTouchAdapter(gameState)
         resume()
     }
 }

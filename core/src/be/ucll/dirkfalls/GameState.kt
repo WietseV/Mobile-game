@@ -13,6 +13,8 @@ class GameState {
     var score = 0
     var gameOver = false
 
+    var pressedPosition: Vector2? = null
+
     fun deleteEntity(entity: Entity){
         entities.remove(entity)
     }

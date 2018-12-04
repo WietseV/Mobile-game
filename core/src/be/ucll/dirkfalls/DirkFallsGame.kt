@@ -1,6 +1,5 @@
 package be.ucll.dirkfalls
 
-import be.ucll.dirkfalls.screen.GameScreen
 import be.ucll.dirkfalls.screen.HomeScreen
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Game

@@ -15,6 +15,8 @@ class GameState {
     var gameOver = false
     val background = Background()
 
+    var pressedPosition: Vector2? = null
+
     fun deleteEntity(entity: Entity){
         entities.remove(entity)
     }

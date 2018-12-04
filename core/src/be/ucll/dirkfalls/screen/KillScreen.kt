@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class KillScreen(val dirkFallsGame: DirkFallsGame) : Screen {
+class KillScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
@@ -35,7 +35,7 @@ class KillScreen(val dirkFallsGame: DirkFallsGame) : Screen {
         buttons.add(home)
     }
 
-    fun screenPressed(x: Float, y: Float) {
+    override fun screenPressed(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
                 dirkFallsGame.screen = HomeScreen(dirkFallsGame)

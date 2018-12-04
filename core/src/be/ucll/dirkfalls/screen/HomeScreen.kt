@@ -37,7 +37,15 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
         val play = PlayButton(this)
         play.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
-        val gyro = UseGyroButton(this, if (gyroscopeAvail) {Color.RED} else {Color.GRAY})
+        var color: Color
+        if (gyroscopeAvail) {
+            color = Color.RED
+            gameState.useGyro = true
+        } else {
+            color = Color.GRAY
+            gameState.useGyro = false
+        }
+        val gyro = UseGyroButton(this, )
         gyro.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
         buttons.add(play)
         buttons.add(gyro)

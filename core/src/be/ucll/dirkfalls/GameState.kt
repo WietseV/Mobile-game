@@ -33,6 +33,7 @@ class GameState {
         entities.removeAll(comets)
         score = 0
         gameOver = false
+        levelManager.resetLevels()
     }
 
     fun changeBackground(red: Float, green: Float, blue: Float) {

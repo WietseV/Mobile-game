@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color
 
 class UseGyroButton(screen: DirkScreen, color: Color = Color.RED) : Button(screen, color) {
     override fun pressButton(game: DirkFallsGame, targetScreen: DirkScreen?) {
+        this.color = startColor
         if (screen is HomeScreen) {
             screen.gameState.useGyro = !screen.gameState.useGyro
         }

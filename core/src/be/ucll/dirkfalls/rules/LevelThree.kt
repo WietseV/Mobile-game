@@ -1,8 +1,9 @@
 package be.ucll.dirkfalls.rules
 
-class LevelThree() : Level(){
+class LevelThree(rule: Rule = touchScreen) : Level(rule) {
 
     override var rules = setOf(
+            rule,
             heroCannotMoveOutOfBounds,
             updatePositionBasedOnVelocity,
             heroTakesDamageWhenHit,

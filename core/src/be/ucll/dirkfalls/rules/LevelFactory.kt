@@ -1,12 +1,20 @@
 package be.ucll.dirkfalls.rules
 
-class LevelFactory {
+import be.ucll.dirkfalls.GameState
+
+class LevelFactory(val gameState: GameState) {
 
     fun createLevel(number: Int) :Level {
-        when (number) {
-            1 -> return LevelOne()
-            2 -> return LevelTwo()
-            3 -> return LevelThree()
+        var gyro: Rule
+        if (gameState.useGyro) {
+            gyro = gyroscope
+        } else {
+            gyro = touchScreen
+        }
+        return when (number) {
+            //1 -> LevelOne()
+            2 -> LevelTwo()
+            3 -> LevelThree(gyro)
             /*4 -> LevelFour()
             5 -> LevelFive()
             6 -> LevelSix()
@@ -14,7 +22,7 @@ class LevelFactory {
             8 -> LevelEight()
             9 -> LevelNine()
             10 -> LevelTen()*/
-            else -> return LevelOne()
+            else -> LevelOne()
         }
 
     }

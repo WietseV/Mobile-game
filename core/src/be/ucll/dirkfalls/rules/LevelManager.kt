@@ -4,19 +4,28 @@ import be.ucll.dirkfalls.GameState
 
 class LevelManager(var gameState: GameState) {
 
-
-    private var level: Level = LevelOne()
+    private val levelFactory = LevelFactory(gameState)
     private var levelCounter = 1
-    private val LevelFactory = LevelFactory()
+    private var level: Level = levelFactory.createLevel(levelCounter)
+
 
     fun update(delta: Float) {
         level.executeRules(gameState, delta)
     }
 
     fun nextLevel() {
-        if (gameState.score % 10 == 0){
-            level = LevelFactory.createLevel(++levelCounter)
+        if (gameState.score % 25 == 0){
+            if (levelCounter == 3) {
+                resetLevels()
+            } else {
+                level = levelFactory.createLevel(++levelCounter)
+            }
         }
+    }
+
+    fun resetLevels() {
+        levelCounter = 1
+        level = levelFactory.createLevel(levelCounter)
     }
 
 

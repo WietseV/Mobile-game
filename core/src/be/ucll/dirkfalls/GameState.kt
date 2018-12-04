@@ -20,6 +20,8 @@ class GameState {
     val background = Background()
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
+    var useGyro = true
+
 
     fun deleteEntity(entity: Entity) {
         entities.remove(entity)

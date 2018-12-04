@@ -7,6 +7,7 @@ import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.screen.buttons.*
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -24,6 +25,8 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val font = BitmapFont()
     private val buttons = mutableListOf<Button>()
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
+    private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+
 
     override fun hide() {
     }

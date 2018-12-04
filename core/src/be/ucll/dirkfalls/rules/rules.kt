@@ -24,7 +24,7 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
         .filter { it.overlaps(hero) }
         .forEach {
             gameState.deleteEntity(it)
-            hero.hit()
+            hero.hit(it)
         }
 }
 

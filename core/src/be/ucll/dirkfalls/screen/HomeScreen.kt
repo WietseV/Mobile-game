@@ -35,9 +35,7 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
 
     override fun show() {
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        val play = PlayButton(this)
-        play.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
-        var color: Color
+        val color: Color
         if (gyroscopeAvail) {
             color = Color.RED
             gameState.useGyro = true
@@ -45,8 +43,13 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
             color = Color.GRAY
             gameState.useGyro = false
         }
+        val play = PlayButton(this)
         val gyro = UseGyroButton(this, color)
-        gyro.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
+        val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
+        val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
+        val buttonCoords = getBoxCoordsOnScreen(0.5f,0.49f, buttonWidth, buttonHeight)
+        play.set(buttonCoords.x, buttonCoords.y, buttonWidth, buttonHeight)
+        gyro.set(buttonCoords.x, buttonCoords.y-getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
         buttons.add(play)
         buttons.add(gyro)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -114,16 +117,22 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
 
     private fun drawText() {
         spriteBatch.use {
+            val textWidth = getTextWidthBasedOnScreen(0.33f)
+            val textHeight = getTextHeightBasedOnScreen(0.07f)
+            val textCoords = getTextCoordsOnScreen(0.5f,0.535f, textWidth, textHeight)
+            val titleWidth = getTextWidthBasedOnScreen(0.8f)
+            val titleHeight = getTextHeightBasedOnScreen(0.12f)
+            val titleCoords = getTextCoordsOnScreen(0.5f, 0.7f, titleWidth, titleHeight)
             font.data.setScale(8f, 8f)
-            font.draw(spriteBatch, "DIRK FALLS", Gdx.graphics.width/2f-100f, Gdx.graphics.height/1.5f, 200f, 1, false)
+            font.draw(spriteBatch, "DIRK FALLS", titleCoords.x, titleCoords.y, titleWidth, 1, false)
             font.data.setScale(3f, 3f)
-            font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
+            font.draw(spriteBatch, "Start game!", textCoords.x, textCoords.y, textWidth, 1, false)
             font.data.setScale(2.5f, 2.5f)
             val gyro = when (gameState.useGyro) {
                 true -> "V"
                 else -> "X"
             }
-            font.draw(spriteBatch, "Use gyroscope? ($gyro)", Gdx.graphics.width/2f-10f, Gdx.graphics.height/3f+115f, 20f, 1, false)
+            font.draw(spriteBatch, "Use gyroscope? ($gyro)", textCoords.x, textCoords.y-getTextHeightBasedOnScreen(0.1f), textWidth, 1, false)
         }
     }
 

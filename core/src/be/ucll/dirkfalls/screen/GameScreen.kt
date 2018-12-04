@@ -51,8 +51,11 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         Gdx.input.inputProcessor = GameTouchAdapter(gameState)
         val reset = ResetButton(this)
         val homeButton = HomeButton(this)
-        reset.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
-        homeButton.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
+        val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
+        val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
+        val resetCoords = getBoxCoordsOnScreen(0.5f,0.49f, buttonWidth, buttonHeight)
+        reset.set(resetCoords.x, resetCoords.y, buttonWidth, buttonHeight)
+        homeButton.set(resetCoords.x, resetCoords.y-getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
         buttons.add(reset)
         buttons.add(homeButton)
         font.data.setScale(3f, 3f)
@@ -135,10 +138,16 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         }
         batch.use {
             font.data.setScale(5f,5f)
-            font.draw(batch, "Game over!", Gdx.graphics.width/3f-1f, 3f*Gdx.graphics.height/5f)
+            val textWidth = getTextWidthBasedOnScreen(0.33f)
+            val textHeight = getTextHeightBasedOnScreen(0.07f)
+            val textCoords = getTextCoordsOnScreen(0.5f,0.535f, textWidth, textHeight)
+            val titleWidth = getTextWidthBasedOnScreen(0.6f)
+            val titleHeight = getTextHeightBasedOnScreen(0.12f)
+            val titleCoords = getTextCoordsOnScreen(0.5f, 0.67f, titleWidth, titleHeight)
+            font.draw(batch, "Game over!", titleCoords.x, titleCoords.y, titleWidth, 1, false)
             font.data.setScale(3f, 3f)
-            font.draw(batch, "Try again", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
-            font.draw(batch, "Main menu", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2.52f, 20f, 1, false)
+            font.draw(batch, "Try again", textCoords.x, textCoords.y, textWidth, 1, false)
+            font.draw(batch, "Main menu", textCoords.x, textCoords.y-getTextHeightBasedOnScreen(0.1f), textWidth, 1, false)
         }
     }
 

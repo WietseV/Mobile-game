@@ -4,18 +4,22 @@ import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
+import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.screen.buttons.*
+import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
+class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameState = GameState()) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
@@ -23,21 +27,49 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val font = BitmapFont()
     private val buttons = mutableListOf<Button>()
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
+    private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+
 
     override fun hide() {
     }
 
     override fun show() {
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        val play = PlayButton()
+        val play = PlayButton(this)
         play.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
+        val gyro = UseGyroButton(this, if (gyroscopeAvail) {Color.RED} else {Color.GRAY})
+        gyro.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
         buttons.add(play)
+        buttons.add(gyro)
+        font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+
     }
 
-    override fun screenPressed(x: Float, y: Float) {
+    override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                dirkFallsGame.screen = GameScreen(dirkFallsGame)
+                gameState.resetGame()
+                it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame, gameState))
+            }
+        }
+    }
+
+    override fun touchDown(x: Float, y: Float) {
+        buttons.forEach {
+            if (it.contains(x, y)) {
+                it.touchButton()
+            } else {
+                it.touchMovedOff()
+            }
+        }
+    }
+
+    override fun touchDragged(x: Float, y: Float) {
+        buttons.forEach {
+            if (!it.contains(x, y)) {
+                it.touchMovedOff()
+            } else {
+                it.touchButton()
             }
         }
     }
@@ -65,15 +97,25 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     }
     private fun drawButtons() {
         renderer.use {
-            renderer.color = Color.RED
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            buttons.forEach { renderer.rect(it.x,it.y,it.width,it.height) }
+            buttons.forEach {
+                renderer.color = it.color
+                renderer.rect(it) }
         }
     }
 
     private fun drawText() {
         spriteBatch.use {
+            font.data.setScale(8f, 8f)
+            font.draw(spriteBatch, "DIRK FALLS", Gdx.graphics.width/2f-100f, Gdx.graphics.height/1.5f, 200f, 1, false)
+            font.data.setScale(3f, 3f)
             font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
+            font.data.setScale(2.5f, 2.5f)
+            val gyro = when (gameState.useGyro) {
+                true -> "V"
+                else -> "X"
+            }
+            font.draw(spriteBatch, "Use gyroscope? ($gyro)", Gdx.graphics.width/2f-10f, Gdx.graphics.height/3f+115f, 20f, 1, false)
         }
     }
 

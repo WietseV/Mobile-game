@@ -4,9 +4,11 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HeroDirection
+import be.ucll.dirkfalls.utils.between
 import be.ucll.dirkfalls.utils.scale
 import be.ucll.dirkfalls.utils.vector2.plus
 import be.ucll.dirkfalls.utils.vector2.times
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -15,39 +17,43 @@ typealias Rule = (gameState: GameState, delta: Float) -> Unit
 
 val updatePositionBasedOnVelocity: Rule = { gameState, delta ->
     gameState.entities
-        .forEach { it.position += it.velocity * delta }
+            .forEach { it.position += it.velocity * delta }
 }
 
 val heroTakesDamageWhenHit: Rule = { gameState, _ ->
     val hero = gameState.hero
     gameState.comets
-        .filter { it.overlaps(hero) }
-        .forEach {
-            gameState.deleteEntity(it)
-            hero.hit()
-        }
+            .filter { it.overlaps(hero) }
+            .forEach {
+                gameState.deleteEntity(it)
+                hero.hit(it)
+            }
 }
 
 val removeCometWhenOutOfBound: Rule = { gameState, _ ->
     gameState.comets
-        .filter { it.position.y < 0f }
-        .forEach {
-            gameState.deleteEntity(it)
-            gameState.score++
-        }
+            .filter { it.position.y < 0f }
+            .forEach {
+                gameState.deleteEntity(it)
+                gameState.score++
+            }
 }
 
 val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
     val hero = gameState.hero
     if (hero.outOfBounds(delta)) {
-        hero.direction = HeroDirection.STILL
+        if (hero.gyro) {
+            hero.velocity = Vector2.Zero
+        } else {
+            hero.direction = HeroDirection.STILL
+        }
     }
 }
 
 fun createCometSpawner(): Rule {
     var cometTimer = 0f
 
-    return {gameState, delta ->
+    return { gameState, delta ->
         cometTimer += delta
 
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
@@ -64,8 +70,37 @@ fun createCometSpawner(): Rule {
     }
 }
 
-val changeColor : Rule = {gameState, delta ->
+val changeColor: Rule = { gameState, delta ->
     gameState.comets.forEach {
         it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)
     }
 }
+
+
+fun newBackground(red: Float, green: Float, blue: Float): Rule = { gameState, delta ->
+    gameState.changeBackground(red, green, blue)
+}
+
+
+val gyroscope : Rule = {gameState, _ ->
+    gameState.hero.gyro = true
+    val gyroY = Gdx.input.gyroscopeY
+    gameState.hero.velocity = Vector2(scale(gyroY, 0f, 1f, 0f, 5f), 0f)
+}
+
+val touchScreen : Rule = {gameState, _ ->
+    val hero = gameState.hero
+    hero.gyro = false
+    val pressed = gameState.pressedPosition
+    if(pressed != null) {
+        hero.direction = when {
+            between(pressed.x, hero.position.x, hero.position.x + hero.shape.width) -> HeroDirection.STILL
+            pressed.x < hero.position.x -> HeroDirection.LEFT
+            pressed.x > hero.position.x + hero.shape.width -> HeroDirection.RIGHT
+            else -> HeroDirection.STILL
+        }
+    } else {
+        hero.direction = HeroDirection.STILL
+    }
+}
+

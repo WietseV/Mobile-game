@@ -10,6 +10,9 @@ class AndroidLauncher : AndroidApplication() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val config = AndroidApplicationConfiguration()
+        config.useGyroscope = true
+        config.useAccelerometer = false
+        config.useCompass = false
         initialize(DirkFallsGame(), config)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }

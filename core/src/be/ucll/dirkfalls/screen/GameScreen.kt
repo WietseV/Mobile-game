@@ -12,8 +12,10 @@ import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.entities.HeroDirection
 import be.ucll.dirkfalls.screen.buttons.Button
 import be.ucll.dirkfalls.utils.between
+import be.ucll.dirkfalls.utils.scale
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -39,6 +41,9 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private var paused: Boolean = false
 
     private val buttons = mutableListOf<Button>()
+
+    private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+
 
 
     override fun hide() {
@@ -66,21 +71,6 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
             ruleManager.update(delta)
             updateHealth()
         }
-
-        val hero = gameState.hero
-        val pressed = gameState.pressedPosition
-        if(pressed != null) {
-            hero.direction = when {
-                between(pressed.x, hero.position.x, hero.position.x + hero.shape.width) -> HeroDirection.STILL
-                pressed.x < hero.position.x -> HeroDirection.LEFT
-                pressed.x > hero.position.x -> HeroDirection.RIGHT
-                else -> HeroDirection.STILL
-            }
-        } else {
-            hero.direction = HeroDirection.STILL
-        }
-
-
         renderer.projectionMatrix = camera.combined
         renderer.use {
             renderer.setAutoShapeType(true)

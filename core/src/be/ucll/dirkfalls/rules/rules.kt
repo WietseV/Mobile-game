@@ -4,9 +4,11 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HeroDirection
+import be.ucll.dirkfalls.utils.between
 import be.ucll.dirkfalls.utils.scale
 import be.ucll.dirkfalls.utils.vector2.plus
 import be.ucll.dirkfalls.utils.vector2.times
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -40,7 +42,11 @@ val removeCometWhenOutOfBound: Rule = { gameState, _ ->
 val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
     val hero = gameState.hero
     if (hero.outOfBounds(delta)) {
-        hero.direction = HeroDirection.STILL
+        if (hero.gyro) {
+            hero.velocity = Vector2.Zero
+        } else {
+            hero.direction = HeroDirection.STILL
+        }
     }
 }
 
@@ -74,5 +80,27 @@ val newBackgroundAbove1000Points : Rule = {gameState, _ ->
 
     if (gameState.score > 4) {
             gameState.changeBackground(110f, 61f, 29f)
+    }
+}
+
+val gyroscope : Rule = {gameState, _ ->
+    gameState.hero.gyro = true
+    val gyroY = Gdx.input.gyroscopeY
+    gameState.hero.velocity = Vector2(scale(gyroY, 0f, 1f, 0f, 5f), 0f)
+}
+
+val touchScreen : Rule = {gameState, _ ->
+    val hero = gameState.hero
+    hero.gyro = false
+    val pressed = gameState.pressedPosition
+    if(pressed != null) {
+        hero.direction = when {
+            between(pressed.x, hero.position.x, hero.position.x + hero.shape.width) -> HeroDirection.STILL
+            pressed.x < hero.position.x -> HeroDirection.LEFT
+            pressed.x > hero.position.x + hero.shape.width -> HeroDirection.RIGHT
+            else -> HeroDirection.STILL
+        }
+    } else {
+        hero.direction = HeroDirection.STILL
     }
 }

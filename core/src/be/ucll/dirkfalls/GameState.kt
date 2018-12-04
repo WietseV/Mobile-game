@@ -14,8 +14,8 @@ class GameState {
     var score = 0
     var gameOver = false
     val background = Background()
-
     var pressedPosition: Vector2? = null
+    var useGyro = true
 
     fun deleteEntity(entity: Entity){
         entities.remove(entity)

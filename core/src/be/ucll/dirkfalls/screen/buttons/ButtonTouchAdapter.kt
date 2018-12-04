@@ -9,8 +9,18 @@ import be.ucll.dirkfalls.utils.scale
 
 class ButtonTouchAdapter(private val screen: DirkScreen): InputAdapter() {
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        screen.screenPressed(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        screen.touchUp(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
         return super.touchUp(screenX, screenY, pointer, button)
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        screen.touchDown(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        return super.touchDown(screenX, screenY, pointer, button)
+    }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        screen.touchDragged(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
+        return super.touchDragged(screenX, screenY, pointer)
     }
 
     private fun convertScreenXToWorldX(x: Int): Float {

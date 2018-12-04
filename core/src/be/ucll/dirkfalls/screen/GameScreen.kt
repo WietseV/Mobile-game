@@ -32,7 +32,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val performance = PerformanceLogger()
     private val ruleManager = RuleManager(gameState)
     private var paused: Boolean = false
-    private val reset = ResetButton()
+    private val reset = ResetButton(this)
 
 
 
@@ -116,7 +116,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
 
     private fun drawGameOver() {
         renderer.use {
-            renderer.color = Color.RED
+            renderer.color = reset.color
             renderer.set(ShapeRenderer.ShapeType.Filled)
             renderer.rect(reset.x,reset.y,reset.width,reset.height)
         }
@@ -124,17 +124,33 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
             font.data.setScale(5f,5f)
             font.draw(batch, "Game over!", Gdx.graphics.width/3f-1f, 3f*Gdx.graphics.height/5f)
             font.data.setScale(3f, 3f)
-            font.draw(batch, "Reset game?", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
+            font.draw(batch, "Try again", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
         }
     }
 
-    override fun screenPressed(x: Float, y: Float) {
+    override fun touchUp(x: Float, y: Float) {
         if (reset.contains(x, y)) {
-            resetGame()
+            reset.pressButton(dirkFallsGame)
         }
     }
 
-    private fun resetGame() {
+    override fun touchDown(x: Float, y: Float) {
+        if (reset.contains(x, y)) {
+            reset.touchButton()
+        } else {
+            reset.touchMovedOff()
+        }
+    }
+
+    override fun touchDragged(x: Float, y: Float) {
+        if (!reset.contains(x, y)) {
+            reset.touchMovedOff()
+        } else {
+            reset.touchButton()
+        }
+    }
+
+    fun resetGame() {
         gameState.resetGame()
         Gdx.input.inputProcessor = GameTouchAdapter(gameState.hero)
         resume()

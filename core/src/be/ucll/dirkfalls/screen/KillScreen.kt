@@ -31,7 +31,7 @@ class KillScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
 
     override fun show() {
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        val home = HomeButton()
+        val home = HomeButton(this)
         home.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
         buttons.add(home)
         font.data.setScale(3f, 3f)
@@ -39,10 +39,30 @@ class KillScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
 
     }
 
-    override fun screenPressed(x: Float, y: Float) {
+    override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                dirkFallsGame.screen = HomeScreen(dirkFallsGame)
+                it.pressButton(dirkFallsGame, HomeScreen(dirkFallsGame))
+            }
+        }
+    }
+
+    override fun touchDown(x: Float, y: Float) {
+        buttons.forEach {
+            if (it.contains(x, y)) {
+                it.touchButton()
+            } else {
+                it.touchMovedOff()
+            }
+        }
+    }
+
+    override fun touchDragged(x: Float, y: Float) {
+        buttons.forEach {
+            if (!it.contains(x, y)) {
+                it.touchMovedOff()
+            } else {
+                it.touchButton()
             }
         }
     }
@@ -70,9 +90,11 @@ class KillScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     }
     private fun drawButtons() {
         renderer.use {
-            renderer.color = Color.RED
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            buttons.forEach { renderer.rect(it.x,it.y,it.width,it.height) }
+            buttons.forEach {
+                renderer.color = it.color
+                renderer.rect(it.x,it.y,it.width,it.height)
+            }
         }
     }
 

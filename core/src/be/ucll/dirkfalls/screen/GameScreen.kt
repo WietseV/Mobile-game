@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
+class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState: GameState) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()
@@ -34,7 +34,6 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     private val font = BitmapFont().apply {
         color = Color.WHITE
     }
-    private var gameState = GameState()
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
     private var paused: Boolean = false
@@ -74,7 +73,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.setColor(gameState.background.color)
+            renderer.color = gameState.background.color
             renderer.rect(gameState.background.background)
             gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
@@ -97,7 +96,6 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         if (hero.health == 0) {
             Gdx.input.inputProcessor = ButtonTouchAdapter(this)
             gameState.gameOver = true
-            //dirkFallsGame.screen = KillScreen(dirkFallsGame)
             pause()
         }
     }
@@ -147,7 +145,7 @@ class GameScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                it.pressButton(dirkFallsGame, HomeScreen(dirkFallsGame))
+                it.pressButton(dirkFallsGame, HomeScreen(dirkFallsGame, gameState))
             }
         }
     }

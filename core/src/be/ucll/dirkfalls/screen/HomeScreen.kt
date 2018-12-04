@@ -4,7 +4,9 @@ import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
+import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.screen.buttons.*
+import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -17,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
+class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameState = GameState()) : DirkScreen() {
     private val camera = OrthographicCamera()
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
@@ -35,8 +37,10 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
         val play = PlayButton(this)
         play.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-0.45f, 2f, 0.75f)
+        val gyro = UseGyroButton(this, if (gyroscopeAvail) {Color.RED} else {Color.GRAY})
+        gyro.set(WORLD_WIDTH/2f-1f, WORLD_HEIGHT/2f-1.5f, 2f, 0.75f)
         buttons.add(play)
-        font.data.setScale(3f, 3f)
+        buttons.add(gyro)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
     }
@@ -44,7 +48,8 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
     override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame))
+                gameState.resetGame()
+                it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame, gameState))
             }
         }
     }
@@ -95,13 +100,22 @@ class HomeScreen(val dirkFallsGame: DirkFallsGame) : DirkScreen() {
             renderer.set(ShapeRenderer.ShapeType.Filled)
             buttons.forEach {
                 renderer.color = it.color
-                renderer.rect(it.x,it.y,it.width,it.height) }
+                renderer.rect(it) }
         }
     }
 
     private fun drawText() {
         spriteBatch.use {
+            font.data.setScale(8f, 8f)
+            font.draw(spriteBatch, "DIRK FALLS", Gdx.graphics.width/2f-100f, Gdx.graphics.height/1.5f, 200f, 1, false)
+            font.data.setScale(3f, 3f)
             font.draw(spriteBatch, "Start game!", Gdx.graphics.width/2f-10f, Gdx.graphics.height/2f, 20f, 1, false)
+            font.data.setScale(2.5f, 2.5f)
+            val gyro = when (gameState.useGyro) {
+                true -> "V"
+                else -> "X"
+            }
+            font.draw(spriteBatch, "Use gyroscope? ($gyro)", Gdx.graphics.width/2f-10f, Gdx.graphics.height/3f+115f, 20f, 1, false)
         }
     }
 

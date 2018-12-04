@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color
 
 class ResetButton(screen: GameScreen, color: Color = Color.RED) : Button(screen, color) {
     override fun pressButton(game: DirkFallsGame, targetScreen: DirkScreen?) {
+        this.color = startColor
         if (screen is GameScreen) {
             screen.resetGame()
         }

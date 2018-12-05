@@ -14,7 +14,7 @@ class Hero(
 
     override val image = Texture("../android/assets/cometsSprits/dirk.png")
     companion object {
-        private const val BOUNDS_RADIUS = 0.4f //world units
+        private const val BOUNDS_RADIUS = 0.8f //world units
         private const val MAX_X_SPEED = 5f // world units
     }
     var gyro = false

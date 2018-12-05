@@ -60,7 +60,7 @@ fun createCometSpawner(): Rule {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
-            val cometX = MathUtils.random(0f + cometRadius, GameConfig.WORLD_WIDTH - cometRadius)
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
             val comet = Comet(vector2 , cometRadius )
             if (gameState.comets.none { it.overlaps(comet) }) {

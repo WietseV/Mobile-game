@@ -3,6 +3,7 @@ package be.ucll.dirkfalls.entities
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 
 class Background {
@@ -19,4 +20,5 @@ class Background {
 
         color = Color(redP, greenP, blueP, 1f)
     }
+
 }

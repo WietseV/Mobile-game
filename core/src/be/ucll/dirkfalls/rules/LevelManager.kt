@@ -15,11 +15,13 @@ class LevelManager(var gameState: GameState) {
 
     fun nextLevel() {
         if (gameState.score % 25 == 0){
-            if (levelCounter == 3) {
+            /*if (levelCounter == 3) {
                 resetLevels()
             } else {
                 level = levelFactory.createLevel(++levelCounter)
-            }
+            }*/
+            level = levelFactory.createLevel(++levelCounter)
+
         }
     }
 

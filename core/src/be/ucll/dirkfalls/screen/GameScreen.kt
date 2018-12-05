@@ -1,6 +1,7 @@
 package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.DirkFallsGame
+import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
@@ -73,11 +74,16 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
             updateHealth()
         }
         renderer.projectionMatrix = camera.combined
+       /* val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
+       batch.use {
+            batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
+        */
+        pictureBackgrounds()
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.color = gameState.background.color
-            renderer.rect(gameState.background.background)
+            /*renderer.color = gameState.background.color
+            renderer.rect(gameState.background.background)*/
             gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(0f, 1f, 0f, 1f)
@@ -90,6 +96,13 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         }
 
         drawScore(gameState.score)
+    }
+
+    private fun pictureBackgrounds() {
+        batch.projectionMatrix = camera.combined
+        val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
+         batch.use {
+            batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
     }
 
     private fun updateHealth() {

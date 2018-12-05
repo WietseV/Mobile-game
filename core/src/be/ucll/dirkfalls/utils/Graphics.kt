@@ -21,6 +21,11 @@ fun ShapeRenderer.rect (rec: Rectangle){
     rect(rec.x, rec.y, rec.width, rec.height)
 }
 
+@JvmOverloads
+fun ShapeRenderer.batchRender(c: Circle, segments: Int = 30){
+    circle(c.x + c.radius, c.y + c.radius, c.radius, segments )
+}
+
 inline fun SpriteBatch.use(action: (SpriteBatch) -> Unit) {
     this.begin()
     action(this)

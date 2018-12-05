@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.entities
 
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.math.Vector2
@@ -27,6 +28,11 @@ abstract class Entity {
     abstract var velocity: Vector2
 
     /**
+     * Sprits of the enitity
+     */
+
+    abstract val image: Texture
+    /**
      * Draw debug info
      */
     abstract fun drawDebug(renderer: ShapeRenderer)
@@ -35,4 +41,6 @@ abstract class Entity {
      * Checks if an object is out of bounds
      */
     abstract fun outOfBounds(delta: Float): Boolean
+
+    abstract fun size(): Float
 }

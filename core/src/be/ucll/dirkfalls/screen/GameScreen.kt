@@ -74,11 +74,11 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
             updateHealth()
         }
         renderer.projectionMatrix = camera.combined
-       /* val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
-       batch.use {
-            batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
-        */
-        pictureBackgrounds()
+        /* val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
+        batch.use {
+             batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
+         */
+        renderBackground()
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
@@ -90,7 +90,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
             renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
         }
-
+        renderGameObjects()
         if (gameState.gameOver) {
             drawGameOver()
         }
@@ -98,11 +98,21 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         drawScore(gameState.score)
     }
 
-    private fun pictureBackgrounds() {
+    private fun renderGameObjects() {
+        batch.projectionMatrix = camera.combined
+         batch.use {
+             gameState.entities.forEach{
+                 batch.draw(it.image, it.position.x, it.position.y,  it.size(), it.size())
+             }
+         }
+    }
+
+    private fun renderBackground(){
         batch.projectionMatrix = camera.combined
         val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
-         batch.use {
-            batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
+        batch.use{
+            batch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+        }
     }
 
     private fun updateHealth() {

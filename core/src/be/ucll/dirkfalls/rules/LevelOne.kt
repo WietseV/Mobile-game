@@ -16,5 +16,5 @@ class LevelOne(rule: Rule = touchScreen) : Level(rule) {
             updateImgBackground
     )
 
-    override val imgBackground = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg ")
+    override val imgBackground = Texture("backgrounds/backgroundLevel1.jpeg ")
 }

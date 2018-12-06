@@ -15,6 +15,6 @@ class LevelThree(rule: Rule = touchScreen) : Level(rule) {
             newBackground(200f, 27f, 9f)
     )
 
-    override val imgBackground = Texture("../android/assets/backgrounds/level3Background.jpg")
+    override val imgBackground = Texture("backgrounds/level3Background.jpg")
 
 }

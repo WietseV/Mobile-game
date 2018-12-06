@@ -1,6 +1,7 @@
 package be.ucll.dirkfalls.rules
 
 import be.ucll.dirkfalls.GameState
+import com.badlogic.gdx.graphics.Texture
 
 class LevelManager(var gameState: GameState) {
 
@@ -30,5 +31,6 @@ class LevelManager(var gameState: GameState) {
         level = levelFactory.createLevel(levelCounter)
     }
 
+    fun getBackgroundImg():Texture = level.imgBackground
 
 }

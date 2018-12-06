@@ -61,6 +61,8 @@ fun createCometSpawner(): Rule {
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+
             val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
             val comet = Comet(vector2 , cometRadius )
             if (gameState.comets.none { it.overlaps(comet) }) {
@@ -79,6 +81,10 @@ val changeColor: Rule = { gameState, delta ->
 
 fun newBackground(red: Float, green: Float, blue: Float): Rule = { gameState, delta ->
     gameState.changeBackground(red, green, blue)
+}
+
+val updateImgBackground: Rule  = { gameState, delta ->
+    gameState.setLevelBackground()
 }
 
 

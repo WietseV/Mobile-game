@@ -1,5 +1,7 @@
 package be.ucll.dirkfalls.rules
 
+import com.badlogic.gdx.graphics.Texture
+
 class LevelOne(rule: Rule = touchScreen) : Level(rule) {
 
     override var rules = setOf(
@@ -10,6 +12,9 @@ class LevelOne(rule: Rule = touchScreen) : Level(rule) {
             removeCometWhenOutOfBound,
             createCometSpawner(),
             changeColor,
-            newBackground(233f, 27f, 213f)
+            newBackground(233f, 27f, 213f),
+            updateImgBackground
     )
+
+    override val imgBackground = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg ")
 }

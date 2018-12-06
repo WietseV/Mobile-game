@@ -5,6 +5,7 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.rules.LevelManager
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
@@ -18,6 +19,7 @@ class GameState {
     }
     var gameOver = false
     val background = Background()
+    var imgBackground = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
     var useGyro = false
@@ -42,6 +44,10 @@ class GameState {
 
     fun updateLevels(delta: Float) {
         levelManager.update(delta)
+    }
+
+    fun setLevelBackground() {
+        imgBackground = levelManager.getBackgroundImg()
     }
 }
 

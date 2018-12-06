@@ -4,6 +4,7 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.roundToInt
@@ -26,6 +27,9 @@ class Hero(
     override val shape
         get() = Rectangle(position.x, position.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
 
+  /*  override val shape
+        get()= Circle(position, radius)*/
+
     override var velocity: Vector2 = Vector2.Zero
         get() = when{
                     gyro -> field
@@ -47,7 +51,7 @@ class Hero(
 
     override fun drawDebug(renderer: ShapeRenderer) {
         renderer.setColor(255f, 255f, 255f, 0f)
-        //renderer.rect(shape.x, shape.y, shape.width, shape.height)
+        renderer.rect(shape.x, shape.y, shape.width, shape.height)
     }
 
     override fun outOfBounds(delta: Float): Boolean =

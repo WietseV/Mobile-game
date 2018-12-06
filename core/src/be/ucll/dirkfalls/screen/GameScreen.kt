@@ -109,7 +109,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
 
     private fun renderBackground(){
         batch.projectionMatrix = camera.combined
-        val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
+        val background = Texture("backgrounds/backgroundLevel1.jpeg")
         batch.use{
             batch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
         }

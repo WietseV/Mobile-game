@@ -2,7 +2,6 @@ package be.ucll.dirkfalls.entities
 
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.utils.batchRender
-import be.ucll.dirkfalls.utils.circle
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
@@ -21,7 +20,7 @@ class Comet(
         get() = Circle(position, radius)
 
     var color = Vector3(1f, 1f, 1f)
-    override var image = Texture("../android/assets/cometsSprits/komeet.png")
+    override var image = Texture("cometsSprits/komeet.png")
     // Get 8 points of the circle and check if they are contained in the shape
     fun overlaps(entity: Entity) =
         listOf(

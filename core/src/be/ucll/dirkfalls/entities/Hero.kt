@@ -12,7 +12,7 @@ class Hero(
     startPosition: Vector2 = Vector2.Zero
 ) : Entity() {
 
-    override val image = Texture("../android/assets/cometsSprits/dirk.png")
+    override val image = Texture("cometsSprits/dirk.png")
     companion object {
         private const val BOUNDS_RADIUS = 0.8f //world units
         private const val MAX_X_SPEED = 5f // world units

@@ -1,6 +1,9 @@
 package be.ucll.dirkfalls.entities
 
 import be.ucll.dirkfalls.GameConfig
+import be.ucll.dirkfalls.utils.batchRender
+import be.ucll.dirkfalls.utils.circle
+import be.ucll.dirkfalls.utils.heroRender
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -10,25 +13,24 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.math.roundToInt
 
 class Hero(
-    startPosition: Vector2 = Vector2.Zero
+    startPosition: Vector2 = Vector2.Zero,
+    radius: Float = 0.4f
 ) : Entity() {
 
     override val image = Texture("cometsSprits/dirk.png")
     companion object {
-        private const val BOUNDS_RADIUS = 0.8f //world units
         private const val MAX_X_SPEED = 5f // world units
     }
     var gyro = false
 
     var direction: HeroDirection = HeroDirection.STILL
-
+    var radius = radius
     override var position = startPosition
 
     override val shape
-        get() = Rectangle(position.x, position.y, BOUNDS_RADIUS, BOUNDS_RADIUS)
+        get() = Circle(position, radius)
 
-  /*  override val shape
-        get()= Circle(position, radius)*/
+
 
     override var velocity: Vector2 = Vector2.Zero
         get() = when{
@@ -51,11 +53,11 @@ class Hero(
 
     override fun drawDebug(renderer: ShapeRenderer) {
         renderer.setColor(255f, 255f, 255f, 0f)
-        renderer.rect(shape.x, shape.y, shape.width, shape.height)
+        renderer.batchRender(shape)
     }
 
     override fun outOfBounds(delta: Float): Boolean =
-        (position.x + velocity.x * delta) + BOUNDS_RADIUS > GameConfig.WORLD_WIDTH * 1f
+        (position.x + velocity.x * delta) + shape.radius > GameConfig.WORLD_WIDTH * 1f
                 || (position.x + velocity.x * delta) < 0
 
     fun hit(comet: Comet) {
@@ -70,6 +72,6 @@ class Hero(
     private fun calculateDamage(comet: Comet): Float = scale(comet.shape.radius, 0f, 0.3f, 0f, 1f)
 
     override fun size(): Float {
-        return BOUNDS_RADIUS
+        return 2 * shape.radius
     }
 }

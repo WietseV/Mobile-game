@@ -26,6 +26,10 @@ fun ShapeRenderer.batchRender(c: Circle, segments: Int = 30){
     circle(c.x + c.radius, c.y + c.radius, c.radius, segments )
 }
 
+@JvmOverloads
+fun ShapeRenderer.heroRender(c: Circle, segments: Int =30){
+    circle (c.x, c.y + c.radius, c.radius, segments)
+}
 inline fun SpriteBatch.use(action: (SpriteBatch) -> Unit) {
     this.begin()
     action(this)

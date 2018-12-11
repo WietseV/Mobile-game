@@ -10,7 +10,8 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
 class GameState {
-    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f, 1f))
+    val heroradius = 0.4f
+    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius , 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
     val comets
         get() = entities.filterIsInstance<Comet>()
@@ -19,7 +20,7 @@ class GameState {
     }
     var gameOver = false
     val background = Background()
-    var imgBackground = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
+    var imgBackground = Texture("backgrounds/backgroundLevel1.jpeg")
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
     var useGyro = false
@@ -30,7 +31,7 @@ class GameState {
     }
 
     fun resetGame() {
-        hero.position = Vector2(GameConfig.WORLD_WIDTH / 2f, 1f)
+        hero.position = Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f)
         hero.health = 100
         entities.removeAll(comets)
         score = 0

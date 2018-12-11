@@ -22,12 +22,19 @@ val updatePositionBasedOnVelocity: Rule = { gameState, delta ->
 
 val heroTakesDamageWhenHit: Rule = { gameState, _ ->
     val hero = gameState.hero
-    gameState.comets
+    /*gameState.comets
             .filter { it.overlaps(hero) }
             .forEach {
                 gameState.deleteEntity(it)
                 hero.hit(it)
-            }
+            }*/
+
+    gameState.comets.forEach{
+        if(it.collide(gameState.hero.shape)) {
+            gameState.deleteEntity(it)
+            hero.hit(it)
+        }
+    }
 }
 
 val removeCometWhenOutOfBound: Rule = { gameState, _ ->
@@ -63,9 +70,9 @@ fun createCometSpawner(): Rule {
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
             val comet = Comet(vector2 , cometRadius )
-            if (gameState.comets.none { it.overlaps(comet) }) {
+            if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
             }
         }
@@ -100,9 +107,9 @@ val touchScreen : Rule = {gameState, _ ->
     val pressed = gameState.pressedPosition
     if(pressed != null) {
         hero.direction = when {
-            between(pressed.x, hero.position.x, hero.position.x + hero.shape.width) -> HeroDirection.STILL
+            between(pressed.x, hero.position.x, hero.position.x + hero.shape.radius) -> HeroDirection.STILL
             pressed.x < hero.position.x -> HeroDirection.LEFT
-            pressed.x > hero.position.x + hero.shape.width -> HeroDirection.RIGHT
+            pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.RIGHT
             else -> HeroDirection.STILL
         }
     } else {

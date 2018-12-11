@@ -2,8 +2,7 @@ package be.ucll.dirkfalls.rules
 
 import com.badlogic.gdx.graphics.Texture
 
-class LevelThree(rule: Rule = touchScreen) : Level(rule) {
-
+class LevelFour(rule: Rule = touchScreen) : Level(rule) {
     override var rules = setOf(
             rule,
             heroCannotMoveOutOfBounds,

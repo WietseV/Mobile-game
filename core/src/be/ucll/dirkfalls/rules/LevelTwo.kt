@@ -10,7 +10,7 @@ class LevelTwo(rule: Rule = touchScreen) : Level(rule) {
             updatePositionBasedOnVelocity,
             heroTakesDamageWhenHit,
             removeCometWhenOutOfBound,
-            createCometsWithVelocity(),
+            createCometSpawnerAndSize(),
             changeColor,
             newBackground(1f, 2f, 88f)
     )

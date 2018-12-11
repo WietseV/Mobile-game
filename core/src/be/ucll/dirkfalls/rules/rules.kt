@@ -57,7 +57,7 @@ val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
     }
 }
 
-fun createCometSpawner(): Rule {
+fun createCometSpawnerAndSize(): Rule {
     var cometTimer = 0f
 
     return { gameState, delta ->
@@ -79,14 +79,62 @@ fun createCometSpawner(): Rule {
     }
 }
 
-fun createCometsWithVelocity(): Rule {
+fun createCometSpawner(): Rule {
     var cometTimer = 0f
 
-    var vector_y = MathUtils.random(-6f, -3f)
-    var vector2velocity = Vector2(0f, vector_y)
     return { gameState, delta ->
         cometTimer += delta
 
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+            cometTimer = 0f // reset timer
+
+            val cometRadius = 0.2f
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
+            val comet = Comet(vector2 , cometRadius )
+            if (gameState.comets.none { it.collide(comet.shape) }) {
+                gameState.entities.add(comet)
+            }
+        }
+    }
+}
+
+fun createCometsWithVelocity(): Rule {
+    var cometTimer = 0f
+
+    var vector_y = MathUtils.random(3f, 6f)
+    var vector2velocity = Vector2(0f, vector_y * (-1))
+    return { gameState, delta ->
+        cometTimer += delta
+        var vector_y = MathUtils.random(3f, 6f)
+        var vector2velocity = Vector2(0f, vector_y * (-1))
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+            cometTimer = 0f // reset timer
+
+            val cometRadius = 0.2f
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
+            val comet = Comet(vector2 , cometRadius, vector2velocity )
+            if (gameState.comets.none { it.collide(comet.shape) }) {
+                gameState.entities.add(comet)
+            }
+        }
+    }
+}
+
+fun createCometsWithVelocityAndSize(): Rule {
+    var cometTimer = 0f
+
+    var vector_y = MathUtils.random(3f, 6f)
+    var vector2velocity = Vector2(0f, vector_y * (-1))
+    return { gameState, delta ->
+        cometTimer += delta
+        var vector_y = MathUtils.random(3f, 6f)
+        var vector2velocity = Vector2(0f, vector_y * (-1))
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
@@ -102,6 +150,7 @@ fun createCometsWithVelocity(): Rule {
         }
     }
 }
+
 val changeColor: Rule = { gameState, delta ->
     gameState.comets.forEach {
         it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)

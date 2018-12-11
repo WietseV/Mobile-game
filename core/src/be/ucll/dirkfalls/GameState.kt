@@ -5,6 +5,7 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.rules.LevelManager
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates

@@ -8,6 +8,7 @@ import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Interpolation.circle
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.roundToInt
@@ -57,7 +58,7 @@ class Hero(
     }
 
     override fun outOfBounds(delta: Float): Boolean =
-        (position.x + velocity.x * delta) + shape.radius > GameConfig.WORLD_WIDTH * 1f
+        (position.x + velocity.x * delta) + shape.radius > (GameConfig.WORLD_WIDTH * 1f - radius)
                 || (position.x + velocity.x * delta) < 0
 
     fun hit(comet: Comet) {
@@ -73,5 +74,10 @@ class Hero(
 
     override fun size(): Float {
         return 2 * shape.radius
+    }
+
+    fun calculateCollidingCircle(): Circle {
+       var circle = Circle(shape.x + radius, shape.y + radius, radius)
+        return circle
     }
 }

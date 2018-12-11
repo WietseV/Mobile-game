@@ -36,7 +36,12 @@ class Comet(
         }
 */
 
-    fun collide(circle: Circle) = shape.overlaps(circle)
+    fun collide(circle: Circle)
+        = shape.overlaps(circle)
+
+    fun collideWithHero(hero: Hero) =
+        calculateCollidingCircle().overlaps(hero.calculateCollidingCircle())
+
 
 
     override fun drawDebug(renderer: ShapeRenderer) {
@@ -51,4 +56,9 @@ class Comet(
     override fun outOfBounds(delta: Float): Boolean =
         (position.x + velocity.x * delta) - radius < 0 ||
                 (position.x + velocity.x * delta) + radius > WORLD_WIDTH
+
+    fun calculateCollidingCircle(): Circle {
+        var circle = Circle(shape.x + radius, shape.y + radius, radius)
+        return circle
+    }
 }

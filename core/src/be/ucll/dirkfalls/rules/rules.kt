@@ -30,7 +30,7 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
             }*/
 
     gameState.comets.forEach{
-        if(it.collide(gameState.hero.shape)) {
+        if (it.collideWithHero(gameState.hero)){
             gameState.deleteEntity(it)
             hero.hit(it)
         }
@@ -79,6 +79,29 @@ fun createCometSpawner(): Rule {
     }
 }
 
+fun createCometsWithVelocity(): Rule {
+    var cometTimer = 0f
+
+    var vector_y = MathUtils.random(-6f, -3f)
+    var vector2velocity = Vector2(0f, vector_y)
+    return { gameState, delta ->
+        cometTimer += delta
+
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+            cometTimer = 0f // reset timer
+
+            val cometRadius = MathUtils.random(0.1f, 0.3f)
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
+            val comet = Comet(vector2 , cometRadius, vector2velocity )
+            if (gameState.comets.none { it.collide(comet.shape) }) {
+                gameState.entities.add(comet)
+            }
+        }
+    }
+}
 val changeColor: Rule = { gameState, delta ->
     gameState.comets.forEach {
         it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)

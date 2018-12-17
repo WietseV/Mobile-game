@@ -12,8 +12,7 @@ class LevelOne(rule: Rule = touchScreen) : Level(rule) {
             removeCometWhenOutOfBound,
             createCometSpawner(),
             changeColor,
-            newBackground(233f, 27f, 213f),
-            updateImgBackground
+            newBackground(233f, 27f, 213f)
     )
 
     override val imgBackground = Texture("backgrounds/backgroundLevel1.jpeg")

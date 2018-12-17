@@ -10,8 +10,7 @@ class LevelFour(rule: Rule = touchScreen) : Level(rule) {
             heroTakesDamageWhenHit,
             removeCometWhenOutOfBound,
             createCometsWithVelocity(),
-            changeColor,
-            newBackground(200f, 27f, 9f)
+            changeColor
     )
 
     override val imgBackground = Texture("backgrounds/level3Background.jpg")

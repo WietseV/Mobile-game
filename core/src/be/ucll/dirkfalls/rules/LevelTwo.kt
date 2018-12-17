@@ -11,8 +11,7 @@ class LevelTwo(rule: Rule = touchScreen) : Level(rule) {
             heroTakesDamageWhenHit,
             removeCometWhenOutOfBound,
             createCometSpawnerAndSize(),
-            changeColor,
-            newBackground(1f, 2f, 88f)
+            changeColor
     )
 
     override val imgBackground = Texture("backgrounds/level2background.jpg")

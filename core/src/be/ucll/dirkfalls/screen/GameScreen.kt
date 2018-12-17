@@ -6,15 +6,9 @@ import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.rules.LevelManager
-import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
-import be.ucll.dirkfalls.screen.buttons.HomeButton
-import be.ucll.dirkfalls.screen.buttons.ResetButton
-import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.entities.HeroDirection
-import be.ucll.dirkfalls.screen.buttons.Button
-import be.ucll.dirkfalls.utils.between
-import be.ucll.dirkfalls.utils.scale
-import be.ucll.dirkfalls.utils.use
+import be.ucll.dirkfalls.screen.buttons.*
+import be.ucll.dirkfalls.utils.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -38,7 +32,6 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
     private var paused: Boolean = false
-
     private val buttons = mutableListOf<Button>()
 
     private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
@@ -47,6 +40,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
 
     override fun hide() {
     }
+
 
     override fun show() {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState)
@@ -61,9 +55,24 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         buttons.add(homeButton)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+
+        //pause button
+        val pauseButton = PauseButton(this)
+        var pButtonWidth = 0.05f
+        val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
+        val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
+
+        var top = 1f
+        var topw = 0f
+
+        var coordbox = getBoxCoordsOnScreen(top, topw, pauseButtonWidth, pauseButtonHeight)
+
+        pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
+
     }
 
     override fun render(delta: Float) {
+
         performance.update(delta)
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
@@ -89,11 +98,13 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
             renderer.setColor(0f, 1f, 0f, 1f)
             renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
             renderer.setColor(255f, 255f, 255f, 100f)
+
         }
         renderGameObjects()
         if (gameState.gameOver) {
             drawGameOver()
         }
+        drawPauseButton()
 
         drawScore(gameState.score)
     }
@@ -207,6 +218,29 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         gameState.resetGame()
         Gdx.input.inputProcessor = GameTouchAdapter(gameState)
         resume()
+    }
+
+    fun drawPauseButton(){
+        //pause button
+        val pauseButton = PauseButton(this)
+        var pButtonWidth = 0.08f
+        val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
+        val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
+
+        var top = 1f
+        var topw = 0f
+
+        var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight*2)
+        // rare berekening, geen idee hoe dit werkt, maths!
+        pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
+
+        renderer.use{
+            renderer.rect(pauseButton)
+        }
+
+        batch.use{
+            batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
+        }
     }
 }
 

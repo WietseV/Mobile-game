@@ -23,4 +23,12 @@ abstract class DirkScreen: Screen {
 
     fun getBoxCoordsOnScreen(percentX: Float, percentY: Float, width: Float, height: Float) =
             Vector2(WORLD_WIDTH*percentX-width/2, WORLD_HEIGHT*percentY-height/2)
+
+    // als je wilt dat uw button een mooie vierkant is.
+    fun getHeightBasedOnWidth(percentWidth: Float) : Float{
+        var y = (WORLD_WIDTH* percentWidth )/ WORLD_HEIGHT
+        return getBoxHeightBasedOnScreen(y)
+    }
+
+
 }

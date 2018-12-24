@@ -5,6 +5,8 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.rules.LevelManager
+import be.ucll.dirkfalls.screen.buttons.Button
+import be.ucll.dirkfalls.screen.buttons.PauseButton
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
@@ -25,6 +27,10 @@ class GameState {
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
     var useGyro = false
+    var pauseButton : PauseButton? = null
+
+
+
 
 
     fun deleteEntity(entity: Entity) {
@@ -50,6 +56,10 @@ class GameState {
 
     fun setLevelBackground() {
         imgBackground = levelManager.getBackgroundImg()
+    }
+
+    fun setPauseButton(pauseButtonparse: PauseButton){
+        pauseButton = pauseButtonparse
     }
 }
 

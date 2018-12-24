@@ -36,6 +36,16 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
 
     private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
 
+    //pause button
+    val pauseButton = PauseButton(this)
+    var pButtonWidth = 0.08f
+    val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
+    val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
+
+    var top = 1f
+    var topw = 0f
+
+    var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight*2)
 
 
     override fun hide() {
@@ -57,7 +67,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
         //pause button
-        val pauseButton = PauseButton(this)
+        var pauseButton = PauseButton(this)
         var pButtonWidth = 0.05f
         val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
         val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
@@ -68,6 +78,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         var coordbox = getBoxCoordsOnScreen(top, topw, pauseButtonWidth, pauseButtonHeight)
 
         pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
+        gameState.setPauseButton(pauseButton)
 
     }
 
@@ -222,15 +233,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
 
     fun drawPauseButton(){
         //pause button
-        val pauseButton = PauseButton(this)
-        var pButtonWidth = 0.08f
-        val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
-        val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
 
-        var top = 1f
-        var topw = 0f
-
-        var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight*2)
         // rare berekening, geen idee hoe dit werkt, maths!
         pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
 
@@ -241,6 +244,8 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
         batch.use{
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
         }
+
+        buttons.add(pauseButton)
     }
 }
 

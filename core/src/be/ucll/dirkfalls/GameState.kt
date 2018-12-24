@@ -27,7 +27,7 @@ class GameState {
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
     var useGyro = false
-    var pauseButton : PauseButton? = null
+    //var pauseButton : PauseButton? = null
 
 
 
@@ -37,7 +37,14 @@ class GameState {
         entities.remove(entity)
     }
 
+    fun intro(){
+        entities.remove(hero)
+        levelManager.introLevel()
+    }
+
     fun resetGame() {
+        if (!entities.contains(hero)) entities.add(hero)
+
         hero.position = Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f)
         hero.health = 100
         entities.removeAll(comets)
@@ -59,8 +66,11 @@ class GameState {
     }
 
     fun setPauseButton(pauseButtonparse: PauseButton){
-        pauseButton = pauseButtonparse
+        //pauseButton = pauseButtonparse
     }
+
+    fun getLevelBackground(): Texture = levelManager.getBackgroundImg()
+
 }
 
 

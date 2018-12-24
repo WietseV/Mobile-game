@@ -16,11 +16,11 @@ internal class GameTouchAdapter(private val gameState: GameState) : InputAdapter
         get() = gameState
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        if (gameState.pauseButton != null){
-            if (gameState.pauseButton.contains(screenX, screenY)){
+        /*if (gameState.pauseButton != null){
+          *//*  if (gameState.pauseButton.contains(screenX, screenY)){
 
-            }
-        }
+            }*//*
+        }*/
         updatePosition(screenX, screenY)
         return true
     }

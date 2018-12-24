@@ -31,6 +31,9 @@ class LevelManager(var gameState: GameState) {
         level = levelFactory.createLevel(levelCounter)
     }
 
+    fun introLevel(){
+        level = levelFactory.createLevel(0)
+    }
 
     fun getBackgroundImg():Texture = level.imgBackground
 

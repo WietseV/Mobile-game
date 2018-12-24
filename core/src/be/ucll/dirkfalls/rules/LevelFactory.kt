@@ -11,11 +11,12 @@ class LevelFactory(val gameState: GameState) {
             touchScreen
         }
         return when (number) {
-            //1 -> LevelOne()
+            0 -> LevelZero()
+            1 -> LevelOne()
             2 -> LevelTwo()
             3 -> LevelThree(gyro)
-            /*4 -> LevelFour()
-            5 -> LevelFive()
+            4 -> LevelFour()
+           /* 5 -> LevelFive()
             6 -> LevelSix()
             7 -> LevelSeven()
             8 -> LevelEight()

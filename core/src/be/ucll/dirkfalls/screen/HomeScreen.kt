@@ -18,11 +18,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameState = GameState()) : DirkScreen() {
+class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) : DirkScreen(dirkFallsGame, gameState) {
     private val camera = OrthographicCamera()
+    private val aspectRatio = Gdx.graphics.height/Gdx.graphics.width
+    private val textCamera = OrthographicCamera(10000f, 10000f*aspectRatio)
 
     private val performance = PerformanceLogger()
     private val renderer = ShapeRenderer()
@@ -48,12 +51,8 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
         }
 
         val play = PlayButton(this, "Play")
-        val gyrotext = when (gameState.useGyro) {
-            true -> "V"
-            else -> "X"
-        }
         gameState.intro()
-        val gyro = UseGyroButton(this, "Gyro ($gyrotext)")
+        val gyro = UseGyroButton(this, "Gyro", color)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val buttonCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
@@ -68,7 +67,6 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
     override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                gameState.resetGame()
                 it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame, gameState))
             }
         }
@@ -114,7 +112,7 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
 
         drawBackground()
         drawButtons()
-        //drawText()
+        drawText()
 
     }
 
@@ -148,15 +146,21 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameSt
     }
 
     private fun drawText() {
-        //wat een lelijke code man.
+        spriteBatch.projectionMatrix = textCamera.combined
         spriteBatch.use {
+            font.data.setScale(80f)
 
-            val titleWidth = getTextWidthBasedOnScreen(0.8f)
-            val titleHeight = getTextHeightBasedOnScreen(0.12f)
-            val titleCoords = getTextCoordsOnScreen(0.5f, 0.7f, titleWidth, titleHeight)
+            font.draw(spriteBatch, "DIRK FALLS", 0f, 2000f*aspectRatio, 0f, 1, false)
 
-            font.draw(spriteBatch, "DIRK FALLS", titleCoords.x, titleCoords.y, titleWidth, 1, false)
+            font.data.setScale(30f)
 
+            font.draw(spriteBatch, "Play", 0f, 100f*aspectRatio, 0f, 1, false)
+            val gyro = when (gameState.useGyro) {
+                true -> "V"
+                else -> "X"
+            }
+            font.data.setScale(25f)
+            font.draw(spriteBatch, "Use gyroscope? ($gyro)", 0f, -900f*aspectRatio, 0f, 1, false)
 
         }
     }

@@ -11,7 +11,7 @@ class UseGyroButton(screen: DirkScreen, text:String, color: Color = Color.RED) :
     override fun pressButton(game: DirkFallsGame, targetScreen: DirkScreen?) {
         this.color = startColor
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)) {
-            if (screen is HomeScreen) {
+            if (screen is HomeScreen && color != Color.GRAY) {
                 screen.gameState.useGyro = !screen.gameState.useGyro
             }
         }

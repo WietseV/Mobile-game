@@ -1,12 +1,14 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
+import be.ucll.dirkfalls.GameState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.math.Vector2
 
-abstract class DirkScreen: Screen {
+abstract class DirkScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameState): Screen {
     abstract fun touchUp(x: Float, y: Float)
     abstract fun touchDown(x: Float, y: Float)
     abstract fun touchDragged(x: Float, y: Float)
@@ -17,7 +19,7 @@ abstract class DirkScreen: Screen {
     fun getTextHeightBasedOnScreen(percentHeight: Float) = Gdx.graphics.height*percentHeight
 
     fun getTextCoordsOnScreen(percentX: Float, percentY: Float, offsetX: Float, offsetY: Float) =
-            Vector2(Gdx.graphics.width*percentX-offsetX/2,Gdx.graphics.height*percentY-offsetY/2)
+            Vector2(Gdx.graphics.width*percentX-offsetX,Gdx.graphics.height*percentY-offsetY)
 
     fun getBoxWidthBasedOnScreen(percentWidth: Float) = WORLD_WIDTH*percentWidth
 

@@ -21,8 +21,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState: GameState) : DirkScreen() {
+class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) : DirkScreen(dirkFallsGame, gameState) {
     private val camera = OrthographicCamera()
+    private val aspectRatio = Gdx.graphics.height/Gdx.graphics.width
+    private val textCamera = OrthographicCamera(10000f, 10000f*aspectRatio)
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()
     private val batch = SpriteBatch(5)
@@ -34,7 +36,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
     private var paused: Boolean = false
     private val buttons = mutableListOf<Button>()
 
-    private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+    //private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
 
     //pause button
     val pauseButton = PauseButton(this)
@@ -168,9 +170,11 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
     }
 
     private fun drawScore(score: Int) {
+        batch.projectionMatrix = textCamera.combined
         batch.use {
+            font.data.setScale(30f)
             val char = score.toString()
-            font.draw(it, "Score: $char", 20f+font.data.scaleX, Gdx.graphics.height-20f)
+            font.draw(it, "Score: $char", 10f, 4500f*aspectRatio, 0f, 1, false)
         }
     }
 
@@ -182,18 +186,13 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
                 renderer.rect(it)
             }
         }
+        batch.projectionMatrix = textCamera.combined
         batch.use {
-            font.data.setScale(5f,5f)
-            val textWidth = getTextWidthBasedOnScreen(0.33f)
-            val textHeight = getTextHeightBasedOnScreen(0.07f)
-            val textCoords = getTextCoordsOnScreen(0.5f,0.535f, textWidth, textHeight)
-            val titleWidth = getTextWidthBasedOnScreen(0.6f)
-            val titleHeight = getTextHeightBasedOnScreen(0.12f)
-            val titleCoords = getTextCoordsOnScreen(0.5f, 0.67f, titleWidth, titleHeight)
-            font.draw(batch, "Game over!", titleCoords.x, titleCoords.y, titleWidth, 1, false)
-            font.data.setScale(3f, 3f)
-            font.draw(batch, "Try again", textCoords.x, textCoords.y, textWidth, 1, false)
-            font.draw(batch, "Main menu", textCoords.x, textCoords.y-getTextHeightBasedOnScreen(0.1f), textWidth, 1, false)
+            font.data.setScale(50f)
+            font.draw(batch, "Game over!", 0f, 2000f*aspectRatio, 0f, 1, false)
+            font.data.setScale(30f)
+            font.draw(batch, "Try again", 0f, 100f*aspectRatio, 0f, 1, false)
+            font.draw(batch, "Main menu", 0f, -900f*aspectRatio, 0f, 1, false)
         }
     }
 
@@ -241,6 +240,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, private val gameState
             renderer.rect(pauseButton)
         }
 
+        batch.projectionMatrix = camera.combined
         batch.use{
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
         }

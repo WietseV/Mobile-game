@@ -54,15 +54,9 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
 
     override fun show() {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState)
-        val reset = ResetButton(this)
-        val homeButton = HomeButton(this)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val resetCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
-        reset.set(resetCoords.x, resetCoords.y, buttonWidth, buttonHeight)
-        homeButton.set(resetCoords.x, resetCoords.y - getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
-        buttons.add(reset)
-        buttons.add(homeButton)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 

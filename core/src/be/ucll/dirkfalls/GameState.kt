@@ -13,7 +13,7 @@ import kotlin.properties.Delegates
 
 class GameState {
     val heroradius = 0.4f
-    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius , 1f), heroradius)
+    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
     val comets
         get() = entities.filterIsInstance<Comet>()
@@ -33,7 +33,7 @@ class GameState {
         entities.remove(entity)
     }
 
-    fun intro(){
+    fun intro() {
         entities.remove(hero)
         levelManager.introLevel()
     }
@@ -58,7 +58,7 @@ class GameState {
     }
 
 
-    fun setPauseButton(pauseButtonparse: PauseButton){
+    fun setPauseButton(pauseButtonparse: PauseButton) {
         //pauseButton = pauseButtonparse
     }
 

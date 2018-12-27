@@ -1,6 +1,5 @@
 package be.ucll.dirkfalls.screen
 
-import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
@@ -8,7 +7,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.math.Vector2
 
-abstract class DirkScreen(private val dirkFallsGame: DirkFallsGame, val gameState: GameState) :
+abstract class DirkScreen(val gameState: GameState) :
         Screen {
     abstract fun touchUp(x: Float, y: Float)
     abstract fun touchDown(x: Float, y: Float)

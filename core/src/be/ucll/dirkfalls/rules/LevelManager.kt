@@ -18,7 +18,7 @@ class LevelManager(var gameState: GameState) {
     private fun loadLevel(levelCounter: Int): Level {
         val level = levelFactory.createLevel(levelCounter)
 
-        if(!assetManager.isLoaded(level.imageBackground)) {
+        if (!assetManager.isLoaded(level.imageBackground)) {
             assetManager.load(level.imageBackground, Texture::class.java)
         }
 

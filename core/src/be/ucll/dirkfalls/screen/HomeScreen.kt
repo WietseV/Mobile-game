@@ -1,6 +1,5 @@
 package be.ucll.dirkfalls.screen
 
-import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.screen.buttons.Button
@@ -9,6 +8,7 @@ import be.ucll.dirkfalls.screen.buttons.PlayButton
 import be.ucll.dirkfalls.screen.buttons.UseGyroButton
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -18,11 +18,10 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) :
-        DirkScreen(dirkFallsGame, gameState) {
+class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
+        DirkScreen(gameState) {
     private val camera = OrthographicCamera()
     private val aspectRatio = Gdx.graphics.height / Gdx.graphics.width
     private val textCamera = OrthographicCamera(10000f, 10000f * aspectRatio)
@@ -48,9 +47,9 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
             gameState.useGyro = false
         }
 
-        val play = PlayButton(this, "Play")
+        val play = PlayButton(this)
         gameState.intro()
-        val gyro = UseGyroButton(this, "Gyro", color)
+        val gyro = UseGyroButton(this, color)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val buttonCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
@@ -121,7 +120,7 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     private fun drawBackground() {
-        if(gameState.backgroundLoaded) {
+        if (gameState.backgroundLoaded) {
             spriteBatch.projectionMatrix = camera.combined
 
             val background = gameState.levelBackground

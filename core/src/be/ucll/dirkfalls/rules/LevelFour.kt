@@ -1,7 +1,5 @@
 package be.ucll.dirkfalls.rules
 
-import com.badlogic.gdx.graphics.Texture
-
 class LevelFour(rule: Rule = touchScreen) : Level(rule) {
     override var rules = setOf(
             rule,
@@ -13,6 +11,6 @@ class LevelFour(rule: Rule = touchScreen) : Level(rule) {
             changeColor
     )
 
-    override val imgBackground = Texture("backgrounds/level4background.jpg")
+    override val imageBackground = "backgrounds/level4background.jpg"
 
 }

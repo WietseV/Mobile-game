@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.viewport.FitViewport
 
 class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) :
@@ -95,6 +96,7 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     override fun render(delta: Float) {
+        gameState.assetManager.update()
         //performance.update(delta)
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
@@ -119,17 +121,19 @@ class HomeScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     private fun drawBackground() {
-        spriteBatch.projectionMatrix = camera.combined
-        val background = gameState.getLevelBackground()
+        if(gameState.backgroundLoaded) {
+            spriteBatch.projectionMatrix = camera.combined
 
-        spriteBatch.use {
-            spriteBatch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+            val background = gameState.levelBackground
 
-            gameState.entities.forEach {
-                spriteBatch.draw(it.image, it.position.x, it.position.y, it.size(), it.size())
+            spriteBatch.use {
+                spriteBatch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+
+                gameState.entities.forEach {
+                    spriteBatch.draw(it.image, it.position.x, it.position.y, it.size(), it.size())
+                }
             }
         }
-
     }
 
 

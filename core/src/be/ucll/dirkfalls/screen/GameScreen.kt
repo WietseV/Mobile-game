@@ -83,7 +83,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     override fun render(delta: Float) {
-
+        gameState.assetManager.update()
         performance.update(delta)
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
@@ -130,11 +130,13 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     private fun renderBackground() {
-        batch.projectionMatrix = camera.combined
-        var background = gameState.getLevelBackground()
+        if(gameState.backgroundLoaded) {
+            batch.projectionMatrix = camera.combined
+            val background = gameState.levelBackground
 
-        batch.use {
-            batch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+            batch.use {
+                batch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+            }
         }
     }
 

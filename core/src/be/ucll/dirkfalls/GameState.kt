@@ -13,31 +13,27 @@ import kotlin.properties.Delegates
 
 class GameState {
     val heroradius = 0.4f
-    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
+    val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius , 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
     val comets
         get() = entities.filterIsInstance<Comet>()
     var score: Int by Delegates.observable(0) { property, oldValue, newValue ->
         levelManager.nextLevel() // elke keer als score geupdate wordt, meld dit aan de level manager
     }
+    val assetManager = AssetManager()
     var gameOver = false
     val background = Background()
-    var imgBackground: Texture
     var pressedPosition: Vector2? = null
-    val assets = AssetManager()
     private val levelManager = LevelManager(this)
     var useGyro = false
     //var pauseButton : PauseButton? = null
 
-    init {
-        imgBackground = assets.get("backgrounds/backgroundLevel1.jpeg", Texture::class.java)
-    }
 
     fun deleteEntity(entity: Entity) {
         entities.remove(entity)
     }
 
-    fun intro() {
+    fun intro(){
         entities.remove(hero)
         levelManager.introLevel()
     }
@@ -61,15 +57,15 @@ class GameState {
         levelManager.update(delta)
     }
 
-    fun setLevelBackground() {
-        imgBackground = levelManager.getBackgroundImg()
-    }
 
-    fun setPauseButton(pauseButtonparse: PauseButton) {
+    fun setPauseButton(pauseButtonparse: PauseButton){
         //pauseButton = pauseButtonparse
     }
 
-    fun getLevelBackground(): Texture = levelManager.getBackgroundImg()
+    val backgroundLoaded: Boolean
+        get() = levelManager.backgroundLoaded
+    val levelBackground: Texture
+        get() = levelManager.backgroundImg
 
 }
 

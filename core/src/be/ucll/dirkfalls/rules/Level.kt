@@ -11,5 +11,5 @@ abstract class Level(val rule: be.ucll.dirkfalls.rules.Rule) {
         rules.forEach { it(gameState, delta) }
     }
 
-    abstract val imgBackground: Texture
+    abstract val imageBackground: String
 }

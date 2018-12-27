@@ -184,11 +184,6 @@ val changeColor: Rule = { gameState, delta ->
     }
 }
 
-val updateImgBackground: Rule = { gameState, delta ->
-    gameState.setLevelBackground()
-}
-
-
 val gyroscope: Rule = { gameState, _ ->
     gameState.hero.gyro = true
     val gyroY = Gdx.input.gyroscopeY

@@ -3,7 +3,6 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.utils.logger
 
 class PerformanceLogger {
-    // Used for performance calculations
     private val log = logger<PerformanceLogger>()
     private var fps = 0
     private var time = 0f

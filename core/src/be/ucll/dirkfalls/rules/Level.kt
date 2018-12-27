@@ -1,7 +1,6 @@
 package be.ucll.dirkfalls.rules
 
 import be.ucll.dirkfalls.GameState
-import com.badlogic.gdx.graphics.Texture
 
 abstract class Level(val rule: be.ucll.dirkfalls.rules.Rule) {
 

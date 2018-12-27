@@ -1,6 +1,5 @@
 package be.ucll.dirkfalls.screen
 
-import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
@@ -8,6 +7,7 @@ import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.screen.buttons.*
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) : DirkScreen(dirkFallsGame, gameState) {
+class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(gameState) {
     private val camera = OrthographicCamera()
     private val aspectRatio = Gdx.graphics.height / Gdx.graphics.width
     private val textCamera = OrthographicCamera(10000f, 10000f * aspectRatio)
@@ -54,15 +54,9 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
 
     override fun show() {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState)
-        val reset = ResetButton(this)
-        val homeButton = HomeButton(this)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val resetCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
-        reset.set(resetCoords.x, resetCoords.y, buttonWidth, buttonHeight)
-        homeButton.set(resetCoords.x, resetCoords.y - getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
-        buttons.add(reset)
-        buttons.add(homeButton)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
@@ -113,7 +107,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         }
         renderGameObjects()
         if (gameState.gameOver) {
-            drawGameOver()
+            gameOver()
         }
         drawPauseButton()
 
@@ -130,7 +124,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     }
 
     private fun renderBackground() {
-        if(gameState.backgroundLoaded) {
+        if (gameState.backgroundLoaded) {
             batch.projectionMatrix = camera.combined
             val background = gameState.levelBackground
 
@@ -178,28 +172,14 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         }
     }
 
-    private fun drawGameOver() {
-        renderer.use {
-            renderer.set(ShapeRenderer.ShapeType.Filled)
-            buttons.forEach {
-                renderer.color = it.color
-                renderer.rect(it)
-            }
-        }
-        batch.projectionMatrix = textCamera.combined
-        batch.use {
-            font.data.setScale(50f)
-            font.draw(batch, "Game over!", 0f, 2000f * aspectRatio, 0f, 1, false)
-            font.data.setScale(30f)
-            font.draw(batch, "Try again", 0f, 100f * aspectRatio, 0f, 1, false)
-            font.draw(batch, "Main menu", 0f, -900f * aspectRatio, 0f, 1, false)
-        }
+    private fun gameOver() {
+        game.screen = GameOverScreen(gameState.levelBackground, gameState.score, game)
     }
 
     override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                it.pressButton(dirkFallsGame, HomeScreen(dirkFallsGame, gameState))
+                it.pressButton(game, HomeScreen(game, gameState))
             }
         }
     }

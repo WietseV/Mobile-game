@@ -1,7 +1,5 @@
 package be.ucll.dirkfalls.rules
 
-import com.badlogic.gdx.graphics.Texture
-
 class LevelOne(rule: Rule = touchScreen) : Level(rule) {
 
     override var rules = setOf(

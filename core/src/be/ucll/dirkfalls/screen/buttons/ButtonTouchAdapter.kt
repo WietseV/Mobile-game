@@ -3,11 +3,11 @@ package be.ucll.dirkfalls.screen.buttons
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.screen.DirkScreen
+import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
-import be.ucll.dirkfalls.utils.scale
 
-class ButtonTouchAdapter(private val screen: DirkScreen): InputAdapter() {
+class ButtonTouchAdapter(private val screen: DirkScreen) : InputAdapter() {
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         screen.touchUp(convertScreenXToWorldX(screenX), convertScreenYToWorldY(screenY))
         return true
@@ -28,6 +28,12 @@ class ButtonTouchAdapter(private val screen: DirkScreen): InputAdapter() {
     }
 
     private fun convertScreenYToWorldY(y: Int): Float {
-        return WORLD_HEIGHT-scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
+        return WORLD_HEIGHT - scale(
+                y.toFloat(),
+                0f,
+                Gdx.graphics.height.toFloat(),
+                0f,
+                WORLD_HEIGHT
+        )
     }
 }

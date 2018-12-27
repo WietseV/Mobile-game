@@ -7,7 +7,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 
-class UseGyroButton(screen: DirkScreen, text:String, color: Color = Color.RED) : Button(screen, text,  color) {
+class UseGyroButton(screen: DirkScreen, text: String, color: Color = Color.RED) :
+        Button(screen, text, color) {
     override fun pressButton(game: DirkFallsGame, targetScreen: DirkScreen?) {
         this.color = startColor
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)) {
@@ -16,11 +17,13 @@ class UseGyroButton(screen: DirkScreen, text:String, color: Color = Color.RED) :
             }
         }
     }
+
     override fun touchButton(color: Color) {
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)) {
             this.color = color
         }
     }
+
     override fun touchMovedOff() {
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)) {
             this.color = startColor

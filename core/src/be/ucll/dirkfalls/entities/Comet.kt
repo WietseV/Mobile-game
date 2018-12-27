@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector3
 
 
 class Comet(
-    startPosition: Vector2,
-    private var radius: Float,
-    override var velocity: Vector2 = Vector2(0f , -3f)
+        startPosition: Vector2,
+        private var radius: Float,
+        override var velocity: Vector2 = Vector2(0f, -3f)
 ) : Entity() {
 
     override var position = startPosition
@@ -36,12 +36,10 @@ class Comet(
         }
 */
 
-    fun collide(circle: Circle)
-        = shape.overlaps(circle)
+    fun collide(circle: Circle) = shape.overlaps(circle)
 
     fun collideWithHero(hero: Hero) =
-        calculateCollidingCircle().overlaps(hero.calculateCollidingCircle())
-
+            calculateCollidingCircle().overlaps(hero.calculateCollidingCircle())
 
 
     override fun drawDebug(renderer: ShapeRenderer) {
@@ -53,9 +51,10 @@ class Comet(
     override fun size(): Float {
         return 2 * shape.radius
     }
+
     override fun outOfBounds(delta: Float): Boolean =
-        (position.x + velocity.x * delta) - radius < 0 ||
-                (position.x + velocity.x * delta) + radius > WORLD_WIDTH
+            (position.x + velocity.x * delta) - radius < 0 ||
+                    (position.x + velocity.x * delta) + radius > WORLD_WIDTH
 
     fun calculateCollidingCircle(): Circle {
         var circle = Circle(shape.x + radius, shape.y + radius, radius)

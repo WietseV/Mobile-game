@@ -10,11 +10,11 @@ import com.google.gson.Gson
 class HighscoreService {
     fun all(handler: AsyncHandler<List<HighscoreEntry>>) {
         val request = HttpRequestBuilder()
-            .newRequest()
-            .method(Net.HttpMethods.GET)
-            .header("content-type", "application/json")
-            .url("http://robin-vandenbroeck.sb.uclllabs.be:8080/")
-            .build()
+                .newRequest()
+                .method(Net.HttpMethods.GET)
+                .header("content-type", "application/json")
+                .url("http://robin-vandenbroeck.sb.uclllabs.be:8080/")
+                .build()
 
         Gdx.net.sendHttpRequest(request, object : Net.HttpResponseListener {
             override fun handleHttpResponse(httpResponse: Net.HttpResponse) {
@@ -41,13 +41,13 @@ class HighscoreService {
         val gson = Gson()
         val json = gson.toJson(entry)
 
-        val request =  HttpRequestBuilder()
-            .newRequest()
-            .method(Net.HttpMethods.POST)
-            .content(json)
-            .header("content-type", "application/json")
-            .url("http://robin-vandenbroeck.sb.uclllabs.be:8080/")
-            .build()
+        val request = HttpRequestBuilder()
+                .newRequest()
+                .method(Net.HttpMethods.POST)
+                .content(json)
+                .header("content-type", "application/json")
+                .url("http://robin-vandenbroeck.sb.uclllabs.be:8080/")
+                .build()
 
 
         Gdx.net.sendHttpRequest(request, object : Net.HttpResponseListener {

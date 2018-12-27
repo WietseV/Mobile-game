@@ -15,7 +15,7 @@ class LevelManager(var gameState: GameState) {
     }
 
     fun nextLevel() {
-        if (gameState.score % 25 == 0){
+        if (gameState.score % 25 == 0) {
             /*if (levelCounter == 3) {
                 resetLevels()
             } else {
@@ -31,10 +31,10 @@ class LevelManager(var gameState: GameState) {
         level = levelFactory.createLevel(levelCounter)
     }
 
-    fun introLevel(){
+    fun introLevel() {
         level = levelFactory.createLevel(0)
     }
 
-    fun getBackgroundImg():Texture = level.imgBackground
+    fun getBackgroundImg(): Texture = level.imgBackground
 
 }

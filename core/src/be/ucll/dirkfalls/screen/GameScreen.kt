@@ -5,12 +5,10 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.rules.LevelManager
-import be.ucll.dirkfalls.entities.HeroDirection
 import be.ucll.dirkfalls.screen.buttons.*
-import be.ucll.dirkfalls.utils.*
+import be.ucll.dirkfalls.utils.rect
+import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -23,8 +21,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 
 class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState) : DirkScreen(dirkFallsGame, gameState) {
     private val camera = OrthographicCamera()
-    private val aspectRatio = Gdx.graphics.height/Gdx.graphics.width
-    private val textCamera = OrthographicCamera(10000f, 10000f*aspectRatio)
+    private val aspectRatio = Gdx.graphics.height / Gdx.graphics.width
+    private val textCamera = OrthographicCamera(10000f, 10000f * aspectRatio)
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()
     private val batch = SpriteBatch(5)
@@ -47,7 +45,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
     var top = 1f
     var topw = 0f
 
-    var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight*2)
+    var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight * 2)
 
 
     override fun hide() {
@@ -60,9 +58,9 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         val homeButton = HomeButton(this)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
-        val resetCoords = getBoxCoordsOnScreen(0.5f,0.49f, buttonWidth, buttonHeight)
+        val resetCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
         reset.set(resetCoords.x, resetCoords.y, buttonWidth, buttonHeight)
-        homeButton.set(resetCoords.x, resetCoords.y-getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
+        homeButton.set(resetCoords.x, resetCoords.y - getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
         buttons.add(reset)
         buttons.add(homeButton)
         font.data.setScale(3f, 3f)
@@ -124,18 +122,18 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
 
     private fun renderGameObjects() {
         batch.projectionMatrix = camera.combined
-         batch.use {
-             gameState.entities.forEach{
-                 batch.draw(it.image, it.position.x, it.position.y,  it.size(), it.size())
-             }
-         }
+        batch.use {
+            gameState.entities.forEach {
+                batch.draw(it.image, it.position.x, it.position.y, it.size(), it.size())
+            }
+        }
     }
 
-    private fun renderBackground(){
+    private fun renderBackground() {
         batch.projectionMatrix = camera.combined
         var background = gameState.getLevelBackground()
 
-        batch.use{
+        batch.use {
             batch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
         }
     }
@@ -174,7 +172,7 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         batch.use {
             font.data.setScale(30f)
             val char = score.toString()
-            font.draw(it, "Score: $char", 10f, 4500f*aspectRatio, 0f, 1, false)
+            font.draw(it, "Score: $char", 10f, 4500f * aspectRatio, 0f, 1, false)
         }
     }
 
@@ -189,10 +187,10 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         batch.projectionMatrix = textCamera.combined
         batch.use {
             font.data.setScale(50f)
-            font.draw(batch, "Game over!", 0f, 2000f*aspectRatio, 0f, 1, false)
+            font.draw(batch, "Game over!", 0f, 2000f * aspectRatio, 0f, 1, false)
             font.data.setScale(30f)
-            font.draw(batch, "Try again", 0f, 100f*aspectRatio, 0f, 1, false)
-            font.draw(batch, "Main menu", 0f, -900f*aspectRatio, 0f, 1, false)
+            font.draw(batch, "Try again", 0f, 100f * aspectRatio, 0f, 1, false)
+            font.draw(batch, "Main menu", 0f, -900f * aspectRatio, 0f, 1, false)
         }
     }
 
@@ -230,18 +228,18 @@ class GameScreen(private val dirkFallsGame: DirkFallsGame, gameState: GameState)
         resume()
     }
 
-    fun drawPauseButton(){
+    fun drawPauseButton() {
         //pause button
 
         // rare berekening, geen idee hoe dit werkt, maths!
         pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
 
-        renderer.use{
+        renderer.use {
             renderer.rect(pauseButton)
         }
 
         batch.projectionMatrix = camera.combined
-        batch.use{
+        batch.use {
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
         }
 

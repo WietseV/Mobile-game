@@ -3,13 +3,10 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.entities.Hero
-import be.ucll.dirkfalls.entities.HeroDirection.*
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.math.Vector2
-import kotlin.math.roundToInt
 
 internal class GameTouchAdapter(private val gameState: GameState) : InputAdapter() {
     private val hero
@@ -37,8 +34,8 @@ internal class GameTouchAdapter(private val gameState: GameState) : InputAdapter
 
     private fun updatePosition(x: Int, y: Int) {
         gameState.pressedPosition = Vector2(
-            scale(x.toFloat(), 0f, Gdx.graphics.width.toFloat(), 0f, WORLD_WIDTH),
-            scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
+                scale(x.toFloat(), 0f, Gdx.graphics.width.toFloat(), 0f, WORLD_WIDTH),
+                scale(y.toFloat(), 0f, Gdx.graphics.height.toFloat(), 0f, WORLD_HEIGHT)
         )
     }
 }

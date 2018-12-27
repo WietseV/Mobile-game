@@ -29,8 +29,8 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
                 hero.hit(it)
             }*/
 
-    gameState.comets.forEach{
-        if (it.collideWithHero(gameState.hero)){
+    gameState.comets.forEach {
+        if (it.collideWithHero(gameState.hero)) {
             gameState.deleteEntity(it)
             hero.hit(it)
         }
@@ -70,8 +70,8 @@ fun createCometSpawnerAndSize(): Rule {
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
-            val comet = Comet(vector2 , cometRadius )
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius)
             if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
             }
@@ -92,8 +92,8 @@ fun createCometSpawner(): Rule {
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
-            val comet = Comet(vector2 , cometRadius )
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius)
             if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
             }
@@ -117,8 +117,8 @@ fun createCometsWithVelocity(): Rule {
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
-            val comet = Comet(vector2 , cometRadius, vector2velocity )
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius, vector2velocity)
             if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
             }
@@ -140,8 +140,8 @@ fun createCometsWithVelocityAndSize(): Rule {
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
-            val comet = Comet(vector2 , cometRadius, vector2velocity )
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius, vector2velocity)
             if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
                 println(gameState.entities.size)
@@ -158,45 +158,54 @@ fun spawnCometForIntroScreen(): Rule {
         cometTimer += delta
         var vector_y = MathUtils.random(3f, 7f)
         var vector2velocity = Vector2(0f, vector_y * (-1))
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME/3) {
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME / 3) {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.4f, 0.7f)
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
-            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT+ cometRadius )
-            val comet = Comet(vector2 , cometRadius, vector2velocity )
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius, vector2velocity)
             if (gameState.comets.none { it.collide(comet.shape) }) {
                 gameState.entities.add(comet)
             }
         }
     }
 }
+
 val changeColor: Rule = { gameState, delta ->
     gameState.comets.forEach {
-        it.color = Vector3(scale(it.position.x, 0f, GameConfig.WORLD_WIDTH), scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT), 0.5f)
+        it.color = Vector3(
+                scale(it.position.x, 0f, GameConfig.WORLD_WIDTH),
+                scale(it.position.y, 0f, GameConfig.WORLD_HEIGHT),
+                0.5f
+        )
     }
 }
 
-val updateImgBackground: Rule  = { gameState, delta ->
+val updateImgBackground: Rule = { gameState, delta ->
     gameState.setLevelBackground()
 }
 
 
-val gyroscope : Rule = {gameState, _ ->
+val gyroscope: Rule = { gameState, _ ->
     gameState.hero.gyro = true
     val gyroY = Gdx.input.gyroscopeY
     gameState.hero.velocity = Vector2(scale(gyroY, 0f, 1f, 0f, 5f), 0f)
 }
 
-val touchScreen : Rule = {gameState, _ ->
+val touchScreen: Rule = { gameState, _ ->
     val hero = gameState.hero
     hero.gyro = false
     val pressed = gameState.pressedPosition
-    if(pressed != null) {
+    if (pressed != null) {
         hero.direction = when {
-            between(pressed.x, hero.position.x, hero.position.x + hero.shape.radius) -> HeroDirection.STILL
+            between(
+                    pressed.x,
+                    hero.position.x,
+                    hero.position.x + hero.shape.radius
+            ) -> HeroDirection.STILL
             pressed.x < hero.position.x -> HeroDirection.LEFT
             pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.RIGHT
             else -> HeroDirection.STILL

@@ -5,7 +5,7 @@ import be.ucll.dirkfalls.screen.DirkScreen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 
-abstract class Button(val screen: DirkScreen, val text:String, var color: Color): Rectangle() {
+abstract class Button(val screen: DirkScreen, val text: String, var color: Color) : Rectangle() {
     protected val startColor = color
 
 
@@ -13,6 +13,7 @@ abstract class Button(val screen: DirkScreen, val text:String, var color: Color)
     open fun touchButton(color: Color = Color.ORANGE) {
         this.color = color
     }
+
     open fun touchMovedOff() {
         this.color = startColor
     }

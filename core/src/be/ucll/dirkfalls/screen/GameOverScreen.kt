@@ -2,6 +2,10 @@ package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameState
+import be.ucll.dirkfalls.service.HighscoreEntry
+import be.ucll.dirkfalls.service.HighscoreService
+import be.ucll.dirkfalls.utils.AsyncHandler
+import be.ucll.dirkfalls.utils.logger
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -10,14 +14,18 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
 
 class GameOverScreen(private val backgroundImage: Texture,
                      private val score: Int,
                      private val game: Game) : Screen {
+    private val logger = be.ucll.dirkfalls.utils.logger<GameOverScreen>()
     private val stage = Stage()
     private val skin = Skin(Gdx.files.internal("UI/skin.json"))
+    private val highscoreService = HighscoreService()
+
     override fun hide() {
     }
 
@@ -31,8 +39,17 @@ class GameOverScreen(private val backgroundImage: Texture,
         val submitButton = TextButton("Submit", skin)
         submitButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                println(nameField.text)
-                return true
+               highscoreService.create(nameField.text, score, object: AsyncHandler<HighscoreEntry> {
+                   override fun success(data: HighscoreEntry) {
+                       submitButton.isDisabled = true
+                       submitButton.touchable = Touchable.disabled
+                   }
+
+                   override fun error(t: Throwable) {
+                        logger.error(t.toString(), t)
+                   }
+               })
+                return false
             }
         })
         val tryAgainButton = TextButton("Try Again", skin)
@@ -58,11 +75,11 @@ class GameOverScreen(private val backgroundImage: Texture,
             }
         })
 
+        val loadingLabel = Label("Loading Highscores...", skin)
 
         val table = Table()
         table.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         table.setPosition(0f, 0f)
-
 
         table.add(scoreLabel)
         table.row()
@@ -75,9 +92,24 @@ class GameOverScreen(private val backgroundImage: Texture,
         table.add(mainMenuButton)
         table.row()
         table.add(shareToFbButton)
-
+        table.row()
+        table.add(loadingLabel)
         stage.addActor(table)
 
+        highscoreService.all(object : AsyncHandler<List<HighscoreEntry>> {
+            override fun success(data: List<HighscoreEntry>) {
+                loadingLabel.remove()
+                data.take(10).forEach { entry ->
+                    table.add(Label(entry.name, skin))
+                    table.add(Label(entry.score.toString(), skin))
+                    table.row()
+                }
+            }
+
+            override fun error(t: Throwable) {
+                logger<DirkFallsGame>().error(t.toString(), t)
+            }
+        })
     }
 
     override fun render(delta: Float) {

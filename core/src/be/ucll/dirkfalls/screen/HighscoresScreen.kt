@@ -1,5 +1,6 @@
 package be.ucll.dirkfalls.screen
 
+import be.ucll.dirkfalls.DirkFallsGame
 import be.ucll.dirkfalls.GameState
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
@@ -49,6 +50,14 @@ class GameOverScreen(private val backgroundImage: Texture,
             }
         })
 
+        val shareToFbButton = TextButton("Share to facebook", skin)
+        shareToFbButton.addListener(object  : InputListener() {
+            override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                (game as DirkFallsGame).fb.share(score)
+                return false
+            }
+        })
+
 
         val table = Table()
         table.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
@@ -64,6 +73,8 @@ class GameOverScreen(private val backgroundImage: Texture,
         table.row()
         table.add(tryAgainButton)
         table.add(mainMenuButton)
+        table.row()
+        table.add(shareToFbButton)
 
         stage.addActor(table)
 

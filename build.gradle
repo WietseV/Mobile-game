@@ -36,8 +36,22 @@ allprojects {
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        jcenter()
     }
 }
+
+subprojects {
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && !details.requested.name.contains('multidex') ) {
+                details.useVersion "27.0.2"
+            }
+        }
+    }
+}
+
+
 
 project(":desktop") {
     apply plugin: "kotlin"
@@ -85,6 +99,8 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation 'com.google.code.gson:gson:2.8.5'
+        compile 'com.facebook.android:facebook-share:4.39.0'
+        compile "de.tomgrill.gdxfacebook:gdx-facebook-android:1.4.1"
     }
 }
 

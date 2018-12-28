@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">DirkFalls</string>
+    <string name="facebook_app_id">1886612001462337</string>
 
 </resources>

@@ -16,9 +16,9 @@ class LevelFactory(val gameState: GameState) {
             2 -> LevelTwo()
             3 -> LevelThree(gyro)
             4 -> LevelFour()
-            /* 5 -> LevelFive()
-             6 -> LevelSix()
-             7 -> LevelSeven()
+            5 -> LevelFive()
+            6 -> LevelSix()
+            /*7 -> LevelSeven()
              8 -> LevelEight()
              9 -> LevelNine()
              10 -> LevelTen()*/

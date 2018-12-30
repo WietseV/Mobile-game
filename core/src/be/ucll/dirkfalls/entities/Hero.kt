@@ -17,6 +17,7 @@ class Hero(
 
     companion object {
         private const val MAX_X_SPEED = 5f // world units
+        private const val MAX_HEALTH = 100
     }
 
     var gyro = false
@@ -45,7 +46,7 @@ class Hero(
             }
         }
 
-    var health = 100
+    var health = MAX_HEALTH
 
     override fun drawDebug(renderer: ShapeRenderer) {
         renderer.setColor(255f, 255f, 255f, 0f)
@@ -58,10 +59,27 @@ class Hero(
 
     fun hit(comet: Comet) {
         val damage: Int = (calculateDamage(comet) * 50f).roundToInt()
+        takeDamage(damage)
+    }
+
+    fun hitHeal(comet: Comet) {
+        val heal: Int = (calculateDamage(comet) * 50f).roundToInt()
+        heal(heal)
+    }
+
+    fun takeDamage(damage: Int) {
         if (health - damage <= 0) {
             health = 0
         } else {
             health -= damage
+        }
+    }
+
+    fun heal(heal: Int) {
+        if (health + heal >= MAX_HEALTH) {
+            health = MAX_HEALTH
+        } else {
+            health += heal
         }
     }
 

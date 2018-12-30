@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
-class GameState {
+class GameState(var useGyro: Boolean = false) {
     val heroradius = 0.4f
     val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
@@ -25,7 +25,6 @@ class GameState {
     val background = Background()
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
-    var useGyro = false
     //var pauseButton : PauseButton? = null
 
 

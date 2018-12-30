@@ -6,6 +6,6 @@ import com.badlogic.gdx.Application
 class FacebookDesktop : FacebookInterface {
     override lateinit var app: Application
     override fun share(score: Int) {
-        print("Score: $score")
+        println("Score: $score")
     }
 }

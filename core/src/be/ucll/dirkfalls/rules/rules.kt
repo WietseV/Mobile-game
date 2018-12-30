@@ -37,6 +37,32 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
     }
 }
 
+val heroHealsWhenHit: Rule = { gameState, _ ->
+    val hero = gameState.hero
+    gameState.comets.forEach {
+        if (it.collideWithHero(gameState.hero)) {
+            gameState.deleteEntity(it)
+            hero.hitHeal(it)
+        }
+    }
+}
+
+fun heroTakesDamageOverTime(): Rule {
+    var damageTimer = 0f
+
+    return { gameState, delta ->
+        damageTimer += delta
+
+        if (damageTimer >= GameConfig.COMET_SPAWN_TIME) {
+            damageTimer = 0f // reset timer
+
+            val hero = gameState.hero
+            hero.takeDamage(5)
+        }
+    }
+
+}
+
 val removeCometWhenOutOfBound: Rule = { gameState, _ ->
     gameState.comets
             .filter { it.position.y < 0f }
@@ -156,8 +182,8 @@ fun spawnCometForIntroScreen(): Rule {
 
     return { gameState, delta ->
         cometTimer += delta
-        var vector_y = MathUtils.random(3f, 7f)
-        var vector2velocity = Vector2(0f, vector_y * (-1))
+        val vector_y = MathUtils.random(3f, 7f)
+        val vector2velocity = Vector2(0f, vector_y * (-1))
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME / 3) {
             cometTimer = 0f // reset timer
 
@@ -203,6 +229,26 @@ val touchScreen: Rule = { gameState, _ ->
             ) -> HeroDirection.STILL
             pressed.x < hero.position.x -> HeroDirection.LEFT
             pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.RIGHT
+            else -> HeroDirection.STILL
+        }
+    } else {
+        hero.direction = HeroDirection.STILL
+    }
+}
+
+val touchScreenInverted: Rule = { gameState, _ ->
+    val hero = gameState.hero
+    hero.gyro = false
+    val pressed = gameState.pressedPosition
+    if (pressed != null) {
+        hero.direction = when {
+            between(
+                    pressed.x,
+                    hero.position.x,
+                    hero.position.x + hero.shape.radius
+            ) -> HeroDirection.STILL
+            pressed.x < hero.position.x -> HeroDirection.RIGHT
+            pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.LEFT
             else -> HeroDirection.STILL
         }
     } else {

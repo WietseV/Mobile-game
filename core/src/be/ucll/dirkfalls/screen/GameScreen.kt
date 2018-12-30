@@ -170,7 +170,7 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
     }
 
     private fun gameOver() {
-        game.screen = GameOverScreen(gameState.levelBackground, gameState.score, game)
+        game.screen = GameOverScreen(gameState.levelBackground, gameState.score, game, gameState.useGyro)
     }
 
     override fun touchUp(x: Float, y: Float) {

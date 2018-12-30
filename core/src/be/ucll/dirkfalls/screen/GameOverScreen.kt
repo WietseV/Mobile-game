@@ -20,7 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 
 class GameOverScreen(private val backgroundImage: Texture,
                      private val score: Int,
-                     private val game: Game) : Screen {
+                     private val game: Game,
+                     private val gyro: Boolean) : Screen {
     private val logger = be.ucll.dirkfalls.utils.logger<GameOverScreen>()
     private val stage = Stage()
     private val skin = Skin(Gdx.files.internal("UI/skin.json"))
@@ -55,14 +56,14 @@ class GameOverScreen(private val backgroundImage: Texture,
         val tryAgainButton = TextButton("Try Again", skin)
         tryAgainButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = GameScreen(game, GameState())
+                game.screen = GameScreen(game, GameState(gyro))
                 return false
             }
         })
         val mainMenuButton = TextButton("Main menu", skin)
         mainMenuButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = HomeScreen(game, GameState())
+                game.screen = HomeScreen(game, GameState(gyro))
                 return false
             }
         })
@@ -98,11 +99,14 @@ class GameOverScreen(private val backgroundImage: Texture,
 
         highscoreService.all(object : AsyncHandler<List<HighscoreEntry>> {
             override fun success(data: List<HighscoreEntry>) {
-                loadingLabel.remove()
-                data.take(10).forEach { entry ->
-                    table.add(Label(entry.name, skin))
-                    table.add(Label(entry.score.toString(), skin))
+                Gdx.app.postRunnable {
+                    table.getCell(loadingLabel).setActor(Label("Highscores:", skin))
                     table.row()
+                    data.take(10).forEach { entry ->
+                        table.add(Label(entry.name, skin))
+                        table.add(Label(entry.score.toString(), skin))
+                        table.row()
+                    }
                 }
             }
 

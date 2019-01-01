@@ -1,6 +1,7 @@
 package be.ucll.dirkfalls.rules
 
 import be.ucll.dirkfalls.GameConfig
+import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HeroDirection
@@ -43,6 +44,7 @@ val heroHealsWhenHit: Rule = { gameState, _ ->
         if (it.collideWithHero(gameState.hero)) {
             gameState.deleteEntity(it)
             hero.hitHeal(it)
+            gameState.score++
         }
     }
 }
@@ -63,7 +65,7 @@ fun heroTakesDamageOverTime(): Rule {
 
 }
 
-val removeCometWhenOutOfBound: Rule = { gameState, _ ->
+val scoreWhenCometOutOfBound: Rule = { gameState, _ ->
     gameState.comets
             .filter { it.position.y < 0f }
             .forEach {
@@ -71,6 +73,15 @@ val removeCometWhenOutOfBound: Rule = { gameState, _ ->
                 gameState.score++
             }
 }
+
+val noScoreWhenCometOutOfBound: Rule = { gameState, _ ->
+    gameState.comets
+            .filter { it.position.y < 0f }
+            .forEach {
+                gameState.deleteEntity(it)
+            }
+}
+
 
 val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
     val hero = gameState.hero
@@ -241,15 +252,30 @@ val touchScreenInverted: Rule = { gameState, _ ->
     hero.gyro = false
     val pressed = gameState.pressedPosition
     if (pressed != null) {
-        hero.direction = when {
-            between(
-                    pressed.x,
-                    hero.position.x,
-                    hero.position.x + hero.shape.radius
-            ) -> HeroDirection.STILL
-            pressed.x < hero.position.x -> HeroDirection.RIGHT
-            pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.LEFT
-            else -> HeroDirection.STILL
+        when {
+            pressed.x < hero.radius ->
+                hero.direction = when {
+                    pressed.x <= hero.position.x + hero.shape.radius -> HeroDirection.RIGHT
+                    pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.LEFT
+                    else -> HeroDirection.STILL
+                }
+            pressed.x > WORLD_WIDTH - hero.radius ->
+                hero.direction = when {
+                    pressed.x < hero.position.x -> HeroDirection.RIGHT
+                    pressed.x >= hero.position.x -> HeroDirection.LEFT
+                    else -> HeroDirection.STILL
+                }
+            else ->
+                hero.direction = when {
+                between(
+                        pressed.x,
+                        hero.position.x,
+                        hero.position.x + hero.shape.radius
+                ) -> HeroDirection.STILL
+                pressed.x < hero.position.x -> HeroDirection.RIGHT
+                pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.LEFT
+                else -> HeroDirection.STILL
+            }
         }
     } else {
         hero.direction = HeroDirection.STILL

@@ -7,7 +7,7 @@ class LevelFive(rule: Rule = touchScreenInverted) : Level(rule) {
             heroCannotMoveOutOfBounds,
             updatePositionBasedOnVelocity,
             heroTakesDamageWhenHit,
-            removeCometWhenOutOfBound,
+            scoreWhenCometOutOfBound,
             createCometSpawner(),
             changeColor
     )

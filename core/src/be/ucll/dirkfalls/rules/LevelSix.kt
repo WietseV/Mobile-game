@@ -8,7 +8,7 @@ class LevelSix(rule: Rule = touchScreen) : Level(rule) {
             updatePositionBasedOnVelocity,
             heroHealsWhenHit,
             heroTakesDamageOverTime(),
-            removeCometWhenOutOfBound,
+            noScoreWhenCometOutOfBound,
             createCometSpawner(),
             changeColor
     )

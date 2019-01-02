@@ -58,11 +58,11 @@ project(":desktop") {
 
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }
 
@@ -87,6 +87,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "de.tomgrill.gdxfacebook:gdx-facebook-android:1.4.1"
     }
 }
 
@@ -99,7 +100,6 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation 'com.google.code.gson:gson:2.8.5'
-        compile "de.tomgrill.gdxfacebook:gdx-facebook-android:1.4.1"
     }
 }
 

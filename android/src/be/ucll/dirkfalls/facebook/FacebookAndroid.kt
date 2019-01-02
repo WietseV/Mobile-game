@@ -50,13 +50,7 @@ class FacebookAndroid(override val app: Application) : FacebookInterface {
         val x_coord = (src.width - width) / 2
         val y_coord = (src.height - height)/2
         cs.drawText(yourText, x_coord, y_coord, tPaint) // 15f is to put space between top edge and the text, if you want to change it, you can
-        /*try {
-            dest.compress(Bitmap.CompressFormat.JPEG, 100, FileOutputStream(File("/sdcard/ImageAfterAddingText.jpg")))
-            // dest is Bitmap, if you want to preview the final image, you can display it on screen also before saving
-        } catch (e: FileNotFoundException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        }*/
+
 
 
         val dialog = ShareDialog(app as AndroidApplication)

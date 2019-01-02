@@ -128,8 +128,8 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
             spriteBatch.use {
                 spriteBatch.draw(background, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
 
-                gameState.entities.forEach {
-                    spriteBatch.draw(it.image, it.position.x, it.position.y, it.size(), it.size())
+                gameState.entities.forEach { entity ->
+                    spriteBatch.draw(entity.image, entity.position.x, entity.position.y, entity.size(), entity.size())
                 }
             }
         }

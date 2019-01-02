@@ -4,7 +4,6 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.screen.buttons.Button
 import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
 import be.ucll.dirkfalls.screen.buttons.PauseButton
 import be.ucll.dirkfalls.utils.rect
@@ -21,7 +20,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
 
-class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(gameState) {
+class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
     private val camera = OrthographicCamera()
     private val aspectRatio = Gdx.graphics.height / Gdx.graphics.width
     private val textCamera = OrthographicCamera(10000f, 10000f * aspectRatio)
@@ -33,21 +32,18 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
     }
     private val healthBar = HealthBar(Vector2(WORLD_WIDTH - 2f, WORLD_HEIGHT - 0.4f))
     private val performance = PerformanceLogger()
-    private var paused: Boolean = false
-    private val buttons = mutableListOf<Button>()
-
-    //private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+    var paused: Boolean = false
 
     //pause button
-    val pauseButton = PauseButton(this)
-    var pButtonWidth = 0.08f
-    val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
-    val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
+    private val pauseButton = PauseButton(this)
+    private var pButtonWidth = 0.08f
+    private val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
+    private val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
 
-    var top = 1f
-    var topw = 0f
+    private var top = 1f
+    private var topw = 0f
 
-    var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight * 2)
+    private var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight * 2)
 
 
     override fun hide() {
@@ -55,24 +51,11 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
 
 
     override fun show() {
-        Gdx.input.inputProcessor = GameTouchAdapter(gameState)
+        pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
+
+        Gdx.input.inputProcessor = GameTouchAdapter(gameState, pauseButton)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
-
-        //pause button
-        var pauseButton = PauseButton(this)
-        var pButtonWidth = 0.05f
-        val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
-        val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
-
-        var top = 1f
-        var topw = 0f
-
-        var coordbox = getBoxCoordsOnScreen(top, topw, pauseButtonWidth, pauseButtonHeight)
-
-        pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
-        gameState.setPauseButton(pauseButton)
-
     }
 
     override fun render(delta: Float) {
@@ -87,16 +70,10 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
             updateHealth()
         }
         renderer.projectionMatrix = camera.combined
-        /* val background = Texture("../android/assets/backgrounds/backgroundLevel1.jpeg")
-        batch.use {
-             batch.draw(background, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, GameConfig.WORLD_WIDTH)}
-         */
         renderBackground()
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            /*renderer.color = gameState.background.color
-            renderer.rect(gameState.background.background)*/
             gameState.entities.forEach { it.drawDebug(renderer) }
             healthBar.draw(renderer)
             renderer.setColor(0f, 1f, 0f, 1f)
@@ -116,8 +93,8 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
     private fun renderGameObjects() {
         batch.projectionMatrix = camera.combined
         batch.use {
-            gameState.entities.forEach {
-                batch.draw(it.image, it.position.x, it.position.y, it.size(), it.size())
+            gameState.entities.forEach { entity ->
+                batch.draw(entity.image, entity.position.x, entity.position.y, entity.size(), entity.size())
             }
         }
     }
@@ -175,41 +152,7 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
         game.screen = GameOverScreen(gameState.levelBackground, gameState.score, game, gameState.useGyro)
     }
 
-    override fun touchUp(x: Float, y: Float) {
-        buttons.forEach {
-            if (it.contains(x, y)) {
-                it.pressButton(game, HomeScreen(game, gameState))
-            }
-        }
-    }
-
-    override fun touchDown(x: Float, y: Float) {
-        buttons.forEach {
-            if (it.contains(x, y)) {
-                it.touchButton()
-            } else {
-                it.touchMovedOff()
-            }
-        }
-    }
-
-    override fun touchDragged(x: Float, y: Float) {
-        buttons.forEach {
-            if (!it.contains(x, y)) {
-                it.touchMovedOff()
-            } else {
-                it.touchButton()
-            }
-        }
-    }
-
-    fun resetGame() {
-        gameState.resetGame()
-        Gdx.input.inputProcessor = GameTouchAdapter(gameState)
-        resume()
-    }
-
-    fun drawPauseButton() {
+    private fun drawPauseButton() {
         //pause button
 
         // rare berekening, geen idee hoe dit werkt, maths!
@@ -223,8 +166,18 @@ class GameScreen(private val game: Game, gameState: GameState) : DirkScreen(game
         batch.use {
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
         }
+    }
 
-        //buttons.add(pauseButton)
+    override fun touchDown(x: Float, y: Float) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun touchUp(x: Float, y: Float) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun touchDragged(x: Float, y: Float) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 

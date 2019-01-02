@@ -125,7 +125,7 @@ fun createCometSpawner(): Rule {
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
-            val cometRadius = 0.2f
+            val cometRadius = 0.22f //Verhoogt van 0.20f naar 0.22f zodat hero sterft na 3 hits en niet met een sliver health overleeft
             val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
             //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
 
@@ -141,12 +141,10 @@ fun createCometSpawner(): Rule {
 fun createCometsWithVelocity(): Rule {
     var cometTimer = 0f
 
-    var vector_y = MathUtils.random(3f, 6f)
-    var vector2velocity = Vector2(0f, vector_y * (-1))
     return { gameState, delta ->
         cometTimer += delta
-        var vector_y = MathUtils.random(3f, 6f)
-        var vector2velocity = Vector2(0f, vector_y * (-1))
+        val vectory = MathUtils.random(3f, 6f)
+        val vector2velocity = Vector2(0f, vectory * (-1))
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
@@ -163,13 +161,14 @@ fun createCometsWithVelocity(): Rule {
     }
 }
 
+@Deprecated("Not yet used")
 fun createCometsWithVelocityAndSize(): Rule {
     var cometTimer = 0f
 
     return { gameState, delta ->
         cometTimer += delta
-        var vector_y = MathUtils.random(3f, 6f)
-        var vector2velocity = Vector2(0f, vector_y * (-1))
+        val vectory = MathUtils.random(3f, 6f)
+        val vector2velocity = Vector2(0f, vectory * (-1))
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
             cometTimer = 0f // reset timer
 
@@ -193,8 +192,8 @@ fun spawnCometForIntroScreen(): Rule {
 
     return { gameState, delta ->
         cometTimer += delta
-        val vector_y = MathUtils.random(3f, 7f)
-        val vector2velocity = Vector2(0f, vector_y * (-1))
+        val vectory = MathUtils.random(3f, 7f)
+        val vector2velocity = Vector2(0f, vectory * (-1))
         if (cometTimer >= GameConfig.COMET_SPAWN_TIME / 3) {
             cometTimer = 0f // reset timer
 
@@ -211,7 +210,7 @@ fun spawnCometForIntroScreen(): Rule {
     }
 }
 
-val changeColor: Rule = { gameState, delta ->
+val changeColor: Rule = { gameState, _ ->
     gameState.comets.forEach {
         it.color = Vector3(
                 scale(it.position.x, 0f, GameConfig.WORLD_WIDTH),

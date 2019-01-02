@@ -11,12 +11,11 @@ inline fun ShapeRenderer.use(action: () -> Unit) {
     end()
 }
 
-@JvmOverloads
+@Deprecated("Not used", ReplaceWith("circle(c.x, c.y, c.radius, segments)"))
 fun ShapeRenderer.circle(c: Circle, segments: Int = 30) {
     circle(c.x, c.y, c.radius, segments)
 }
 
-@JvmOverloads
 fun ShapeRenderer.rect(rec: Rectangle) {
     rect(rec.x, rec.y, rec.width, rec.height)
 }
@@ -26,12 +25,12 @@ fun ShapeRenderer.batchRender(c: Circle, segments: Int = 30) {
     circle(c.x + c.radius, c.y + c.radius, c.radius, segments)
 }
 
-@JvmOverloads
+@Deprecated("Not used", ReplaceWith("circle(c.x, c.y + c.radius, c.radius, segments)"))
 fun ShapeRenderer.heroRender(c: Circle, segments: Int = 30) {
     circle(c.x, c.y + c.radius, c.radius, segments)
 }
 
-@JvmOverloads
+@Deprecated("Not used", ReplaceWith("rect(rect.x + rect.width / 2, rect.y + rect.height / 2, rect.width, rect.height)"))
 fun ShapeRenderer.rectForBatch(rect: Rectangle) {
     rect(rect.x + rect.width / 2, rect.y + rect.height / 2, rect.width, rect.height)
 }

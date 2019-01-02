@@ -5,19 +5,18 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.Entity
 import be.ucll.dirkfalls.entities.Hero
 import be.ucll.dirkfalls.rules.LevelManager
-import be.ucll.dirkfalls.screen.buttons.PauseButton
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
 class GameState(var useGyro: Boolean = false) {
-    val heroradius = 0.4f
+    private val heroradius = 0.4f
     val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
     val comets
         get() = entities.filterIsInstance<Comet>()
-    var score: Int by Delegates.observable(0) { property, oldValue, newValue ->
+    var score: Int by Delegates.observable(0) { _, _, _ ->
         levelManager.nextLevel() // elke keer als score geupdate wordt, meld dit aan de level manager
     }
     val assetManager = AssetManager()
@@ -25,7 +24,6 @@ class GameState(var useGyro: Boolean = false) {
     val background = Background()
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
-    //var pauseButton : PauseButton? = null
 
 
     fun deleteEntity(entity: Entity) {
@@ -48,17 +46,8 @@ class GameState(var useGyro: Boolean = false) {
         levelManager.resetLevels()
     }
 
-    fun changeBackground(red: Float, green: Float, blue: Float) {
-        background.changeColor(red, green, blue)
-    }
-
     fun updateLevels(delta: Float) {
         levelManager.update(delta)
-    }
-
-
-    fun setPauseButton(pauseButtonparse: PauseButton) {
-        //pauseButton = pauseButtonparse
     }
 
     val backgroundLoaded: Boolean

@@ -75,7 +75,7 @@ class Hero(
         }
     }
 
-    fun heal(heal: Int) {
+    private fun heal(heal: Int) {
         if (health + heal >= MAX_HEALTH) {
             health = MAX_HEALTH
         } else {
@@ -90,7 +90,6 @@ class Hero(
     }
 
     fun calculateCollidingCircle(): Circle {
-        var circle = Circle(shape.x + radius, shape.y + radius, radius)
-        return circle
+        return Circle(shape.x + radius, shape.y + radius, radius)
     }
 }

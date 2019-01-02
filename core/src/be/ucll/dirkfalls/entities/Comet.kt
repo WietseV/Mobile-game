@@ -56,8 +56,7 @@ class Comet(
             (position.x + velocity.x * delta) - radius < 0 ||
                     (position.x + velocity.x * delta) + radius > WORLD_WIDTH
 
-    fun calculateCollidingCircle(): Circle {
-        var circle = Circle(shape.x + radius, shape.y + radius, radius)
-        return circle
+    private fun calculateCollidingCircle(): Circle {
+        return Circle(shape.x + radius, shape.y + radius, radius)
     }
 }

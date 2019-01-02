@@ -12,10 +12,11 @@ class Background {
     var blue = scale(199f, 0f, 255f)
     var color = Color(red, green, blue, 1f)
 
+    @Deprecated("Not used")
     fun changeColor(red: Float, green: Float, blue: Float) {
-        var redP = scale(red, 0f, 255f)
-        var greenP = scale(green, 0f, 255f)
-        var blueP = scale(blue, 0f, 255f)
+        val redP = scale(red, 0f, 255f)
+        val greenP = scale(green, 0f, 255f)
+        val blueP = scale(blue, 0f, 255f)
 
         color = Color(redP, greenP, blueP, 1f)
     }

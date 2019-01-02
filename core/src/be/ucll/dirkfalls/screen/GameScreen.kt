@@ -4,7 +4,9 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.screen.buttons.*
+import be.ucll.dirkfalls.screen.buttons.Button
+import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
+import be.ucll.dirkfalls.screen.buttons.PauseButton
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Game

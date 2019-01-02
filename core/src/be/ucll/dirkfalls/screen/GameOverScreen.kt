@@ -40,16 +40,16 @@ class GameOverScreen(private val backgroundImage: Texture,
         val submitButton = TextButton("Submit", skin)
         submitButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-               highscoreService.create(nameField.text, score, object: AsyncHandler<HighscoreEntry> {
-                   override fun success(data: HighscoreEntry) {
-                       submitButton.isDisabled = true
-                       submitButton.touchable = Touchable.disabled
-                   }
+                highscoreService.create(nameField.text, score, object : AsyncHandler<HighscoreEntry> {
+                    override fun success(data: HighscoreEntry) {
+                        submitButton.isDisabled = true
+                        submitButton.touchable = Touchable.disabled
+                    }
 
-                   override fun error(t: Throwable) {
+                    override fun error(t: Throwable) {
                         logger.error(t.toString(), t)
-                   }
-               })
+                    }
+                })
                 return false
             }
         })
@@ -69,7 +69,7 @@ class GameOverScreen(private val backgroundImage: Texture,
         })
 
         val shareToFbButton = TextButton("Share to facebook", skin)
-        shareToFbButton.addListener(object  : InputListener() {
+        shareToFbButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
                 (game as DirkFallsGame).fb.share(score)
                 return false

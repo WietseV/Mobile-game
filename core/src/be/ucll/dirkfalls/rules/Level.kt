@@ -1,7 +1,6 @@
 package be.ucll.dirkfalls.rules
 
 import be.ucll.dirkfalls.GameState
-import kotlin.reflect.KClass
 
 abstract class Level(val rule: be.ucll.dirkfalls.rules.Rule) {
 

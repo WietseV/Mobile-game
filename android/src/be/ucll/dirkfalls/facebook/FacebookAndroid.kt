@@ -40,17 +40,16 @@ class FacebookAndroid(override val app: Application) : FacebookInterface {
         val yourText = "I got a score of $score on Dirk Falls!"
 
         val cs = Canvas(dest)
-        val tPaint = Paint()
-        tPaint.textSize = 35f
-        tPaint.color = Color.WHITE
-        tPaint.style = Paint.Style.FILL
+        val paint = Paint()
+        paint.textSize = 35f
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
         cs.drawBitmap(src, 0f, 0f, null)
-        val height = tPaint.measureText("yY")
-        val width = tPaint.measureText(yourText)
-        val x_coord = (src.width - width) / 2
-        val y_coord = (src.height - height)/2
-        cs.drawText(yourText, x_coord, y_coord, tPaint) // 15f is to put space between top edge and the text, if you want to change it, you can
-
+        val height = paint.measureText("yY")
+        val width = paint.measureText(yourText)
+        val xCoord = (src.width - width) / 2
+        val yCoord = (src.height - height) / 2
+        cs.drawText(yourText, xCoord, yCoord, paint) // 15f is to put space between top edge and the text, if you want to change it, you can
 
 
         val dialog = ShareDialog(app as AndroidApplication)

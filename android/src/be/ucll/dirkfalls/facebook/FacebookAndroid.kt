@@ -12,7 +12,7 @@ import com.facebook.share.widget.ShareDialog
 import de.tomgrill.gdxfacebook.core.*
 
 
-class FacebookAndroid(override val app: Application) : FacebookInterface {
+class FacebookAndroid(val app: Application) : FacebookInterface {
     override fun share(score: Int) {
         val permissions = Array<String>()
         val gdxFacebook = GDXFacebookSystem.install(FacebookConfig())

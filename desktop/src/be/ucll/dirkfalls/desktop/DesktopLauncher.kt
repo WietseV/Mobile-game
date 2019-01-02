@@ -10,6 +10,5 @@ fun main(arg: Array<String>) {
         height = 800
     }
     val fb = FacebookDesktop()
-    val app = LwjglApplication(DirkFallsGame(fb), config)
-    fb.app = app
+    LwjglApplication(DirkFallsGame(fb), config)
 }

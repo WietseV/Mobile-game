@@ -37,6 +37,7 @@ class GameOverScreen(private val backgroundImage: Texture,
 
         val nameLabel = Label("Your name:", skin)
         val nameField = TextField("", skin)
+        nameField.maxLength = 25
         val submitButton = TextButton("Submit", skin)
         submitButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -103,7 +104,7 @@ class GameOverScreen(private val backgroundImage: Texture,
                     table.getCell(loadingLabel).setActor(Label("Highscores:", skin))
                     table.row()
                     data.take(10).forEach { entry ->
-                        table.add(Label(entry.name, skin))
+                        table.add(Label(entry.name.trim().substring(0, 25), skin))
                         table.add(Label(entry.score.toString(), skin))
                         table.row()
                     }

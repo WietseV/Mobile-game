@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 class LevelManager(var gameState: GameState) {
     private val levelFactory: LevelFactory = RandomLevelFactory(gameState)
     private val assetManager = gameState.assetManager
-    private var levelCounter = 1
+    private var levelCounter = 0
     private var level: Level = loadLevel(levelCounter)
     private lateinit var nextLevel: Level
 

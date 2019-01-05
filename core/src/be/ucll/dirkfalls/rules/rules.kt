@@ -34,6 +34,9 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
         if (it.collideWithHero(gameState.hero)) {
             gameState.deleteEntity(it)
             hero.hit(it)
+            if (gameState.useVibration) {
+                Gdx.input.vibrate(200)
+            }
         }
     }
 }
@@ -60,6 +63,9 @@ fun heroTakesDamageOverTime(): Rule {
 
             val hero = gameState.hero
             hero.takeDamage(5)
+            if (gameState.useVibration) {
+                Gdx.input.vibrate(100)
+            }
         }
     }
 

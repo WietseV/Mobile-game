@@ -52,7 +52,7 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
 
     override fun show() {
         pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
-
+        gameState.resetGame()
         Gdx.input.inputProcessor = GameTouchAdapter(gameState, pauseButton)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)

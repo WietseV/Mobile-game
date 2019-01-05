@@ -11,6 +11,6 @@ class LevelFour(rule: Rule = touchScreen) : Level(rule) {
             changeColor
     )
 
-    override val imageBackground = "backgrounds/level4background.jpg"
+    override val imageBackground = "backgrounds/achtergrondLevel1.png"
 
 }

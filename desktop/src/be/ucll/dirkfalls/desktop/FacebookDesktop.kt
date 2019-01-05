@@ -1,7 +1,6 @@
 package be.ucll.dirkfalls.desktop
 
 import be.ucll.dirkfalls.service.FacebookInterface
-import com.badlogic.gdx.Application
 
 class FacebookDesktop : FacebookInterface {
     override fun share(score: Int) {

@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
-class GameState(var useGyro: Boolean = false) {
+class GameState(var useGyro: Boolean = false, var useVibration: Boolean = false) {
     private val heroradius = 0.4f
     val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)

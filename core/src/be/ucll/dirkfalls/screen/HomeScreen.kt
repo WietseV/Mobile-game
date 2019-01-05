@@ -2,10 +2,7 @@ package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.screen.buttons.Button
-import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
-import be.ucll.dirkfalls.screen.buttons.PlayButton
-import be.ucll.dirkfalls.screen.buttons.UseGyroButton
+import be.ucll.dirkfalls.screen.buttons.*
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Game
@@ -32,36 +29,50 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
     private val buttons = mutableListOf<Button>()
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
     private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+    private val vibratorAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Vibrator)
 
     override fun hide() {
     }
 
     override fun show() {
+        println("Width: ${Gdx.graphics.width}, Height: ${Gdx.graphics.height}")
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        val color: Color
-        if (gyroscopeAvail) {
-            color = Color.RED
-            gameState.useGyro = true
-        } else {
-            color = Color.GRAY
-            gameState.useGyro = false
+        val colorGyro: Color
+        when (gyroscopeAvail) {
+            true -> {
+                colorGyro = Color.RED
+                gameState.useGyro = true
+            }
+            false -> {
+                colorGyro = Color.GRAY
+                gameState.useGyro = false
+            }
+        }
+        val colorVibrate: Color
+        when (vibratorAvail) {
+            true -> {
+                colorVibrate = Color.RED
+                gameState.useVibration = true
+            }
+            false -> {
+                colorVibrate = Color.GRAY
+                gameState.useVibration = false
+            }
         }
 
         val play = PlayButton(this)
         gameState.intro()
-        val gyro = UseGyroButton(this, color)
+        val gyro = UseGyroButton(this, colorGyro)
+        val vibrate = UseVibrateButton(this, colorVibrate)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val buttonCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
         play.set(buttonCoords.x, buttonCoords.y, buttonWidth, buttonHeight)
-        gyro.set(
-                buttonCoords.x,
-                buttonCoords.y - getBoxHeightBasedOnScreen(0.1f),
-                buttonWidth,
-                buttonHeight
-        )
+        gyro.set(buttonCoords.x, (buttonCoords.y - getBoxHeightBasedOnScreen(0.1f)), buttonWidth, buttonHeight)
+        vibrate.set(buttonCoords.x, (buttonCoords.y - getBoxHeightBasedOnScreen(0.2f)), buttonWidth, buttonHeight)
         buttons.add(play)
         buttons.add(gyro)
+        buttons.add(vibrate)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
     }
@@ -164,6 +175,12 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
             }
             font.data.setScale(25f)
             font.draw(spriteBatch, "Use gyroscope? ($gyro)", 0f, -900f * aspectRatio, 0f, 1, false)
+            val vibrate = when (gameState.useVibration) {
+                true -> "V"
+                else -> "X"
+            }
+            font.data.setScale(25f)
+            font.draw(spriteBatch, "Vibrate? ($vibrate)", 0f, -1900f * aspectRatio, 0f, 1, false)
 
         }
     }

@@ -149,7 +149,7 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
     }
 
     private fun gameOver() {
-        game.screen = GameOverScreen(gameState.levelBackground, gameState.score, game, gameState.useGyro)
+        game.screen = GameOverScreen(gameState, game)
     }
 
     private fun drawPauseButton() {

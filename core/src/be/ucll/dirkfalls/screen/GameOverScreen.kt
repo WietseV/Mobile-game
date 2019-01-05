@@ -6,6 +6,7 @@ import be.ucll.dirkfalls.service.HighscoreEntry
 import be.ucll.dirkfalls.service.HighscoreService
 import be.ucll.dirkfalls.utils.AsyncHandler
 import be.ucll.dirkfalls.utils.logger
+import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -18,14 +19,16 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
 
-class GameOverScreen(private val backgroundImage: Texture,
-                     private val score: Int,
-                     private val game: Game,
-                     private val gyro: Boolean) : Screen {
+class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
     private val logger = be.ucll.dirkfalls.utils.logger<GameOverScreen>()
     private val stage = Stage()
     private val skin = Skin(Gdx.files.internal("UI/skin.json"))
     private val highscoreService = HighscoreService()
+    private val backgroundImage: Texture = gameState.levelBackground
+    private val score: Int = gameState.score
+    private val gyro: Boolean = gameState.useGyro
+    private val vibrate: Boolean = gameState.useVibration
+    private val aspectRatio = scale(Gdx.graphics.width * 1f, 0f, 2000f, 1f, 2f)
 
     override fun hide() {
     }
@@ -39,37 +42,30 @@ class GameOverScreen(private val backgroundImage: Texture,
         val nameField = TextField("", skin)
         nameField.maxLength = 25
         val submitButton = TextButton("Submit", skin)
-        submitButton.addListener(object : InputListener() {
-            override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                highscoreService.create(nameField.text, score, object : AsyncHandler<HighscoreEntry> {
-                    override fun success(data: HighscoreEntry) {
-                        submitButton.isDisabled = true
-                        submitButton.touchable = Touchable.disabled
-                    }
-
-                    override fun error(t: Throwable) {
-                        logger.error(t.toString(), t)
-                    }
-                })
-                return false
-            }
-        })
+        submitButton.isTransform = true
+        submitButton.setScale(aspectRatio*0.8f)
         val tryAgainButton = TextButton("Try Again", skin)
+        tryAgainButton.isTransform = true
+        tryAgainButton.setScale(aspectRatio*0.8f)
         tryAgainButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = GameScreen(game, GameState(gyro))
+                game.screen = GameScreen(game, GameState(gyro, vibrate))
                 return false
             }
         })
         val mainMenuButton = TextButton("Main menu", skin)
+        mainMenuButton.isTransform = true
+        mainMenuButton.setScale(aspectRatio*0.8f)
         mainMenuButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = HomeScreen(game, GameState(gyro))
+                game.screen = HomeScreen(game, GameState(gyro, vibrate))
                 return false
             }
         })
 
         val shareToFbButton = TextButton("Share to facebook", skin)
+        shareToFbButton.isTransform = true
+        shareToFbButton.setScale(aspectRatio*0.8f)
         shareToFbButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
                 (game as DirkFallsGame).fb.share(score)
@@ -83,29 +79,61 @@ class GameOverScreen(private val backgroundImage: Texture,
         table.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         table.setPosition(0f, 0f)
 
-        table.add(scoreLabel)
+        table.add(scoreLabel).pad(aspectRatio*5f).colspan(2).center()
+        scoreLabel.setFontScale(aspectRatio)
         table.row()
-        table.add(nameLabel)
-        table.add(nameField)
+        table.add(nameLabel).pad(aspectRatio*5f).left()
+        nameLabel.setFontScale(aspectRatio)
+        table.add(nameField).pad(aspectRatio*5f).left()
+        nameField.setScale(aspectRatio*0.8f)
         table.row()
-        table.add(submitButton)
+        table.add(submitButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
         table.row()
-        table.add(tryAgainButton)
-        table.add(mainMenuButton)
+        table.add(tryAgainButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
+        table.add(mainMenuButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
         table.row()
-        table.add(shareToFbButton)
+        table.add(shareToFbButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
         table.row()
-        table.add(loadingLabel)
+        table.add(loadingLabel).pad(aspectRatio*5f).colspan(2).left()
+        loadingLabel.setFontScale(aspectRatio)
         stage.addActor(table)
+
+        submitButton.addListener(object : InputListener() {
+            override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                highscoreService.create(nameField.text, score, object : AsyncHandler<HighscoreEntry> {
+                    override fun success(data: HighscoreEntry) {
+                        submitButton.isDisabled = true
+                        submitButton.touchable = Touchable.disabled
+                        val submitted = Label("Your highscore was submitted successfully!", skin)
+                        table.getCell(submitButton).setActor(submitted)
+                        submitted.setFontScale(aspectRatio)
+                    }
+
+                    override fun error(t: Throwable) {
+                        logger.error(t.toString(), t)
+                    }
+                })
+                return false
+            }
+        })
 
         highscoreService.all(object : AsyncHandler<List<HighscoreEntry>> {
             override fun success(data: List<HighscoreEntry>) {
                 Gdx.app.postRunnable {
-                    table.getCell(loadingLabel).setActor(Label("Highscores:", skin))
+                    val hs = Label("Highscores:", skin)
+                    hs.setFontScale(aspectRatio)
+                    table.getCell(loadingLabel).setActor(hs)
                     table.row()
                     data.take(10).forEach { entry ->
-                        table.add(Label(entry.name.trim().substring(0, 25), skin))
-                        table.add(Label(entry.score.toString(), skin))
+                        val name: Label = when {
+                            entry.name.trim().length > 25 -> Label(entry.name.trim().substring(0, 25), skin)
+                            else -> Label(entry.name.trim(), skin)
+                        }
+                        table.add(name).pad(aspectRatio*5f).left()
+                        name.setFontScale(aspectRatio)
+                        val score = Label(entry.score.toString(), skin)
+                        table.add(score).pad(aspectRatio*5f).left()
+                        score.setFontScale(aspectRatio)
                         table.row()
                     }
                 }

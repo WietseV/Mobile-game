@@ -258,13 +258,13 @@ val touchScreenInverted: Rule = { gameState, _ ->
     val pressed = gameState.pressedPosition
     if (pressed != null) {
         when {
-            pressed.x < hero.radius ->
+            pressed.x < (hero.position.x - hero.radius) ->
                 hero.direction = when {
                     pressed.x <= hero.position.x + hero.shape.radius -> HeroDirection.RIGHT
                     pressed.x > hero.position.x + hero.shape.radius -> HeroDirection.LEFT
                     else -> HeroDirection.STILL
                 }
-            pressed.x > WORLD_WIDTH - hero.radius ->
+            pressed.x > (hero.position.x + hero.radius )->
                 hero.direction = when {
                     pressed.x < hero.position.x -> HeroDirection.RIGHT
                     pressed.x >= hero.position.x -> HeroDirection.LEFT

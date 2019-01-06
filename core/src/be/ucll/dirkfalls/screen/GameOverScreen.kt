@@ -10,8 +10,10 @@ import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -41,6 +43,8 @@ class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
         val nameLabel = Label("Your name:", skin)
         val nameField = TextField("", skin)
         nameField.maxLength = 25
+        val emptyLabel = Label("", skin)
+        val errorLabel = Label("Name can't be empty!", skin)
         val submitButton = TextButton("Submit", skin)
         submitButton.isTransform = true
         submitButton.setScale(aspectRatio*0.8f)
@@ -89,6 +93,9 @@ class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
         table.row()
         table.add(submitButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
         table.row()
+        table.add(emptyLabel).pad(aspectRatio*5f).colspan(2).left()
+        emptyLabel.setFontScale(aspectRatio)
+        table.row()
         table.add(tryAgainButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
         table.add(mainMenuButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
         table.row()
@@ -100,19 +107,28 @@ class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
 
         submitButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                highscoreService.create(nameField.text, score, object : AsyncHandler<HighscoreEntry> {
-                    override fun success(data: HighscoreEntry) {
-                        submitButton.isDisabled = true
-                        submitButton.touchable = Touchable.disabled
-                        val submitted = Label("Your highscore was submitted successfully!", skin)
-                        table.getCell(submitButton).setActor(submitted)
-                        submitted.setFontScale(aspectRatio)
-                    }
+                if (nameField.text.trim().isEmpty()) {
+                    errorLabel.setFontScale(aspectRatio)
+                    errorLabel.color = Color.RED
+                    table.getCell(emptyLabel).setActor(errorLabel)
+                } else {
+                    highscoreService.create(nameField.text, score, object : AsyncHandler<HighscoreEntry> {
+                        override fun success(data: HighscoreEntry) {
+                            submitButton.isDisabled = true
+                            submitButton.touchable = Touchable.disabled
+                            val submitted = Label("Your highscore was submitted successfully!", skin)
+                            table.getCell(submitButton).setActor(submitted)
+                            submitted.setFontScale(aspectRatio)
+                        }
 
-                    override fun error(t: Throwable) {
-                        logger.error(t.toString(), t)
+                        override fun error(t: Throwable) {
+                            logger.error(t.toString(), t)
+                        }
+                    })
+                    if (table.getCell(errorLabel) != null) {
+                        table.getCell(errorLabel).setActor(emptyLabel)
                     }
-                })
+                }
                 return false
             }
         })

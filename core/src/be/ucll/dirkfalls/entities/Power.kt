@@ -17,7 +17,7 @@ class Power(override var position: Vector2,
             get() = Circle(position, radius)
 
 
-    override var image = Texture("cometsSprits/superpower.png")
+    override var image = Texture("cometsSprits/superpower2.png")
     var color = Vector3(1f, 1f, 1f)
 
     fun collide(circle: Circle) = shape.overlaps(circle)

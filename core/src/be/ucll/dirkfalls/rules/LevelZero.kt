@@ -5,6 +5,7 @@ class LevelZero(rule: Rule = touchScreen) : Level(rule) {
     override var rules = setOf(
             rule,
             updatePositionBasedOnVelocity,
+            fallingLikeSin(),
             spawnCometForIntroScreen(),
             deleteComentsOutOfBounds
 

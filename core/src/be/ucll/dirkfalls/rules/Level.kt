@@ -11,4 +11,5 @@ abstract class Level(val rule: be.ucll.dirkfalls.rules.Rule) {
     }
 
     abstract val imageBackground: String
+    //abstract val recht
 }

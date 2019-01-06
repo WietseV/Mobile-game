@@ -8,7 +8,7 @@ class LevelOne(rule: Rule = touchScreen) : Level(rule) {
             updatePositionBasedOnVelocity,
             heroTakesDamageWhenHit,
             scoreWhenCometOutOfBound,
-            createCometSpawner(),
+            fallingLikeSin(),
             changeColor
     )
 

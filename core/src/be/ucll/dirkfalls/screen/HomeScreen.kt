@@ -117,11 +117,6 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
             //gameState.entities.forEach { it.drawDebug(renderer) }
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
-            renderer.setColor(0f, 0f, 255f, 100f)
-            renderer.rect(0f, 1f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
-            renderer.setColor(0f, 255f, 0f, 100f)
-            renderer.rect(0f, 0f, GameConfig.WORLD_WIDTH, 1f)
-            renderer.setColor(255f, 255f, 255f, 100f)
         }
 
         drawBackground()

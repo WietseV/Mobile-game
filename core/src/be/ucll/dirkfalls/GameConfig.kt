@@ -6,6 +6,7 @@ object GameConfig {
 
     const val COMET_SPAWN_TIME = 0.25f
     const val POWE_SPAWN_TIME = 1f
+    const val SIN_SPAWN_TIME = 0.18f
 
 
 }

@@ -7,18 +7,24 @@ import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HeroDirection
 import be.ucll.dirkfalls.entities.Power
 import be.ucll.dirkfalls.utils.between
+import be.ucll.dirkfalls.utils.glebscale
 import be.ucll.dirkfalls.utils.scale
 import be.ucll.dirkfalls.utils.vector2.plus
 import be.ucll.dirkfalls.utils.vector2.times
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.MathUtils.sin
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.tan
 
 var cometTimer = 0f
 var powerFallingTimer = 0f
 var standardPowerTimer = 5f
 var powerTimer = standardPowerTimer
+var sinCount = 0
 
 typealias Rule = (gameState: GameState, delta: Float) -> Unit
 
@@ -251,6 +257,29 @@ fun createCometsWithVelocityAndSize(): Rule {
     }
 }
 
+fun fallingLikeSin(): Rule{
+    return { gameState, delta ->
+        cometTimer += delta
+        sinCount += MathUtils.random(1,3)
+
+        if (cometTimer >= GameConfig.SIN_SPAWN_TIME) {
+            cometTimer = 0f // reset timer
+
+            val cometRadius = MathUtils.random(0.1f, 0.3f)
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+            var floatSin =  cos(sinCount.toFloat()%100f)
+            println(floatSin)
+            val vectoriets = glebscale((floatSin) + 1f, 0f, 2f,0f,GameConfig.WORLD_WIDTH - (2 * cometRadius) )
+            // ik weet dat de functie hier boven een beetje vaag er uit ziet, maar dit komt omdat
+            // x soms negatief is, en dan kreeg ik het niet geregeld.  x Gleb
+            val vector2 = Vector2(vectoriets, GameConfig.WORLD_HEIGHT + cometRadius)
+            val comet = Comet(vector2, cometRadius)
+            if (gameState.comets.none { it.collide(comet.shape) }) {
+                gameState.entities.add(comet)
+            }
+        }
+    }
+}
 fun spawnCometForIntroScreen(): Rule {
 
     return { gameState, delta ->

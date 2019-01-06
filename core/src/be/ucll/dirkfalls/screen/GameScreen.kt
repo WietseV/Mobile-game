@@ -71,22 +71,22 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
         }
         renderer.projectionMatrix = camera.combined
         renderBackground()
-        renderer.use {
-            renderer.setAutoShapeType(true)
-            renderer.set(ShapeRenderer.ShapeType.Filled)
-            gameState.entities.forEach { it.drawDebug(renderer) }
-            healthBar.draw(renderer)
-            renderer.setColor(0f, 1f, 0f, 1f)
-            renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
-            renderer.setColor(255f, 255f, 255f, 100f)
 
-        }
         renderGameObjects()
         if (gameState.gameOver) {
             gameOver()
         }
         drawPauseButton()
+        renderer.use {
+            renderer.setAutoShapeType(true)
+            renderer.set(ShapeRenderer.ShapeType.Filled)
+            //gameState.entities.forEach { it.drawDebug(renderer) } // hiermee worden de hitboxen getekend
+            healthBar.draw(renderer)
+            renderer.setColor(1f, 1f, 1f, 1f)
+            renderer.rect(0f, 0f, WORLD_WIDTH, 1f)
+            renderer.setColor(255f, 255f, 255f, 100f)
 
+        }
         drawScore(gameState.score)
     }
 

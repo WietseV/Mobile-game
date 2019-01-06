@@ -13,7 +13,7 @@ class Hero(
         startPosition: Vector2 = Vector2.Zero,
         var radius: Float = 0.4f
 ) : Entity() {
-    override val image = Texture("cometsSprits/dirk.png")
+    override val image = Texture("cometsSprits/superdirk.png")
 
     companion object {
         private const val MAX_X_SPEED = 5f // world units

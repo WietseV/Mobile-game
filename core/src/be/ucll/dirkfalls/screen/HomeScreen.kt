@@ -114,7 +114,7 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
         gameState.updateLevels(delta)
         renderer.projectionMatrix = camera.combined
         renderer.use {
-            gameState.entities.forEach { it.drawDebug(renderer) }
+            //gameState.entities.forEach { it.drawDebug(renderer) }
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
             renderer.setColor(0f, 0f, 255f, 100f)

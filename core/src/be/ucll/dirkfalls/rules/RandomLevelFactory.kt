@@ -14,7 +14,7 @@ class RandomLevelFactory(override val gameState: GameState) : LevelFactory {
         } else {
             touchScreen
         }
-        var levels = listOf(LevelTwo(), LevelThree(gyro), LevelFour(), LevelFive(), LevelSix())
+        var levels = listOf(LevelTwo(), LevelFour(), LevelFive(), LevelSix(), LevelThree(gyro) )
         if (level != null) {
             levels = levels.filter { it.javaClass.name != level.javaClass.name }
         }

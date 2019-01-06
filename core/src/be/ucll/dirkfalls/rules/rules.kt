@@ -5,6 +5,7 @@ import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
 import be.ucll.dirkfalls.entities.Comet
 import be.ucll.dirkfalls.entities.HeroDirection
+import be.ucll.dirkfalls.entities.Power
 import be.ucll.dirkfalls.utils.between
 import be.ucll.dirkfalls.utils.scale
 import be.ucll.dirkfalls.utils.vector2.plus
@@ -13,6 +14,11 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+
+var cometTimer = 0f
+var powerFallingTimer = 0f
+var standardPowerTimer = 5f
+var powerTimer = standardPowerTimer
 
 typealias Rule = (gameState: GameState, delta: Float) -> Unit
 
@@ -23,22 +29,20 @@ val updatePositionBasedOnVelocity: Rule = { gameState, delta ->
 
 val heroTakesDamageWhenHit: Rule = { gameState, _ ->
     val hero = gameState.hero
-    /*gameState.comets
-            .filter { it.overlaps(hero) }
-            .forEach {
-                gameState.deleteEntity(it)
-                hero.hit(it)
-            }*/
+
 
     gameState.comets.forEach {
         if (it.collideWithHero(gameState.hero)) {
             gameState.deleteEntity(it)
-            hero.hit(it)
-            if (gameState.useVibration) {
-                Gdx.input.vibrate(200)
+            if (!hero.superDirkActive) {
+                hero.hit(it)
+                if (gameState.useVibration) Gdx.input.vibrate(200)
+
             }
         }
     }
+
+
 }
 
 val heroHealsWhenHit: Rule = { gameState, _ ->
@@ -50,6 +54,7 @@ val heroHealsWhenHit: Rule = { gameState, _ ->
             gameState.score++
         }
     }
+
 }
 
 fun heroTakesDamageOverTime(): Rule {
@@ -80,6 +85,19 @@ val scoreWhenCometOutOfBound: Rule = { gameState, _ ->
             }
 }
 
+val deleteComentsOutOfBounds: Rule ={gameState, _ ->
+    gameState.comets
+            .filter { it.position.y < 0f - 2* it.shape.radius}
+            .forEach {
+                gameState.deleteEntity(it)
+            }
+    gameState.powers
+            .filter { it.position.y < 0f - 2* it.shape.radius}
+            .forEach {
+                gameState.deleteEntity(it)
+            }
+}
+
 val noScoreWhenCometOutOfBound: Rule = { gameState, _ ->
     gameState.comets
             .filter { it.position.y < 0f }
@@ -101,7 +119,7 @@ val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
 }
 
 fun createCometSpawnerAndSize(): Rule {
-    var cometTimer = 0f
+
 
     return { gameState, delta ->
         cometTimer += delta
@@ -123,7 +141,6 @@ fun createCometSpawnerAndSize(): Rule {
 }
 
 fun createCometSpawner(): Rule {
-    var cometTimer = 0f
 
     return { gameState, delta ->
         cometTimer += delta
@@ -145,7 +162,7 @@ fun createCometSpawner(): Rule {
 }
 
 fun createCometsWithVelocity(): Rule {
-    var cometTimer = 0f
+
 
     return { gameState, delta ->
         cometTimer += delta
@@ -167,9 +184,51 @@ fun createCometsWithVelocity(): Rule {
     }
 }
 
+fun rulePowers(): Rule {
+
+
+    return { gameState, delta ->
+        powerFallingTimer += delta
+        if (powerFallingTimer >= GameConfig.POWE_SPAWN_TIME) {
+            powerFallingTimer = 0f // reset timer
+
+            val cometRadius = 0.22f //Verhoogt van 0.20f naar 0.22f zodat hero sterft na 3 hits en niet met een sliver health overleeft
+            val cometX = MathUtils.random(0f, GameConfig.WORLD_WIDTH - (2 * cometRadius))
+            //de formule hier boven dient er voor zodat de batch de kometen fatsoenlijk tekent
+
+            val vector2 = Vector2(cometX, GameConfig.WORLD_HEIGHT + cometRadius)
+            val power = Power(vector2, cometRadius)
+            if (gameState.powers.none { it.collide(power.shape) }) {
+                gameState.entities.add(power)
+            }
+        }
+
+        // verdere power regels zoals dat dirk zijn skin veranderd en geen damage meer neemt.
+        if (gameState.hero.superDirkActive) {
+            if (powerTimer > 0) {
+                powerTimer -= delta
+            } else {
+                gameState.hero.superDirkActive = false
+                powerTimer = standardPowerTimer
+            }
+        }
+        gameState.powers.forEach {
+            if (it.collideWithHero(gameState.hero)) {
+                gameState.deleteEntity(it)
+                gameState.hero.superDirkActive = true
+                powerTimer = standardPowerTimer
+                if (gameState.useVibration) {
+                    Gdx.input.vibrate(500)
+                }
+
+            }
+        }
+    }
+}
+
+
 @Deprecated("Not yet used")
 fun createCometsWithVelocityAndSize(): Rule {
-    var cometTimer = 0f
 
     return { gameState, delta ->
         cometTimer += delta
@@ -193,8 +252,6 @@ fun createCometsWithVelocityAndSize(): Rule {
 }
 
 fun spawnCometForIntroScreen(): Rule {
-    var cometTimer = 0f
-
 
     return { gameState, delta ->
         cometTimer += delta
@@ -258,18 +315,12 @@ val touchScreenInverted: Rule = { gameState, _ ->
     val pressed = gameState.pressedPosition
     if (pressed != null) {
         when {
-            pressed.x < (hero.position.x - hero.radius) ->
-                hero.direction = when {
-                    pressed.x <= hero.position.x + hero.radius -> HeroDirection.RIGHT
-                    pressed.x > hero.position.x - hero.radius -> HeroDirection.LEFT
-                    else -> HeroDirection.STILL
-                }
-            pressed.x > (hero.position.x + hero.radius )->
-                hero.direction = when {
-                    pressed.x < hero.position.x + hero.radius -> HeroDirection.RIGHT
-                    pressed.x >= hero.position.x - hero.radius -> HeroDirection.LEFT
-                    else -> HeroDirection.STILL
-                }
+            pressed.x < (hero.position.x + hero.shape.radius) ->
+                hero.direction = HeroDirection.RIGHT
+
+            pressed.x >= (hero.position.x ) ->
+                hero.direction =  HeroDirection.LEFT
+
             else ->
                 hero.direction = when {
                     between(

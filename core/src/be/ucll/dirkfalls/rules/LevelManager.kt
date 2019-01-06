@@ -47,6 +47,12 @@ class LevelManager(var gameState: GameState) {
 
     fun nextLevel() {
         if (gameState.score % 25 == 0) {
+            if (level is LevelFour){
+                gameState.powers.forEach(){
+                    gameState.deleteEntity(it)
+                }
+                gameState.hero.superDirkActive = false
+            }
             val previousLevel = level
             level = nextLevel
             nextLevel = loadNextLevel(++levelCounter)

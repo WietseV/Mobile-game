@@ -1,9 +1,6 @@
 package be.ucll.dirkfalls
 
-import be.ucll.dirkfalls.entities.Background
-import be.ucll.dirkfalls.entities.Comet
-import be.ucll.dirkfalls.entities.Entity
-import be.ucll.dirkfalls.entities.Hero
+import be.ucll.dirkfalls.entities.*
 import be.ucll.dirkfalls.rules.LevelManager
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
@@ -16,6 +13,8 @@ class GameState(var useGyro: Boolean = false, var useVibration: Boolean = false)
     val entities = mutableListOf<Entity>(hero)
     val comets
         get() = entities.filterIsInstance<Comet>()
+    val powers
+        get() = entities.filterIsInstance<Power>()
     var score: Int by Delegates.observable(0) { _, _, _ ->
         levelManager.nextLevel() // elke keer als score geupdate wordt, meld dit aan de level manager
     }

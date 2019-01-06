@@ -13,7 +13,14 @@ class Hero(
         startPosition: Vector2 = Vector2.Zero,
         var radius: Float = 0.4f
 ) : Entity() {
-    override val image = Texture("cometsSprits/superdirk.png")
+
+    override val image
+        get()= getImg()
+
+
+    val dirk = Texture("cometsSprits/dirk.png")
+    val superDirk = Texture("cometsSprits/superdirk.png")
+    var superDirkActive = false
 
     companion object {
         private const val MAX_X_SPEED = 5f // world units
@@ -62,6 +69,10 @@ class Hero(
         takeDamage(damage)
     }
 
+    fun hitWithCometDamage(comet: Comet){
+
+    }
+
     fun hitHeal(comet: Comet) {
         val heal: Int = (calculateDamage(comet) * 50f).roundToInt()
         heal(heal)
@@ -82,7 +93,10 @@ class Hero(
             health += heal
         }
     }
-
+    private fun getImg():Texture{
+        if (superDirkActive) return superDirk
+        else return dirk
+    }
     private fun calculateDamage(comet: Comet): Float = scale(comet.shape.radius, 0f, 0.3f, 0f, 1f)
 
     override fun size(): Float {

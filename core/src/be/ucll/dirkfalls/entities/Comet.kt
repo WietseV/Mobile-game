@@ -18,9 +18,9 @@ class Comet(
     override var position = startPosition
     override val shape
         get() = Circle(position, radius)
-
+    val damage = 0.3f
     var color = Vector3(1f, 1f, 1f)
-    override var image = Texture("cometsSprits/komeet2.png")
+    override var image = Texture("cometsSprits/komeet4.png")
     // Get 8 points of the circle and check if they are contained in the shape
     /*fun overlaps(entity: Entity) =
         listOf(

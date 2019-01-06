@@ -8,7 +8,8 @@ class LevelFour(rule: Rule = touchScreen) : Level(rule) {
             heroTakesDamageWhenHit,
             scoreWhenCometOutOfBound,
             createCometsWithVelocity(),
-            changeColor
+            changeColor,
+            rulePowers()
     )
 
     override val imageBackground = "backgrounds/achtergrondLevelBonus.png"

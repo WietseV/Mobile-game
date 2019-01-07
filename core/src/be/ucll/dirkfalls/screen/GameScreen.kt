@@ -167,18 +167,6 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
         }
     }
-
-    override fun touchDown(x: Float, y: Float) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun touchUp(x: Float, y: Float) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun touchDragged(x: Float, y: Float) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
 
 

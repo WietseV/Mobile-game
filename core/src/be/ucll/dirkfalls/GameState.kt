@@ -1,13 +1,14 @@
 package be.ucll.dirkfalls
 
 import be.ucll.dirkfalls.entities.*
+import be.ucll.dirkfalls.rules.Difficulty
 import be.ucll.dirkfalls.rules.LevelManager
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
-class GameState(var useGyro: Boolean = false, var useVibration: Boolean = false) {
+class GameState {
     private val heroradius = 0.4f
     val hero = Hero(Vector2(GameConfig.WORLD_WIDTH / 2f - heroradius, 1f), heroradius)
     val entities = mutableListOf<Entity>(hero)
@@ -23,6 +24,12 @@ class GameState(var useGyro: Boolean = false, var useVibration: Boolean = false)
     val background = Background()
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
+
+    var useGyro: Boolean = false
+    var useVibration: Boolean = false
+    var music: Float = 100f
+    var sound: Float = 100f
+    var difficulty: Difficulty = Difficulty.EASY
 
 
     fun deleteEntity(entity: Entity) {

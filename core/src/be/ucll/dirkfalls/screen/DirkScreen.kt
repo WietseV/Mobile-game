@@ -8,9 +8,9 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.math.Vector2
 
 abstract class DirkScreen(val gameState: GameState) : Screen {
-    abstract fun touchUp(x: Float, y: Float)
-    abstract fun touchDown(x: Float, y: Float)
-    abstract fun touchDragged(x: Float, y: Float)
+    open fun touchUp(x: Float, y: Float) {}
+    open fun touchDown(x: Float, y: Float) {}
+    open fun touchDragged(x: Float, y: Float) {}
     private var fromWorldToHUDWidth = Gdx.graphics.width / WORLD_WIDTH
     private var fromWorldToHUDHeight = Gdx.graphics.height / WORLD_HEIGHT
     private var fromHUDToWorldWidth = WORLD_WIDTH / Gdx.graphics.width

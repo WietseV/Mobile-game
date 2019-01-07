@@ -21,16 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
 
-class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
+class GameOverScreen(val gameState: GameState, private val game: Game) : Screen {
     private val logger = be.ucll.dirkfalls.utils.logger<GameOverScreen>()
     private val stage = Stage()
     private val skin = Skin(Gdx.files.internal("UI/skin.json"))
     private val highscoreService = HighscoreService()
     private val backgroundImage: Texture = gameState.levelBackground
     private val score: Int = gameState.score
-    private val gyro: Boolean = gameState.useGyro
-    private val vibrate: Boolean = gameState.useVibration
-    private val aspectRatio = scale(Gdx.graphics.width * 1f, 0f, 2000f, 1f, 2f)
+    private val aspectRatio = scale(Gdx.graphics.width * 1f, 0f, 2000f, 0f, 4f)
 
     override fun hide() {
     }
@@ -53,7 +51,8 @@ class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
         tryAgainButton.setScale(aspectRatio*0.8f)
         tryAgainButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = GameScreen(game, GameState(gyro, vibrate))
+                gameState.resetGame()
+                game.screen = GameScreen(game, gameState)
                 return false
             }
         })
@@ -62,7 +61,7 @@ class GameOverScreen(gameState: GameState, private val game: Game) : Screen {
         mainMenuButton.setScale(aspectRatio*0.8f)
         mainMenuButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                game.screen = HomeScreen(game, GameState(gyro, vibrate))
+                game.screen = HomeScreen(game, gameState)
                 return false
             }
         })

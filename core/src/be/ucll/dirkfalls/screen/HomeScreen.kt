@@ -2,13 +2,15 @@ package be.ucll.dirkfalls.screen
 
 import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameState
-import be.ucll.dirkfalls.screen.buttons.*
+import be.ucll.dirkfalls.screen.buttons.Button
+import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
+import be.ucll.dirkfalls.screen.buttons.OptionsButton
+import be.ucll.dirkfalls.screen.buttons.PlayButton
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -37,50 +39,30 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
     override fun show() {
         println("Width: ${Gdx.graphics.width}, Height: ${Gdx.graphics.height}")
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        val colorGyro: Color
-        when (gyroscopeAvail) {
-            true -> {
-                colorGyro = Color.RED
-                gameState.useGyro = true
-            }
-            false -> {
-                colorGyro = Color.GRAY
-                gameState.useGyro = false
-            }
-        }
-        val colorVibrate: Color
-        when (vibratorAvail) {
-            true -> {
-                colorVibrate = Color.RED
-                gameState.useVibration = true
-            }
-            false -> {
-                colorVibrate = Color.GRAY
-                gameState.useVibration = false
-            }
-        }
+        gameState.useGyro = gyroscopeAvail
+        gameState.useVibration = vibratorAvail
 
         val play = PlayButton(this)
+        val options = OptionsButton(this)
         gameState.intro()
-        val gyro = UseGyroButton(this, colorGyro)
-        val vibrate = UseVibrateButton(this, colorVibrate)
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val buttonCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
         play.set(buttonCoords.x, buttonCoords.y, buttonWidth, buttonHeight)
-        gyro.set(buttonCoords.x, (buttonCoords.y - getBoxHeightBasedOnScreen(0.1f)), buttonWidth, buttonHeight)
-        vibrate.set(buttonCoords.x, (buttonCoords.y - getBoxHeightBasedOnScreen(0.2f)), buttonWidth, buttonHeight)
+        options.set(buttonCoords.x, buttonCoords.y - getBoxHeightBasedOnScreen(0.1f), buttonWidth, buttonHeight)
         buttons.add(play)
-        buttons.add(gyro)
-        buttons.add(vibrate)
+        buttons.add(options)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
-
     }
 
     override fun touchUp(x: Float, y: Float) {
         buttons.forEach {
             if (it.contains(x, y)) {
-                it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame, gameState))
+                if (it is PlayButton) {
+                    it.pressButton(dirkFallsGame, GameScreen(dirkFallsGame, gameState))
+                } else if (it is OptionsButton) {
+                    it.pressButton(dirkFallsGame, OptionsScreen(gameState, dirkFallsGame, this))
+                }
             }
         }
     }
@@ -164,19 +146,7 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
             font.data.setScale(30f)
 
             font.draw(spriteBatch, "Play", 0f, 100f * aspectRatio, 0f, 1, false)
-            val gyro = when (gameState.useGyro) {
-                true -> "V"
-                else -> "X"
-            }
-            font.data.setScale(25f)
-            font.draw(spriteBatch, "Use gyroscope? ($gyro)", 0f, -900f * aspectRatio, 0f, 1, false)
-            val vibrate = when (gameState.useVibration) {
-                true -> "V"
-                else -> "X"
-            }
-            font.data.setScale(25f)
-            font.draw(spriteBatch, "Vibrate? ($vibrate)", 0f, -1900f * aspectRatio, 0f, 1, false)
-
+            font.draw(spriteBatch, "Options", 0f, -900f * aspectRatio, 0f, 1, false)
         }
     }
 

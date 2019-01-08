@@ -28,6 +28,7 @@ var sinCount = 0
 
 typealias Rule = (gameState: GameState, delta: Float) -> Unit
 
+
 val updatePositionBasedOnVelocity: Rule = { gameState, delta ->
     gameState.entities
             .forEach { it.position += it.velocity * delta }
@@ -42,6 +43,7 @@ val heroTakesDamageWhenHit: Rule = { gameState, _ ->
             gameState.deleteEntity(it)
             if (!hero.superDirkActive) {
                 hero.hit(it)
+                gameState.hitSound.play(gameState.sound/100f)
                 if (gameState.useVibration) Gdx.input.vibrate(200)
 
             }
@@ -66,10 +68,13 @@ val heroHealsWhenHit: Rule = { gameState, _ ->
 fun heroTakesDamageOverTime(): Rule {
     var damageTimer = 0f
 
+
     return { gameState, delta ->
         damageTimer += delta
+        var difficulty = gameState.properDiffeculty()
 
-        if (damageTimer >= GameConfig.COMET_SPAWN_TIME) {
+
+        if (damageTimer >= difficulty) {
             damageTimer = 0f // reset timer
 
             val hero = gameState.hero
@@ -126,11 +131,11 @@ val heroCannotMoveOutOfBounds: Rule = { gameState, delta ->
 
 fun createCometSpawnerAndSize(): Rule {
 
-
     return { gameState, delta ->
         cometTimer += delta
+        var difficulty = gameState.properDiffeculty()
 
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+        if (cometTimer >= difficulty) {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
@@ -150,8 +155,9 @@ fun createCometSpawner(): Rule {
 
     return { gameState, delta ->
         cometTimer += delta
-
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+        var difficulty = gameState.properDiffeculty()
+        println(difficulty)
+        if (cometTimer >= difficulty) {
             cometTimer = 0f // reset timer
 
             val cometRadius = 0.22f //Verhoogt van 0.20f naar 0.22f zodat hero sterft na 3 hits en niet met een sliver health overleeft
@@ -172,9 +178,11 @@ fun createCometsWithVelocity(): Rule {
 
     return { gameState, delta ->
         cometTimer += delta
+        var difficulty = gameState.properDiffeculty()
+        println(difficulty)
         val vectory = MathUtils.random(3f, 6f)
         val vector2velocity = Vector2(0f, vectory * (-1))
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+        if (cometTimer >= difficulty) {
             cometTimer = 0f // reset timer
 
             val cometRadius = 0.2f
@@ -195,6 +203,8 @@ fun rulePowers(): Rule {
 
     return { gameState, delta ->
         powerFallingTimer += delta
+
+
         if (powerFallingTimer >= GameConfig.POWE_SPAWN_TIME) {
             powerFallingTimer = 0f // reset timer
 
@@ -222,6 +232,8 @@ fun rulePowers(): Rule {
             if (it.collideWithHero(gameState.hero)) {
                 gameState.deleteEntity(it)
                 gameState.hero.superDirkActive = true
+
+                gameState.powerSound.play(gameState.sound/100f)
                 powerTimer = standardPowerTimer
                 if (gameState.useVibration) {
                     Gdx.input.vibrate(500)
@@ -240,7 +252,9 @@ fun createCometsWithVelocityAndSize(): Rule {
         cometTimer += delta
         val vectory = MathUtils.random(3f, 6f)
         val vector2velocity = Vector2(0f, vectory * (-1))
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME) {
+        var difficulty = gameState.properDiffeculty()
+
+        if (cometTimer >= difficulty) {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
@@ -261,8 +275,8 @@ fun fallingLikeSin(): Rule{
     return { gameState, delta ->
         cometTimer += delta
         sinCount += MathUtils.random(1,3)
-
-        if (cometTimer >= GameConfig.SIN_SPAWN_TIME) {
+        var difficulty = gameState.properDiffeculty()
+        if (cometTimer >= difficulty) {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.1f, 0.3f)
@@ -286,7 +300,7 @@ fun spawnCometForIntroScreen(): Rule {
         cometTimer += delta
         val vectory = MathUtils.random(3f, 7f)
         val vector2velocity = Vector2(0f, vectory * (-1))
-        if (cometTimer >= GameConfig.COMET_SPAWN_TIME / 3) {
+        if (cometTimer >= GameConfig.COMET_SPAWN_TIME_MEDIUM / 3) {
             cometTimer = 0f // reset timer
 
             val cometRadius = MathUtils.random(0.4f, 0.7f)

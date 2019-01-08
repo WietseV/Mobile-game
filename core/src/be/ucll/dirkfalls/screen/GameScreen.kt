@@ -53,7 +53,7 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
     private var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight * 2)
 
     private val buttons = mutableListOf<Button>()
-
+    private val levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/happy.mp3"))
 
     override fun hide() {
     }
@@ -68,6 +68,10 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
         Gdx.input.inputProcessor = GameTouchAdapter(gameState, buttons)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+        levelMusic.setLooping(true)
+        levelMusic.volume = gameState.music/100f
+
+        if (!paused) levelMusic.play()
     }
 
     override fun render(delta: Float) {
@@ -138,10 +142,12 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
 
     override fun pause() {
         paused = true
+        levelMusic.pause()
     }
 
     override fun resume() {
         paused = false
+        levelMusic.play()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -152,6 +158,7 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
         renderer.dispose()
         batch.dispose()
         font.dispose()
+        levelMusic.stop()
     }
 
     private fun drawScore(score: Int) {
@@ -164,7 +171,9 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
     }
 
     private fun gameOver() {
+        gameState.deadSound.play(gameState.sound/100f)
         game.screen = GameOverScreen(gameState, game)
+
     }
 
     private fun drawPauseButton() {

@@ -46,7 +46,7 @@ class LevelManager(var gameState: GameState) {
 
 
     fun nextLevel() {
-        if (gameState.score % 25 == 0) {
+        if (gameState.score % 45 == 0) {
             if (level is LevelFour){
                 gameState.powers.forEach(){
                     gameState.deleteEntity(it)

@@ -67,6 +67,7 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
             true -> "On"
             false -> "Off"
         }
+        println(gameState.useGyro)
         val gyroButton = TextButton(gyro, skin)
         gyroButton.isTransform = true
         gyroButton.setScale(aspectRatio*0.8f)
@@ -149,6 +150,9 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
         backButton.setScale(aspectRatio*0.8f)
         backButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                if (prevScreen is DirkScreen) {
+                    disabled = true
+                }
                 game.screen = prevScreen
                 return false
             }
@@ -176,10 +180,13 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
         table.row()
         table.add(difficultyLabel).pad(aspectRatio*5f).left().top()
         table.add(difficultyButton).pad(aspectRatio*5f).left().width(aspectRatio*30f)
-        table.row()
-        table.add(backButton).pad(200f, aspectRatio*8f, 100f, 0f).left()
+        val backContainer = Table()
+        backContainer.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        backContainer.setPosition(0f, 0f)
+        backContainer.add(backButton).pad(aspectRatio*8f).expand().bottom().left()
 
         stage.addActor(table)
+        stage.addActor(backContainer)
     }
 
     override fun render(delta: Float) {

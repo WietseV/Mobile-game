@@ -3,32 +3,32 @@ package be.ucll.dirkfalls.screen
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
+import be.ucll.dirkfalls.screen.buttons.Button
 import be.ucll.dirkfalls.screen.buttons.PauseButton
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.math.Vector2
 
-internal class GameTouchAdapter(private val gameState: GameState, private val pause: PauseButton) : InputAdapter() {
+internal class GameTouchAdapter(private val gameState: GameState, private val buttons: List<Button>) : InputAdapter() {
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        if (!checkPauseButton(screenX, screenY)) {
+        if (checkButtons(screenX, screenY) == null) {
             updatePosition(screenX, screenY)
         }
         return true
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        if (!checkPauseButton(screenX, screenY)) {
+        if (checkButtons(screenX, screenY) == null) {
             updatePosition(screenX, screenY)
         }
         return true
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        if (checkPauseButton(screenX, screenY)) {
-            pause.pressButton((pause.screen as GameScreen).game, null)
-        }
+        val b = checkButtons(screenX, screenY)
+        b?.pressButton((b.screen as GameScreen).game, OptionsScreen(gameState, (b.screen as GameScreen).game, b.screen))
         gameState.pressedPosition = null
         return true
     }
@@ -40,5 +40,11 @@ internal class GameTouchAdapter(private val gameState: GameState, private val pa
         )
     }
 
-    private fun checkPauseButton(x: Int, y: Int) = pause.contains(pause.screen.fromHUDToWorldWidth(x), WORLD_HEIGHT-pause.screen.fromHUDToWorldHeight(y))
+    private fun checkButtons(x: Int, y: Int): Button? {
+        buttons.forEach {
+            if (it.contains(it.screen.fromHUDToWorldWidth(x), WORLD_HEIGHT-it.screen.fromHUDToWorldHeight(y))) return it
+        }
+        return null
+    }
+
 }

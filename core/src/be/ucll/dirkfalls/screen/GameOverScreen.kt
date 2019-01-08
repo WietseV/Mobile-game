@@ -40,6 +40,9 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
 
         val nameLabel = Label("Your name:", skin)
         val nameField = TextField("", skin)
+        val fieldContainer = Container<TextField> (nameField)
+        fieldContainer.isTransform = true
+        fieldContainer.setScale(aspectRatio*0.8f)
         nameField.maxLength = 25
         val emptyLabel = Label("", skin)
         val errorLabel = Label("Name can't be empty!", skin)
@@ -61,6 +64,7 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
         mainMenuButton.setScale(aspectRatio*0.8f)
         mainMenuButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                gameState.resetGame()
                 game.screen = HomeScreen(game, gameState)
                 return false
             }
@@ -87,8 +91,7 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
         table.row()
         table.add(nameLabel).pad(aspectRatio*5f).left()
         nameLabel.setFontScale(aspectRatio)
-        table.add(nameField).pad(aspectRatio*5f).left()
-        nameField.setScale(aspectRatio*0.8f)
+        table.add(fieldContainer).pad(aspectRatio*5f).left().bottom()
         table.row()
         table.add(submitButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
         table.row()

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 
-abstract class Button(val screen: DirkScreen, var color: Color) : Rectangle() {
+abstract class Button(open val screen: DirkScreen, var color: Color) : Rectangle() {
     protected val startColor = color
 
 

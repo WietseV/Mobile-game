@@ -16,6 +16,9 @@ abstract class DirkScreen(val gameState: GameState) : Screen {
     private var fromHUDToWorldWidth = WORLD_WIDTH / Gdx.graphics.width
     private var fromHUDToWorldHeight = WORLD_HEIGHT / Gdx.graphics.height
 
+    var disabled = false
+
+
     @Deprecated("Not used", ReplaceWith("Gdx.graphics.width * percentWidth", "com.badlogic.gdx.Gdx"))
     fun getTextWidthBasedOnScreen(percentWidth: Float) = Gdx.graphics.width * percentWidth
 

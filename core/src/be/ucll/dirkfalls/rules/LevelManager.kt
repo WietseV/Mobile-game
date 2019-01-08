@@ -73,5 +73,8 @@ class LevelManager(var gameState: GameState) {
 
     fun introLevel() {
         level = levelFactory.createLevel(0, null)
+        if (!assetManager.isLoaded(level.imageBackground)) {
+            assetManager.load(level.imageBackground, Texture::class.java)
+        }
     }
 }

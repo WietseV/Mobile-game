@@ -3,6 +3,8 @@ package be.ucll.dirkfalls
 import be.ucll.dirkfalls.entities.*
 import be.ucll.dirkfalls.rules.Difficulty
 import be.ucll.dirkfalls.rules.LevelManager
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
@@ -25,8 +27,8 @@ class GameState {
     var pressedPosition: Vector2? = null
     private val levelManager = LevelManager(this)
 
-    var useGyro: Boolean = false
-    var useVibration: Boolean = false
+    var useGyro: Boolean = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+    var useVibration: Boolean = Gdx.input.isPeripheralAvailable(Input.Peripheral.Vibrator)
     var music: Float = 100f
     var sound: Float = 100f
     var difficulty: Difficulty = Difficulty.EASY

@@ -4,7 +4,9 @@ import be.ucll.dirkfalls.GameConfig
 import be.ucll.dirkfalls.GameConfig.WORLD_HEIGHT
 import be.ucll.dirkfalls.GameConfig.WORLD_WIDTH
 import be.ucll.dirkfalls.GameState
+import be.ucll.dirkfalls.screen.buttons.Button
 import be.ucll.dirkfalls.screen.buttons.ButtonTouchAdapter
+import be.ucll.dirkfalls.screen.buttons.OptionsButton
 import be.ucll.dirkfalls.screen.buttons.PauseButton
 import be.ucll.dirkfalls.utils.rect
 import be.ucll.dirkfalls.utils.use
@@ -36,6 +38,11 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
 
     //pause button
     private val pauseButton = PauseButton(this)
+    private val optionsButton = object : OptionsButton(this) {
+        override fun pressButton(game: Game, targetScreen: DirkScreen?) {
+            if (paused) super.pressButton(game, targetScreen)
+        }
+    }
     private var pButtonWidth = 0.08f
     private val pauseButtonWidth = getBoxWidthBasedOnScreen(pButtonWidth)
     private val pauseButtonHeight = getHeightBasedOnWidth(pButtonWidth)
@@ -45,15 +52,20 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
 
     private var coordbox = getBoxCoordsOnScreen(topw, top, 0f, pauseButtonHeight * 2)
 
+    private val buttons = mutableListOf<Button>()
+
 
     override fun hide() {
     }
 
 
     override fun show() {
+        println(gameState.useGyro)
         pauseButton.set(coordbox.x, coordbox.y, pauseButtonWidth, pauseButtonHeight)
-        gameState.resetGame()
-        Gdx.input.inputProcessor = GameTouchAdapter(gameState, pauseButton)
+        optionsButton.set(coordbox.x+pauseButtonWidth*1.2f, coordbox.y, pauseButtonWidth, pauseButtonHeight)
+        buttons.add(pauseButton)
+        buttons.add(optionsButton)
+        Gdx.input.inputProcessor = GameTouchAdapter(gameState, buttons)
         font.data.setScale(3f, 3f)
         font.region.texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
     }
@@ -77,6 +89,9 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
             gameOver()
         }
         drawPauseButton()
+        if (paused) {
+            drawOptionsButton()
+        }
         renderer.use {
             renderer.setAutoShapeType(true)
             renderer.set(ShapeRenderer.ShapeType.Filled)
@@ -165,6 +180,16 @@ class GameScreen(val game: Game, gameState: GameState) : DirkScreen(gameState) {
         batch.projectionMatrix = camera.combined
         batch.use {
             batch.draw(pauseButton.pauseDrawable, pauseButton.x, pauseButton.y, pauseButtonWidth, pauseButtonHeight)
+        }
+    }
+
+    private fun drawOptionsButton() {
+        renderer.use {
+            renderer.rect(optionsButton)
+        }
+        batch.projectionMatrix = camera.combined
+        batch.use {
+            batch.draw(optionsButton.optionsDrawable, optionsButton.x, optionsButton.y, optionsButton.width, optionsButton.height)
         }
     }
 }

@@ -30,21 +30,16 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
     private val font = BitmapFont()
     private val buttons = mutableListOf<Button>()
     private val viewport = FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera)
-    private val gyroscopeAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
-    private val vibratorAvail = Gdx.input.isPeripheralAvailable(Input.Peripheral.Vibrator)
 
     override fun hide() {
     }
 
     override fun show() {
-        println("Width: ${Gdx.graphics.width}, Height: ${Gdx.graphics.height}")
+        gameState.intro()
         Gdx.input.inputProcessor = ButtonTouchAdapter(this)
-        gameState.useGyro = gyroscopeAvail
-        gameState.useVibration = vibratorAvail
 
         val play = PlayButton(this)
         val options = OptionsButton(this)
-        gameState.intro()
         val buttonWidth = getBoxWidthBasedOnScreen(0.35f)
         val buttonHeight = getBoxHeightBasedOnScreen(0.08f)
         val buttonCoords = getBoxCoordsOnScreen(0.5f, 0.49f, buttonWidth, buttonHeight)
@@ -88,6 +83,10 @@ class HomeScreen(private val dirkFallsGame: Game, gameState: GameState) :
     }
 
     override fun render(delta: Float) {
+        if (disabled) { //Manier om screen even te disablen voor ge ernaartoe gaat (wanneer de screen al aangemaakt is)
+            Thread.sleep(200)
+            disabled = false
+        }
         gameState.assetManager.update()
         //performance.update(delta)
 

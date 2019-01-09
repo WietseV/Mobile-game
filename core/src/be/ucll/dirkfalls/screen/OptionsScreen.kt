@@ -5,6 +5,7 @@ import be.ucll.dirkfalls.rules.Difficulty
 import be.ucll.dirkfalls.utils.scale
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -21,6 +22,9 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
     private val skin = Skin(Gdx.files.internal("UI/skin.json"))
     private val backgroundImage: Texture = gameState.levelBackground
     private val aspectRatio = scale(Gdx.graphics.width * 1f, 0f, 2000f, 1f, 4f)
+
+    private val useGyro: Boolean = Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)
+    private val useVibration: Boolean = Gdx.input.isPeripheralAvailable(Input.Peripheral.Vibrator)
 
     override fun hide() {
     }
@@ -68,25 +72,31 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
             false -> "Off"
         }
         println(gameState.useGyro)
-        val gyroButton = TextButton(gyro, skin)
-        gyroButton.isTransform = true
-        gyroButton.setScale(aspectRatio*0.8f)
-        gyroButton.width = aspectRatio*10f
-        gyroButton.addListener(object : InputListener() {
-            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                when (gameState.useGyro) {
-                    true -> {
-                        gyroButton.setText("Off")
-                        gameState.useGyro = false
+        val gyroButton: Actor
+        if (useGyro) {
+            gyroButton  = TextButton(gyro, skin)
+            gyroButton.isTransform = true
+            gyroButton.setScale(aspectRatio * 0.8f)
+            gyroButton.width = aspectRatio * 10f
+            gyroButton.addListener(object : InputListener() {
+                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                    when (gameState.useGyro) {
+                        true -> {
+                            gyroButton.setText("Off")
+                            gameState.useGyro = false
+                        }
+                        false -> {
+                            gyroButton.setText("On")
+                            gameState.useGyro = true
+                        }
                     }
-                    false -> {
-                        gyroButton.setText("On")
-                        gameState.useGyro = true
-                    }
+                    return false
                 }
-                return false
-            }
-        })
+            })
+        } else {
+            gyroButton = Label("Unavailable", skin)
+            gyroButton.setFontScale(aspectRatio)
+        }
 
         val vibrateLabel = Label("Vibrate: ", skin)
         vibrateLabel.setFontScale(aspectRatio)
@@ -94,25 +104,31 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
             true -> "On"
             false -> "Off"
         }
-        val vibrateButton = TextButton(vibrate, skin)
-        vibrateButton.isTransform = true
-        vibrateButton.setScale(aspectRatio*0.8f)
-        vibrateButton.width = aspectRatio*10f
-        vibrateButton.addListener(object : InputListener() {
-            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                when (gameState.useVibration) {
-                    true -> {
-                        vibrateButton.setText("Off")
-                        gameState.useVibration = false
+        val vibrateButton: Actor
+        if (useVibration) {
+            vibrateButton = TextButton(vibrate, skin)
+            vibrateButton.isTransform = true
+            vibrateButton.setScale(aspectRatio * 0.8f)
+            vibrateButton.width = aspectRatio * 10f
+            vibrateButton.addListener(object : InputListener() {
+                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                    when (gameState.useVibration) {
+                        true -> {
+                            vibrateButton.setText("Off")
+                            gameState.useVibration = false
+                        }
+                        false -> {
+                            vibrateButton.setText("On")
+                            gameState.useVibration = true
+                        }
                     }
-                    false -> {
-                        vibrateButton.setText("On")
-                        gameState.useVibration = true
-                    }
+                    return false
                 }
-                return false
-            }
-        })
+            })
+        } else {
+            vibrateButton = Label("Unavailable", skin)
+            vibrateButton.setFontScale(aspectRatio)
+        }
 
         val difficultyLabel = Label("Difficulty:", skin)
         difficultyLabel.setFontScale(aspectRatio)
@@ -153,7 +169,11 @@ class OptionsScreen(gameState: GameState, private val game: Game, private val pr
                 if (prevScreen is DirkScreen) {
                     disabled = true
                 }
-                game.screen = prevScreen
+                if (prevScreen is HomeScreen) {
+                    game.screen = HomeScreen(game, gameState)
+                } else {
+                    game.screen = prevScreen
+                }
                 return false
             }
         })

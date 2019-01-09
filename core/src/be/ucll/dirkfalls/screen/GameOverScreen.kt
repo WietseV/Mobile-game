@@ -13,12 +13,9 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.*
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener
 
 
 class GameOverScreen(val gameState: GameState, private val game: Game) : Screen {
@@ -40,20 +37,22 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
 
         val nameLabel = Label("Your name:", skin)
         val nameField = TextField("", skin)
-        val fieldContainer = Container<TextField> (nameField)
+        val fieldContainer = Container<TextField>(nameField)
         fieldContainer.isTransform = true
-        fieldContainer.setScale(aspectRatio*0.8f)
+        fieldContainer.setScale(aspectRatio * 0.8f)
         nameField.maxLength = 25
         val emptyLabel = Label("", skin)
         val errorLabel = Label("Name can't be empty!", skin)
         val submitButton = TextButton("Submit", skin)
         submitButton.isTransform = true
-        submitButton.setScale(aspectRatio*0.8f)
+        submitButton.setScale(aspectRatio * 0.8f)
         val tryAgainButton = TextButton("Try Again", skin)
         tryAgainButton.isTransform = true
-        tryAgainButton.setScale(aspectRatio*0.8f)
+        tryAgainButton.setScale(aspectRatio * 0.8f)
         tryAgainButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                stage.unfocusAll()
+                Gdx.input.setOnscreenKeyboardVisible(false)
                 gameState.resetGame()
                 game.screen = GameScreen(game, gameState)
                 return false
@@ -61,9 +60,11 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
         })
         val mainMenuButton = TextButton("Main menu", skin)
         mainMenuButton.isTransform = true
-        mainMenuButton.setScale(aspectRatio*0.8f)
+        mainMenuButton.setScale(aspectRatio * 0.8f)
         mainMenuButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                stage.unfocusAll()
+                Gdx.input.setOnscreenKeyboardVisible(false)
                 gameState.resetGame()
                 game.screen = HomeScreen(game, gameState)
                 return false
@@ -72,9 +73,11 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
 
         val shareToFbButton = TextButton("Share to facebook", skin)
         shareToFbButton.isTransform = true
-        shareToFbButton.setScale(aspectRatio*0.8f)
+        shareToFbButton.setScale(aspectRatio * 0.8f)
         shareToFbButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                stage.unfocusAll()
+                Gdx.input.setOnscreenKeyboardVisible(false)
                 (game as DirkFallsGame).fb.share(score)
                 return false
             }
@@ -86,29 +89,30 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
         table.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         table.setPosition(0f, 0f)
 
-        table.add(scoreLabel).pad(aspectRatio*5f).colspan(2).center()
+        table.add(scoreLabel).pad(aspectRatio * 5f).colspan(2).center()
         scoreLabel.setFontScale(aspectRatio)
         table.row()
-        table.add(nameLabel).pad(aspectRatio*5f).left()
+        table.add(nameLabel).pad(aspectRatio * 5f).left()
         nameLabel.setFontScale(aspectRatio)
-        table.add(fieldContainer).pad(aspectRatio*5f).left().bottom()
+        table.add(fieldContainer).pad(aspectRatio * 5f).left().bottom()
         table.row()
-        table.add(submitButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
+        table.add(submitButton).pad(aspectRatio * 8f, 0f, aspectRatio * 8f, 0f).colspan(2).left()
         table.row()
-        table.add(emptyLabel).pad(aspectRatio*5f).colspan(2).left()
+        table.add(emptyLabel).pad(aspectRatio * 5f).colspan(2).left()
         emptyLabel.setFontScale(aspectRatio)
         table.row()
-        table.add(tryAgainButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
-        table.add(mainMenuButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).left()
+        table.add(tryAgainButton).pad(aspectRatio * 8f, 0f, aspectRatio * 8f, 0f).left()
+        table.add(mainMenuButton).pad(aspectRatio * 8f, 0f, aspectRatio * 8f, 0f).left()
         table.row()
-        table.add(shareToFbButton).pad(aspectRatio*8f, 0f, aspectRatio*8f, 0f).colspan(2).left()
+        table.add(shareToFbButton).pad(aspectRatio * 8f, 0f, aspectRatio * 8f, 0f).colspan(2).left()
         table.row()
-        table.add(loadingLabel).pad(aspectRatio*5f).colspan(2).left()
+        table.add(loadingLabel).pad(aspectRatio * 5f).colspan(2).left()
         loadingLabel.setFontScale(aspectRatio)
         stage.addActor(table)
 
         submitButton.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                stage.unfocusAll()
                 if (nameField.text.trim().isEmpty()) {
                     errorLabel.setFontScale(aspectRatio)
                     errorLabel.color = Color.RED
@@ -147,10 +151,10 @@ class GameOverScreen(val gameState: GameState, private val game: Game) : Screen 
                             entry.name.trim().length > 25 -> Label(entry.name.trim().substring(0, 25), skin)
                             else -> Label(entry.name.trim(), skin)
                         }
-                        table.add(name).pad(aspectRatio*5f).left()
+                        table.add(name).pad(aspectRatio * 5f).left()
                         name.setFontScale(aspectRatio)
                         val score = Label(entry.score.toString(), skin)
-                        table.add(score).pad(aspectRatio*5f).left()
+                        table.add(score).pad(aspectRatio * 5f).left()
                         score.setFontScale(aspectRatio)
                         table.row()
                     }
